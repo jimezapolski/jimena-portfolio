@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jimena Zapolski — UX/UI Designer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,900;1,400;1,700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+  <!-- Loader safety net: if CDN fails, hide loader after 2.5s so content is never stuck hidden -->
+  <script>
+    var _loaderFallback = setTimeout(function() {
+      var l = document.getElementById('loader');
+      if (l && l.style.display !== 'none') {
+        l.style.transition = 'opacity 0.4s';
+        l.style.opacity = '0';
+        setTimeout(function() { l.style.display = 'none'; }, 400);
+      }
+    }, 2500);
+  </script>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    :root {
+      --bg: #F7F5F2;
+      --surface: #EFEDE9;
+      --border: rgba(0,0,0,0.08);
+      --border-hi: rgba(0,0,0,0.2);
+      --ink: #111010;
+      --muted: #888;
+      --rosa: #C38F8F;
+      --rosa-border: rgba(195,143,143,0.3);
+      --lime: #7DB800;
+      --serif: 'Playfair Display', Georgia, serif;
+      --sans: 'DM Sans', system-ui, sans-serif;
+      --mono: 'DM Mono', monospace;
+    }
+
+    html { scroll-behavior: auto; } /* Lenis handles smooth scroll */
+
+    body { background:var(--bg); color:var(--ink); font-family:var(--sans); font-weight:300; overflow-x:hidden; }
+
+    /* ─── LOADER ─── */
+    #loader {
+      position: fixed; inset: 0;
+      background: var(--bg);
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+    }
+    .loader-name {
+      display: flex;
+      align-items: baseline;
+      gap: 0;
+      overflow: hidden;
+    }
+    .loader-name .lc {
+      display: inline-block;
+      font-family: var(--serif);
+      font-size: clamp(28px, 5vw, 54px);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+    .loader-name .lc-first { font-style: italic; color: var(--rosa); }
+    .loader-name .lc-space { width: 0.3em; display: inline-block; }
+    .loader-line {
+      width: clamp(160px, 22vw, 260px);
+      height: 0.8px;
+      background: var(--rosa);
+      transform-origin: left;
+      transform: scaleX(0);
+      margin-top: 10px ;
+    }
+
+    /* ─── TRANSITION OVERLAY ─── */
+    #transition-overlay {
+      position: fixed; inset: 0;
+      background: var(--ink);
+      z-index: 2000;
+      transform: scaleY(0);
+      transform-origin: bottom;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+    #transition-title {
+      font-family: var(--serif);
+      font-size: clamp(22px, 4vw, 48px);
+      font-style: italic;
+      font-weight: 900;
+      color: var(--bg);
+      opacity: 0;
+      transform: scale(0.95);
+      letter-spacing: -0.02em;
+      text-align: center;
+      padding: 0 40px;
+    }
+
+    /* ─── CUSTOM CURSOR ─── */
+    #cursor {
+      position: fixed;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--rosa);
+      pointer-events: none;
+      z-index: 9999;
+      top: 0; left: 0;
+      transform: translate(-50%, -50%) scale(1);
+      will-change: transform;
+      transition: background 0.2s;
+    }
+    @media (max-width: 640px) { #cursor { display: none; } }
+
+    /* ─── MAIN WRAPPER ─── */
+    .pr { min-height: 100vh; }
+    .wrap { max-width: 920px; margin: 0 auto; padding: 0 40px 30px; }
+
+    /* ─── NAV ─── */
+    nav { display:flex; justify-content:space-between; align-items:center; padding:28px 0 14px 0; border-bottom:0.5px solid var(--border); }
+    .nav-logo { font-family:var(--serif); font-size:22px; font-weight:900; font-style:italic; color:var(--rosa); letter-spacing:-0.02em; text-decoration:none; cursor:default; }
+    .nav-logo img { height:42px; width:auto; display:block; }
+    .nav-right { display:flex; align-items:center; gap:32px; }
+    .nav-avail { display:flex; align-items:center; gap:6px; font-family:var(--mono); font-size:10px; color:var(--lime); letter-spacing:0.06em; }
+    .nav-dot { width:5px; height:5px; border-radius:50%; background:var(--lime); animation:pulse 2.4s ease-in-out infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    .nav-links { display:flex; gap:28px; list-style:none; }
+    .nav-links a {
+      font-size:12px; color:var(--muted); text-decoration:none; cursor:pointer;
+      transition:color 0.2s;
+      position: relative; padding-bottom: 2px;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute; bottom: -1px; left: 0;
+      width: 100%; height: 0.5px;
+      background: var(--ink);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+    .nav-links a:hover { color:var(--ink); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+
+    /* ─── HERO ─── */
+    .hero { padding:88px 0 72px; border-bottom:0px solid var(--border); }
+    .hero-intro { font-size:16px; font-weight:300; color:var(--muted); margin-bottom:12px; }
+    .hero-name { font-family:var(--serif); line-height:0.88; letter-spacing:-0.02em; display: grid; justify-content: left; margin-bottom: -40px;}
+    /* .hero-name .n1 { display:block; font-style:italic; font-weight:700; font-size:clamp(64px,11vw,104px); color:var(--rosa); } */
+    .hero-name .n1 {height:auto; width:250px; display:inline-block;}
+    /* .hero-name .n2 { display:block; font-weight:900; font-size:clamp(64px,11vw,104px); text-transform:uppercase; color:var(--ink); } */
+    .hero-name .n2 {height:auto; width:300px; margin-top: -90px; }
+    .hero-copy { font-size:14px; line-height:1.8; color:var(--muted); font-weight:300; max-width:420px; margin-top:40px; margin-bottom:16px; }
+    .hero-copy .hl { color:var(--rosa); font-style:italic; }
+    .hero-tags { display:flex; flex-wrap:wrap; gap:5px; margin-bottom:36px; }
+    .hero-tag { font-family:var(--mono); font-size:9px; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); border:0.5px solid var(--border); padding:4px 10px; }
+    .hero-tag.hi { border-color:var(--rosa-border); color:var(--rosa); }
+
+    .btn-pill { display:inline-flex; align-items:center; background:var(--ink); border:none; border-radius:100px; cursor:pointer; overflow:hidden; }
+    .btn-pill-text { font-family:var(--serif); font-size:13px; font-weight:700; font-style:italic; color:var(--bg); padding:13px 22px 13px 26px; transition: transform 0.2s; }
+    .btn-pill:hover .btn-pill-text { transform: translateX(4px); }
+    .btn-pill-icon { width:40px; height:40px; border-radius:50%; background:var(--rosa); display:flex; align-items:center; justify-content:center; margin:4px 4px 4px 0; flex-shrink:0; transition: transform 0.3s ease; }
+    .btn-pill:hover .btn-pill-icon { transform: rotate(45deg); }
+
+    /* ─── MARQUEE ─── */
+    .marquee-wrap { border-top:0.5px solid var(--border); border-bottom:0.5px solid var(--border); overflow:hidden; padding:12px 0;margin-top: -10px; }
+    .marquee-track { display:flex; white-space:nowrap; animation:mq 22s linear infinite; }
+    .mi { font-family:var(--mono); font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(0,0,0,0.2); padding:0 24px; flex-shrink:0; }
+    .mi.r { color:var(--rosa); font-size:8px; }
+    .mi.l { color:var(--lime); font-size:8px; }
+    @keyframes mq { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+    .slbl { font-family:var(--mono); font-size:9px; color:var(--muted); letter-spacing:0.18em; text-transform:uppercase; }
+
+    /* ─── PROJECTS ─── */
+    .projects-section { margin-top:72px; }
+    .proj-head { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:8px; }
+    .proj-intro { font-family:var(--serif); font-size:clamp(17px,2.6vw,24px); font-weight:400; font-style:italic; line-height:1.3; color:var(--muted); max-width:560px; margin-bottom:36px; }
+    .proj-intro strong { font-style:normal; font-weight:900; color:var(--ink); }
+
+    .proj-list { display:flex; flex-direction:column; }
+    .proj-row { border-bottom:0.5px solid var(--border); cursor:pointer; transition:background 0.2s; padding: 20px;}
+    .proj-row:first-child { border-top:0.5px solid var(--border); }
+    .proj-row:hover { background:rgba(0,0,0,0.02); }
+    .proj-row.open { background:var(--surface); }
+    .proj-top { display:grid; grid-template-columns:40px 1fr auto 20px; align-items:center; gap:20px; padding:22px 0; }
+    .pnum { font-family:var(--mono); font-size:9px; color:var(--muted); letter-spacing:0.1em; transition: transform 0.2s; }
+    .proj-row:hover .pnum { transform: translateY(-3px); }
+    .pname { font-family:var(--serif); font-size:18px; font-weight:900; letter-spacing:-0.01em; }
+    .ptags { display:flex; gap:4px; }
+    .ptag { font-family:var(--mono); font-size:8px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); border:0.5px solid var(--border); padding:3px 7px; }
+    .parrow { font-size:14px; color:var(--muted); transition:transform 0.25s, color 0.2s; text-align:right; }
+    .proj-row.open .parrow { transform:rotate(45deg); color:var(--rosa); }
+    .proj-expand { display:none; padding:0 0 28px; }
+    .proj-row.open .proj-expand { display:block; }
+    .xgrid { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border); margin-bottom:20px; }
+    .xblock { background:var(--bg); padding:20px; }
+    .proj-row.open .xblock { background:var(--surface); }
+    .xlabel { font-family:var(--mono); font-size:8px; color:var(--rosa); letter-spacing:0.16em; text-transform:uppercase; margin-bottom:10px; }
+    .xtext { font-size:11px; line-height:1.7; color:var(--muted); font-weight:300; }
+    .xcta {
+      display:inline-flex; align-items:center; gap:6px;
+      font-family:var(--mono); font-size:9px; letter-spacing:0.1em; text-transform:uppercase;
+      color:var(--lime); background:none; border:0.5px solid rgba(125,184,0,0.3);
+      padding:8px 14px; cursor:pointer; transition:background 0.2s, transform 0.3s, box-shadow 0.3s;
+    }
+    .xcta:hover { background:rgba(125,184,0,0.06); }
+
+    /* ─── DIFERENCIAL ─── */
+    .diff-section { margin-top:80px; }
+    .diff-heading { font-family:var(--serif); font-size:28px; font-weight:900; letter-spacing:-0.01em; margin-top:6px; margin-bottom:36px; }
+    .diff-heading em { font-style:italic; color:var(--rosa); }
+    .diff-row { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border); }
+    .diff-stat {
+      background:var(--bg); padding:32px 24px 28px;
+      border-bottom:2px solid transparent;
+      transition:border-color 0.25s, transform 0.25s;
+      cursor: default;
+    }
+    .diff-stat:hover { border-bottom-color:var(--rosa); transform: scale(1.01); }
+    .diff-word { font-family:var(--serif); font-size:32px; font-weight:900; line-height:1; letter-spacing:-0.02em; margin-bottom:14px; color:var(--ink); }
+    .diff-word.italic { font-style:italic; }
+    .diff-label { font-family:var(--mono); font-size:9px; color:var(--muted); letter-spacing:0.12em; text-transform:uppercase; margin-bottom:8px; }
+    .diff-text { font-size:11px; line-height:1.7; color:var(--muted); font-weight:300; }
+
+    /* ─── STATS ─── */
+    .stats-bar { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border); margin-top:80px; }
+    .stat-block { background:var(--bg); padding:24px 20px; }
+    .stat-val { font-family:var(--serif); font-size:32px; font-weight:900; line-height:1; letter-spacing:-0.02em; color:var(--ink); margin-bottom:6px; }
+    .stat-val em { font-style:italic; color:var(--rosa); }
+    .stat-lbl { font-family:var(--mono); font-size:9px; color:var(--muted); letter-spacing:0.1em; text-transform:uppercase; line-height:1.4; }
+
+    /* ─── EXPERIENCIA ─── */
+    .exp-section { margin-top:80px; }
+    .sec-title { font-family:var(--serif); font-size:28px; font-weight:900; letter-spacing:-0.01em; margin-top:6px; }
+    .sec-title em { font-style:italic; color:var(--rosa); }
+    .exp-list { margin-top:28px; display:flex; flex-direction:column; }
+    .exp-row { border-bottom:0.5px solid var(--border); padding:28px 0; display:grid; grid-template-columns:1fr auto; gap:24px; align-items:start; }
+    .exp-row:first-child { border-top:0.5px solid var(--border); }
+    .exp-role { font-family:var(--serif); font-size:17px; font-weight:900; margin-bottom:4px; letter-spacing:-0.01em; }
+    .exp-company { font-family:var(--mono); font-size:10px; color:var(--rosa); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:14px; }
+    .exp-bullets { display:flex; flex-direction:column; gap:6px; }
+    .exp-bullet { font-size:12px; line-height:1.65; color:var(--muted); font-weight:300; padding-left:14px; position:relative; }
+    .exp-bullet::before { content:'—'; position:absolute; left:0; color:var(--rosa); font-size:10px; }
+    .exp-bullet strong { color:var(--ink); font-weight:500; }
+    .exp-period { font-family:var(--mono); font-size:9px; color:var(--muted); letter-spacing:0.06em; white-space:nowrap; margin-top:4px; }
+
+    /* ─── ABOUT ─── */
+    .about-section { margin-top:80px; padding-top:64px; border-top:0.5px solid var(--border); display:grid; grid-template-columns:1fr 1fr; gap:72px; align-items:start; }
+    .about-head { font-family:var(--serif); font-size:clamp(30px,4.5vw,46px); font-weight:900; line-height:0.95; letter-spacing:-0.02em; margin-bottom:20px; }
+    .about-head em { font-style:italic; color:var(--rosa); display:block; }
+    .about-body { font-size:13px; line-height:1.9; color:var(--muted); font-weight:300; margin-bottom:16px; }
+    .edu-block { margin-top:20px; padding-top:20px; border-top:0.5px solid var(--border); }
+    .edu-title { font-family:var(--serif); font-size:13px; font-weight:900; margin-bottom:3px; }
+    .edu-sub { font-family:var(--mono); font-size:9px; color:var(--muted); letter-spacing:0.06em; margin-bottom:6px; }
+    .edu-note { font-size:11px; color:var(--muted); line-height:1.6; }
+    .edu-note strong { color:var(--rosa); font-weight:500; }
+    .skills-col { display:flex; flex-direction:column; gap:22px; }
+    .sklbl { font-family:var(--mono); font-size:8px; color:var(--lime); letter-spacing:0.16em; text-transform:uppercase; margin-bottom:8px; }
+    .skpills { display:flex; flex-wrap:wrap; gap:3px; }
+    .skp { font-family:var(--mono); font-size:10px; color:var(--muted); border:0.5px solid var(--border); padding:4px 10px; }
+
+    /* ─── CONTACT ─── */
+    .contact-section { margin-top:80px; padding-top:64px; border-top:0.5px solid var(--border); }
+    .contact-big { font-family:var(--serif); font-size:clamp(38px,6.5vw,68px); font-weight:900; line-height:0.9; letter-spacing:-0.02em; margin-bottom:48px; }
+    .contact-big em { font-style:italic; color:var(--rosa); display:block; }
+    .crow { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:20px; }
+    .cmail { font-family:var(--mono); font-size:11px; color:var(--muted); }
+    .clinks { display:flex; gap:8px; }
+    .clnk {
+      font-family:var(--mono); font-size:9px; letter-spacing:0.1em; text-transform:uppercase;
+      color:var(--muted); background:none; border:0.5px solid var(--border);
+      padding:9px 14px; cursor:pointer; transition:color 0.2s, border-color 0.2s;
+    }
+    .clnk:hover { color:var(--ink); border-color:var(--border-hi); }
+    .footer { margin-top:48px; padding-top:20px; border-top:0.5px solid var(--border); display:flex; justify-content:space-between; font-family:var(--mono); font-size:9px; color:var(--muted); letter-spacing:0.06em; }
+
+    /* ─── REDUCED MOTION ─── */
+    @media (prefers-reduced-motion: reduce) {
+      #loader { display: none !important; }
+      .marquee-track { animation: none; }
+    }
+
+    /* ─── MOBILE ─── */
+    @media (max-width:640px) {
+      .wrap { padding:0 24px 80px; }
+      .stats-bar, .diff-row { grid-template-columns:1fr 1fr; }
+      .about-section { grid-template-columns:1fr; gap:40px; }
+      .xgrid { grid-template-columns:1fr; }
+      .proj-top { grid-template-columns:32px 1fr auto; }
+      .ptags { display:none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LOADER — hidden immediately if returning from a case study -->
+  <script>if(sessionStorage.getItem('pageTransition'))document.write('<style>#loader{display:none!important}</style>');</script>
+  <div id="loader" aria-hidden="true">
+    <div class="loader-name">
+      <span class="lc lc-first">j</span><span class="lc lc-first">i</span><span class="lc lc-first">m</span><span class="lc lc-first">e</span><span class="lc lc-first">n</span><span class="lc lc-first">a</span><span class="lc-space"></span><span class="lc">Z</span><span class="lc">a</span><span class="lc">p</span><span class="lc">o</span><span class="lc">l</span><span class="lc">s</span><span class="lc">k</span><span class="lc">i</span>
+    </div>
+    <div class="loader-line"></div>
+  </div>
+
+  <!-- TRANSITION OVERLAY -->
+  <div id="transition-overlay" aria-hidden="true">
+    <span id="transition-title"></span>
+  </div>
+
+  <!-- CUSTOM CURSOR -->
+  <div id="cursor" aria-hidden="true"></div>
+
+  <div class="pr">
+    <div class="wrap">
+
+      <!-- NAV -->
+      <nav>
+        <div class="nav-logo">
+          <img
+            src="assets/Asset 18@72x.png"
+            alt="JZ"
+            onerror="this.outerHTML='<span style=\'font-family:var(--serif);font-size:22px;font-weight:900;font-style:italic;color:var(--rosa);letter-spacing:-0.02em\'>JZ</span>'"
+          />
+        </div>
+        <div class="nav-right">
+          <span class="nav-avail"><span class="nav-dot"></span>Disponible</span>
+          <ul class="nav-links">
+            <li><a onclick="scrollToSection('.projects-section')">Proyectos</a></li>
+            <li><a onclick="scrollToSection('.exp-section')">Experiencia</a></li>
+            <li><a onclick="scrollToSection('.contact-section')">Contacto</a></li>
+          </ul>
+        </div>
+      </nav>
+
+      <!-- HERO -->
+      <section class="hero">
+        <p class="hero-intro anim-ready">Hola, soy</p>
+        <h1 class="hero-name">
+          <img class="n1 anim-ready"
+            src="assets/jimena.png"
+            alt="jimena"
+            onerror="this.outerHTML='<span style=\'font-family:var(--serif);font-size:22px;font-weight:900;font-style:italic;color:var(--rosa);letter-spacing:-0.02em\'>jimena</span>'"
+          /></img>
+          <img class="n2 anim-ready"
+          src="assets/zapolski.png"
+          alt="zapolski"
+          onerror="this.outerHTML='<span style=\'font-family:var(--serif);font-size:22px;font-weight:900;font-style:italic;color:var(--ink);letter-spacing:-0.02em\'>zapolski</span>'"
+        /></img>
+        </h1>
+        <p class="hero-copy anim-ready">Transformo ideas en experiencias digitales claras, útiles y memorables. — <span class="hl">cada decisión tiene un propósito.</span></p>
+        <div class="hero-tags anim-ready">
+          <span class="hero-tag hi">Diseño UX / UI</span>
+          <span class="hero-tag hi">Producto</span>
+          <span class="hero-tag hi">AR / VR</span>
+          <span class="hero-tag hi">IA</span>
+          <span class="hero-tag hi"> Diseño End-to-end</span>
+          <span class="hero-tag">Salud · Pharma</span>
+          <span class="hero-tag">Ed-Tech</span>
+          <span class="hero-tag">Logística</span>
+          <span class="hero-tag">E-commerce</span>
+        </div>
+        <button class="btn-pill anim-ready" onclick="scrollToSection('.contact-section')">
+          <span class="btn-pill-text">Conectemos</span>
+          <span class="btn-pill-icon">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#F7F5F2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+          </span>
+        </button>
+      </section>
+
+    </div>
+
+    <!-- MARQUEE -->
+    <div class="marquee-wrap">
+      <div class="marquee-track">
+        <span class="mi">UX Strategy</span><span class="mi r">✦</span>
+        <span class="mi">Product Design</span><span class="mi l">✦</span>
+        <span class="mi">AR / VR</span><span class="mi r">✦</span>
+        <span class="mi">Laboratorios Bagó</span><span class="mi l">✦</span>
+        <span class="mi">AbbVie · Danone</span><span class="mi r">✦</span>
+        <span class="mi">APM Terminals</span><span class="mi l">✦</span>
+        <span class="mi">Novo Nordisk</span><span class="mi r">✦</span>
+        <span class="mi">Design Systems</span><span class="mi l">✦</span>
+        <span class="mi">HTML / CSS </span><span class="mi r">✦</span>
+        <span class="mi">Webflow </span><span class="mi r">✦</span>
+        <span class="mi">React Native</span><span class="mi r">✦</span>
+        <span class="mi">IA</span><span class="mi l">✦</span>
+        <span class="mi">UX Strategy</span><span class="mi r">✦</span>
+        <span class="mi">Product Design</span><span class="mi l">✦</span>
+        <span class="mi">AR / VR</span><span class="mi r">✦</span>
+        <span class="mi">Laboratorios Bagó</span><span class="mi l">✦</span>
+        <span class="mi">AbbVie · Danone</span><span class="mi r">✦</span>
+        <span class="mi">APM Terminals</span><span class="mi l">✦</span>
+        <span class="mi">Novo Nordisk</span><span class="mi r">✦</span>
+        <span class="mi">Design Systems</span><span class="mi l">✦</span>
+        <span class="mi">React Native</span><span class="mi r">✦</span>
+        <span class="mi">IA aplicada</span><span class="mi l">✦</span>
+      </div>
+    </div>
+
+    <div class="wrap">
+
+      <!-- PROJECTS -->
+      <section class="projects-section">
+        <div class="proj-head">
+          <p class="slbl">Trabajos recientes</p>
+          <span style="font-family:var(--mono);font-size:9px;color:var(--muted)">(001)</span>
+        </div>
+        <p class="proj-intro anim-ready">Combinando <strong>innovación, estrategia y diseño</strong> para crear experiencias que generan resultados reales.</p>
+        <div class="proj-list">
+
+          <div class="proj-row anim-ready" onclick="toggle(this)">
+            <div class="proj-top">
+              <span class="pnum">001</span>
+              <span class="pname">Zenda — AR Education</span>
+              <div class="ptags"><span class="ptag">Ed-Tech</span><span class="ptag">AR</span><span class="ptag">Diseño UX/UI</span><span class="ptag">React Native</span><span class="ptag">Swift</span></div>
+              <span class="parrow">+</span>
+            </div>
+            <div class="proj-expand">
+              <div class="xgrid">
+                <div class="xblock"><p class="xlabel">Enfoque</p><p class="xtext"> Proyecto de tesis centrado en cómo transformar información compleja en experiencias comprensibles, combinando investigación con usuarios, diseño iterativo y desarrollo nativo en React Native y Swift.</p></div>
+                <div class="xblock"><p class="xlabel">Impacto en usuarios</p><p class="xtext">Una experiencia de aprendizaje en realidad aumentada que convierte la interpretación del etiquetado frontal en una interacción visual, tangible y activa.</p></div>
+                <div class="xblock"><p class="xlabel">Resultado</p><p class="xtext">Propuesta validada con potencial de implementación institucional. Tesis calificada con 9, destacada por su integración entre diseño, tecnología y educación.</p></div>
+              </div>
+              <button class="xcta" onclick="event.stopPropagation(); goTo('zenda.html', 'Zenda — AR Education')">Ver caso completo ↗</button>
+            </div>
+          </div>
+
+          <div class="proj-row anim-ready" onclick="toggle(this)">
+            <div class="proj-top">
+              <span class="pnum">002</span>
+              <span class="pname">ZonaProp — Redesign</span>
+              <div class="ptags"><span class="ptag">App</span><span class="ptag">Mobile</span><span class="ptag">Auditoría</span></div>
+              <span class="parrow">+</span>
+            </div>
+            <div class="proj-expand">
+              <div class="xgrid">
+                <div class="xblock"><p class="xlabel">Enfoque</p><p class="xtext">Rediseño conceptual del flujo de búsqueda inmobiliaria, cuestionando patrones tradicionales y explorando cómo la IA puede asistir decisiones complejas.</p></div>
+                <div class="xblock"><p class="xlabel">Impacto en usuarios</p><p class="xtext"> Simplifica la toma de decisiones al transformar la búsqueda en una experiencia más guiada, clara y alineada a las necesidades reales de cada usuario.</p></div>
+                <div class="xblock"><p class="xlabel">Resultado</p><p class="xtext"> Propuesta especulativa que redefine la interacción con portales inmobiliarios, enfocada en eficiencia, personalización y una experiencia más guiada.</p></div>
+              </div>
+              <button class="xcta" onclick="event.stopPropagation(); goTo('zonaprop.html', 'ZonaProp — AI Redesign')">Ver caso completo ↗</button>
+            </div>
+          </div>
+
+          <div class="proj-row anim-ready" onclick="toggle(this)">
+            <div class="proj-top">
+              <span class="pnum">003</span>
+              <span class="pname">Billetera Digital — Fintech</span>
+              <div class="ptags"><span class="ptag">Fintech</span><span class="ptag">Design System</span><span class="ptag">A11y</span><span class="ptag">IA</span></div>
+              <span class="parrow">+</span>
+            </div>
+            <div class="proj-expand">
+              <div class="xgrid">
+                <div class="xblock"><p class="xlabel">Proceso UX</p><p class="xtext">Research del mercado fintech local, personas, arquitectura de información y design system desde cero con IA aplicada al flujo de onboarding.</p></div>
+                <div class="xblock"><p class="xlabel">Impacto en usuarios</p><p class="xtext">Onboarding simplificado. Lenguaje financiero cotidiano para usuarios que se acercan por primera vez al mundo digital.</p></div>
+                <div class="xblock"><p class="xlabel">Impacto en el negocio</p><p class="xtext">Modelo validado con métricas de activación y retención. Diferenciador en mercado saturado.</p></div>
+              </div>
+              <button class="xcta" onclick="event.stopPropagation(); showComingSoon(this)">Próximamente ↗</button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- DIFERENCIAL -->
+      <section class="diff-section">
+        <p class="slbl">Por qué yo</p>
+        <h2 class="diff-heading anim-ready">Lo que me <em>diferencia</em></h2>
+        <div class="diff-row">
+          <div class="diff-stat anim-ready">
+            <p class="diff-word">Diseño</p>
+            <p class="diff-label">Estratégico · End-to-end</p>
+            <p class="diff-text">Centrado en el usuario e impacto medible. Más del 50% de reducción en tiempos de aprobación.</p>
+          </div>
+          <div class="diff-stat anim-ready">
+            <p class="diff-word italic">Código</p>
+            <p class="diff-label">React · Next.js · Native</p>
+            <p class="diff-text">Entiendo lo que diseño y sé construirlo. Sin fricción con desarrollo, mayor velocidad de entrega.</p>
+          </div>
+          <div class="diff-stat anim-ready">
+            <p class="diff-word">AR / IA</p>
+            <p class="diff-label">Experiencias inmersivas</p>
+            <p class="diff-text">Proyectos reales en salud, pharma y logística. Diseño para entornos no convencionales con viabilidad técnica.</p>
+          </div>
+          <div class="diff-stat anim-ready">
+            <p class="diff-word italic">Docencia</p>
+            <p class="diff-label">ORT · Design Thinking</p>
+            <p class="diff-text">Mentoreo equipos en Agile y UX desde 2022. Enseñar diseño lo hace más profundo y comunicable.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- STATS
+      <div class="stats-bar">
+        <div class="stat-block anim-ready">
+          <div class="stat-val"><span class="stat-num" data-target="5" data-int="true">5</span><em>+</em></div>
+          <div class="stat-lbl">Años de experiencia</div>
+        </div>
+        <div class="stat-block anim-ready">
+          <div class="stat-val"><span class="stat-num" data-target="50" data-int="true">50</span><em>%</em></div>
+          <div class="stat-lbl">↓ tiempos de aprobación</div>
+        </div>
+        <div class="stat-block anim-ready">
+          <div class="stat-val"><span class="stat-num" data-target="8" data-int="true">8</span><em>.9</em></div>
+          <div class="stat-lbl">Promedio universitario</div>
+        </div>
+        <div class="stat-block anim-ready">
+          <div class="stat-val"><span class="stat-num" data-target="20" data-int="true">20</span><em>+</em></div>
+          <div class="stat-lbl">Clientes & proyectos</div>
+        </div>
+      </div> -->
+
+      <!-- EXPERIENCIA -->
+      <section class="exp-section">
+        <p class="slbl">Experiencia</p>
+        <h2 class="sec-title anim-ready">Empresas que <em>confiaron</em> en mí</h2>
+        <div class="exp-list">
+          <div class="exp-row anim-ready">
+            <div>
+              <p class="exp-role">UX/UI Designer</p>
+              <p class="exp-company">3Destiny — AR, VR & IA</p>
+              <div class="exp-bullets">
+                <p class="exp-bullet">Lideré el diseño <strong>end-to-end</strong> para industrias complejas: Laboratorios Bagó, AbbVie, Panalab, Danone, APM Terminals, Novo Nordisk.</p>
+                <p class="exp-bullet">Reduje en más de un <strong>50% los tiempos de aprobación</strong> optimizando presentación de propuestas y handoff técnico.</p>
+                <p class="exp-bullet">Articulé estrategias de UX para <strong>proyectos de realidad aumentada</strong> en colaboración con desarrolladores y diseñadores 3D.</p>
+              </div>
+            </div>
+            <div class="exp-period">Mar 2025 — Hoy</div>
+          </div>
+          <div class="exp-row anim-ready">
+            <div>
+              <p class="exp-role">Freelance UX/UI Designer</p>
+              <p class="exp-company">Carthage Beauty · DigPar · Losa0 · Kakawa · Azikna</p>
+              <div class="exp-bullets">
+                <p class="exp-bullet">Lideré el diseño integral de <strong>Calidad de Vida Bagó</strong> — app mobile que traduce requerimientos médicos complejos en arquitectura de información clara.</p>
+                <p class="exp-bullet">Diseñé experiencias inmersivas para <strong>Ushuaia XR</strong>, adaptando narrativa y usabilidad para pantallas y espacios físicos.</p>
+                <p class="exp-bullet">Sitios web y landing pages con <strong>WCAG compliance</strong> e investigación de comportamiento de usuarios.</p>
+              </div>
+            </div>
+            <div class="exp-period">Ago 2023 — Hoy</div>
+          </div>
+          <div class="exp-row anim-ready">
+            <div>
+              <p class="exp-role">Docente de Diseño Digital</p>
+              <p class="exp-company">Escuela Técnica ORT</p>
+              <div class="exp-bullets">
+                <p class="exp-bullet">Mentoreo en <strong>ciclo completo de diseño digital</strong> y metodologías ágiles — Scrum, Design Thinking.</p>
+                <p class="exp-bullet">Prototipado con <strong>Figma, Illustrator y Photoshop</strong> en proyectos de resolución de problemas reales.</p>
+              </div>
+            </div>
+            <div class="exp-period">Mar 2022 — Hoy</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ABOUT -->
+      <section class="about-section">
+        <div>
+          <p class="slbl" style="margin-bottom:14px">Sobre mí</p>
+          <h2 class="about-head anim-ready"><em>Diseño</em> con criterio.</h2>
+          <p class="about-body anim-ready">UX/UI Designer con formación en Tecnología Multimedial (UMaimonides). Trabajo en la intersección entre diseño estratégico, usabilidad e impacto de negocio — integrando IA, AR/VR y código cuando el proyecto lo necesita.</p>
+          <p class="about-body anim-ready">Docente en la Escuela Técnica ORT desde 2022. Creo que enseñar diseño te hace mejor diseñador/a — y que el mejor diseño es el que no se nota.</p>
+          <div class="edu-block anim-ready">
+            <p class="edu-title">Lic. en Tecnología Multimedial</p>
+            <p class="edu-sub">Universidad Maimonides · 2020–2024</p>
+            <p class="edu-note">Promedio <strong>8,9/10</strong> · Tesis: Zenda, app educativa con AR en React Native y Swift — ciclo completo de producto.</p>
+          </div>
+        </div>
+        <div class="skills-col">
+          <div class="anim-ready"><p class="sklbl">Diseño & Prototipado</p><div class="skpills"><span class="skp">Figma</span><span class="skp">Framer</span><span class="skp">Webflow</span><span class="skp">Adobe XD</span><span class="skp">Illustrator</span><span class="skp">InDesign</span></div></div>
+          <div class="anim-ready"><p class="sklbl">Desarrollo</p><div class="skpills"><span class="skp">HTML/CSS</span><span class="skp">JavaScript</span><span class="skp">React</span><span class="skp">React Native</span><span class="skp">Next.js</span><span class="skp">TypeScript</span></div></div>
+          <div class="anim-ready"><p class="sklbl">IA Aplicada</p><div class="skpills"><span class="skp">Figma Make</span><span class="skp">V0</span><span class="skp">Lovable</span><span class="skp">Stitch</span><span class="skp">Claude</span><span class="skp">ChatGPT</span></div></div>
+          <div class="anim-ready"><p class="sklbl">Metodologías</p><div class="skpills"><span class="skp">Design Thinking</span><span class="skp">Agile</span><span class="skp">Scrum</span><span class="skp">Kanban</span></div></div>
+        </div>
+      </section>
+
+      <!-- CONTACT -->
+      <section class="contact-section">
+        <h2 class="contact-big">
+          <span class="anim-ready" style="display:block">¿Trabajamos</span>
+          <em class="anim-ready">juntos?</em>
+        </h2>
+        <div class="crow anim-ready">
+          <p class="cmail">jimenazapolski@gmail.com</p>
+          <div class="clinks">
+            <button class="clnk" onclick="openLink('mailto:jimenazapolski@gmail.com')">Email</button>
+            <button class="clnk" onclick="openLink('https://www.linkedin.com/in/jimena-zapolski')">LinkedIn</button>
+            <button class="clnk" onclick="openLink('https://www.behance.net/jimezapolski')">Behance</button>
+          </div>
+        </div>
+        <div class="footer">
+          <span>Jimena Zapolski · UX/UI Designer · Product Designer · Buenos Aires</span>
+          <span>2026</span>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <script>
+    /* ─── GSAP SETUP ─── */
+    gsap.registerPlugin(ScrollTrigger);
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isMobile = window.innerWidth < 640;
+
+    /* ─── LENIS SMOOTH SCROLL ─── */
+    function initLenis() {
+      const lenis = new Lenis({ lerp: 0.1, smoothWheel: true });
+      lenis.on('scroll', ScrollTrigger.update);
+      gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+      gsap.ticker.lagSmoothing(0);
+    }
+
+    /* ─── CUSTOM CURSOR ─── */
+    function initCursor() {
+      if (isMobile || prefersReducedMotion) return;
+      const cursor = document.getElementById('cursor');
+      const xTo = gsap.quickTo(cursor, 'x', { duration: 0.35, ease: 'power3' });
+      const yTo = gsap.quickTo(cursor, 'y', { duration: 0.35, ease: 'power3' });
+      window.addEventListener('mousemove', e => { xTo(e.clientX); yTo(e.clientY); });
+      document.querySelectorAll('a, button, .proj-row, .clnk, .xcta, .btn-pill, .diff-stat').forEach(el => {
+        el.addEventListener('mouseenter', () => gsap.to(cursor, { scale: 1.75, duration: 0.25, ease: 'power2.out' }));
+        el.addEventListener('mouseleave', () => gsap.to(cursor, { scale: 1, duration: 0.25, ease: 'power2.out' }));
+      });
+    }
+
+    /* ─── LOADER ─── */
+    function initLoader() {
+      // Coming back from a case study → skip loader, only run transition overlay
+      if (sessionStorage.getItem('pageTransition')) {
+        document.getElementById('loader').style.display = 'none';
+        revealPage();
+        return;
+      }
+      if (prefersReducedMotion) {
+        document.getElementById('loader').style.display = 'none';
+        revealPage();
+        return;
+      }
+      const loader = document.getElementById('loader');
+      const chars = loader.querySelectorAll('.lc');
+      const line = loader.querySelector('.loader-line');
+      clearTimeout(window._loaderFallback);
+      const tl = gsap.timeline({ onComplete: () => {
+        gsap.to(loader, {
+          opacity: 0, duration: 0.4, delay: 0.25,
+          onComplete: () => { loader.style.display = 'none'; revealPage(); }
+        });
+      }});
+      tl.set(chars, { y: 60, opacity: 0 })
+        .to(chars, { y: 0, opacity: 1, stagger: 0.035, ease: 'expo.out', duration: 0.9 })
+        .to(line, { scaleX: 1, duration: 0.55, ease: 'power3.inOut' }, '-=0.35');
+    }
+
+    function revealPage() {
+      initTransitionIn();
+      initScrollAnimations();
+      initMagnetic();
+    }
+
+    /* ─── TRANSITION IN (from case study) ─── */
+    function initTransitionIn() {
+      const overlay = document.getElementById('transition-overlay');
+      if (sessionStorage.getItem('pageTransition')) {
+        sessionStorage.removeItem('pageTransition');
+        gsap.set(overlay, { scaleY: 1, transformOrigin: 'top', pointerEvents: 'none' });
+        gsap.to(overlay, { scaleY: 0, duration: 0.65, ease: 'power3.inOut', delay: 0.05 });
+      }
+    }
+
+    /* ─── PAGE TRANSITION OUT ─── */
+    function goTo(href, title) {
+      const overlay = document.getElementById('transition-overlay');
+      const titleEl = document.getElementById('transition-title');
+      overlay.style.pointerEvents = 'all';
+      if (title) titleEl.textContent = title;
+      const tl = gsap.timeline({
+        onComplete: () => {
+          sessionStorage.setItem('pageTransition', '1');
+          window.location.href = href;
+        }
+      });
+      tl.set(overlay, { scaleY: 0, transformOrigin: 'bottom' })
+        .to(overlay, { scaleY: 1, duration: 0.5, ease: 'power3.inOut' })
+        .to(titleEl, { opacity: 1, scale: 1, duration: 0.25, ease: 'power2.out' }, '-=0.15');
+    }
+
+    /* ─── HERO ANIMATIONS (run immediately after loader) ─── */
+    function animateHero() {
+      if (prefersReducedMotion) {
+        document.querySelectorAll('.hero .anim-ready').forEach(el => el.style.opacity = 1);
+        return;
+      }
+      const tl = gsap.timeline({ delay: 0 });
+      tl.to('.hero-intro', { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' })
+        .to('.hero-name .n1', { opacity: 1, x: 0, duration: 0.7, ease: 'expo.out' }, '-=0.3')
+        .to('.hero-name .n2', { opacity: 1, x: 0, duration: 0.7, ease: 'expo.out' }, '-=0.5')
+        .to('.hero-copy', { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, '-=0.3')
+        .to('.hero-tags', { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' }, '-=0.3')
+        .to('.btn-pill', { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(1.5)' }, '-=0.2');
+      gsap.set('.hero-intro', { y: 20, opacity: 0 });
+      gsap.set('.hero-name .n1', { x: -80, opacity: 0 });
+      gsap.set('.hero-name .n2', { x: 80, opacity: 0 });
+      gsap.set('.hero-copy', { y: 20, opacity: 0 });
+      gsap.set('.hero-tags', { y: 16, opacity: 0 });
+      gsap.set('.btn-pill', { scale: 0.9, opacity: 0 });
+    }
+
+    /* ─── SCROLL ANIMATIONS ─── */
+    function initScrollAnimations() {
+      if (prefersReducedMotion) {
+        document.querySelectorAll('.anim-ready').forEach(el => el.style.opacity = 1);
+        return;
+      }
+
+      // Set initial states
+      gsap.set('.hero-intro', { y: 20, opacity: 0 });
+      gsap.set('.hero-name .n1', { x: -80, opacity: 0 });
+      gsap.set('.hero-name .n2', { x: 80, opacity: 0 });
+      gsap.set('.hero-copy', { y: 20, opacity: 0 });
+      gsap.set('.hero-tags', { y: 16, opacity: 0 });
+      gsap.set('.btn-pill', { scale: 0.9, opacity: 0 });
+
+      // Hero — immediate after loader
+      gsap.timeline({ delay: 0.1 })
+        .to('.hero-intro', { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' })
+        .to('.hero-name .n1', { opacity: 1, x: 0, duration: 0.8, ease: 'expo.out' }, '-=0.3')
+        .to('.hero-name .n2', { opacity: 1, x: 0, duration: 0.8, ease: 'expo.out' }, '-=0.55')
+        .to('.hero-copy', { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, '-=0.3')
+        .to('.hero-tags', { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' }, '-=0.3')
+        .to('.btn-pill', { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(1.5)' }, '-=0.2');
+
+      // Projects intro
+      gsap.fromTo('.proj-intro', { y: 20, opacity: 0 }, {
+        y: 0, opacity: 1, duration: 0.7, ease: 'power3.out',
+        scrollTrigger: { trigger: '.proj-intro', start: 'top 88%' }
+      });
+
+      // Project rows — stagger
+      gsap.utils.toArray('.proj-row').forEach((row, i) => {
+        gsap.fromTo(row, { y: 30, opacity: 0 }, {
+          y: 0, opacity: 1, duration: 0.65, ease: 'power3.out',
+          delay: i * 0.08,
+          scrollTrigger: { trigger: row, start: 'top 88%' }
+        });
+      });
+
+      // Diferencial heading
+      gsap.fromTo('.diff-heading', { y: 20, opacity: 0 }, {
+        y: 0, opacity: 1, duration: 0.6, ease: 'power3.out',
+        scrollTrigger: { trigger: '.diff-heading', start: 'top 88%' }
+      });
+
+      // Diferencial stats — stagger horizontal
+      gsap.utils.toArray('.diff-stat').forEach((el, i) => {
+        gsap.fromTo(el, { x: 24, opacity: 0 }, {
+          x: 0, opacity: 1, duration: 0.6, ease: 'power3.out',
+          delay: i * 0.1,
+          scrollTrigger: { trigger: '.diff-row', start: 'top 85%' }
+        });
+      });
+
+      // Stats bar — counter-up
+      const statsTriggered = {};
+      gsap.utils.toArray('.stat-block').forEach((block, i) => {
+        gsap.fromTo(block, { y: 20, opacity: 0 }, {
+          y: 0, opacity: 1, duration: 0.6, ease: 'power3.out',
+          delay: i * 0.1,
+          scrollTrigger: {
+            trigger: '.stats-bar', start: 'top 85%',
+            onEnter: () => {
+              if (statsTriggered[i]) return;
+              statsTriggered[i] = true;
+              const numEl = block.querySelector('.stat-num');
+              if (!numEl) return;
+              const target = parseFloat(numEl.dataset.target);
+              const isInt = numEl.dataset.int === 'true';
+              const obj = { val: 0 };
+              gsap.to(obj, {
+                val: target, duration: 1.6, ease: 'power2.out',
+                delay: i * 0.1,
+                onUpdate() {
+                  numEl.textContent = isInt ? Math.round(obj.val) : obj.val.toFixed(1);
+                }
+              });
+            }
+          }
+        });
+      });
+
+      // Experience rows
+      gsap.utils.toArray('.exp-row').forEach((row, i) => {
+        gsap.fromTo(row, { x: -20, opacity: 0 }, {
+          x: 0, opacity: 1, duration: 0.65, ease: 'power3.out',
+          delay: i * 0.08,
+          scrollTrigger: { trigger: row, start: 'top 88%' }
+        });
+      });
+
+      // Section titles
+      gsap.utils.toArray('.sec-title, .diff-heading').forEach(el => {
+        gsap.fromTo(el, { y: 20, opacity: 0 }, {
+          y: 0, opacity: 1, duration: 0.6, ease: 'power3.out',
+          scrollTrigger: { trigger: el, start: 'top 88%' }
+        });
+      });
+
+      // About
+      gsap.fromTo('.about-head', { y: 30, opacity: 0 }, {
+        y: 0, opacity: 1, duration: 0.8, ease: 'power3.out',
+        scrollTrigger: { trigger: '.about-section', start: 'top 85%' }
+      });
+      gsap.utils.toArray('.about-body, .edu-block').forEach((el, i) => {
+        gsap.fromTo(el, { y: 20, opacity: 0 }, {
+          y: 0, opacity: 1, duration: 0.6, ease: 'power3.out',
+          delay: i * 0.1,
+          scrollTrigger: { trigger: el, start: 'top 90%' }
+        });
+      });
+      gsap.utils.toArray('.skills-col > div').forEach((el, i) => {
+        gsap.fromTo(el, { y: 16, opacity: 0 }, {
+          y: 0, opacity: 1, duration: 0.5, ease: 'power3.out',
+          delay: i * 0.1,
+          scrollTrigger: { trigger: el, start: 'top 90%' }
+        });
+      });
+
+      // Contact
+      gsap.utils.toArray('.contact-big span, .contact-big em').forEach((el, i) => {
+        gsap.fromTo(el, { y: 40, opacity: 0 }, {
+          y: 0, opacity: 1, duration: 0.7, ease: 'expo.out',
+          delay: i * 0.12,
+          scrollTrigger: { trigger: '.contact-section', start: 'top 85%' }
+        });
+      });
+      gsap.fromTo('.crow', { y: 20, opacity: 0 }, {
+        y: 0, opacity: 1, duration: 0.6, ease: 'power3.out',
+        scrollTrigger: { trigger: '.crow', start: 'top 90%' }
+      });
+    }
+
+    /* ─── MAGNETIC EFFECT ─── */
+    function initMagnetic() {
+      if (isMobile || prefersReducedMotion) return;
+      document.querySelectorAll('.clnk, .xcta').forEach(el => {
+        el.addEventListener('mousemove', e => {
+          const r = el.getBoundingClientRect();
+          const x = (e.clientX - r.left - r.width / 2) * 0.25;
+          const y = (e.clientY - r.top - r.height / 2) * 0.25;
+          gsap.to(el, { x, y, duration: 0.3, ease: 'power2.out' });
+        });
+        el.addEventListener('mouseleave', () => {
+          gsap.to(el, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.5)' });
+        });
+      });
+    }
+
+    /* ─── HELPERS ─── */
+    function toggle(row) {
+      const isOpen = row.classList.contains('open');
+      document.querySelectorAll('.proj-row').forEach(r => r.classList.remove('open'));
+      if (!isOpen) row.classList.add('open');
+    }
+
+    function openLink(url) {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+
+    function scrollToSection(selector) {
+      const el = document.querySelector(selector);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function showComingSoon(btn) {
+      const orig = btn.textContent;
+      btn.textContent = 'Próximamente…';
+      setTimeout(() => { btn.textContent = orig; }, 2000);
+    }
+
+    /* ─── INIT ─── */
+    initLenis();
+    initCursor();
+    initLoader();
+  </script>
+</body>
+</html>

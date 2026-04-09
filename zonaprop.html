@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZonaProp Redesign · Jimena Zapolski</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,900;1,400;1,700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    :root {
+      --bg: #F7F5F2;
+      --surface: #EFEDE9;
+      --border: rgba(0,0,0,0.08);
+      --ink: #111010;
+      --muted: #888;
+      --rosa: #C38F8F;
+      --serif: 'Playfair Display', Georgia, serif;
+      --sans: 'DM Sans', system-ui, sans-serif;
+      --mono: 'DM Mono', monospace;
+    }
+
+    html { scroll-behavior: auto; }
+    body { background:var(--bg); color:var(--ink); font-family:var(--sans); overflow-x:hidden; }
+
+    /* ─── TRANSITION OVERLAY ─── */
+    #transition-overlay {
+      position: fixed; inset: 0;
+      background: var(--ink); z-index: 2000;
+      transform: scaleY(0); transform-origin: bottom;
+      display: flex; align-items: center; justify-content: center;
+      pointer-events: none;
+    }
+    #transition-title {
+      font-family: var(--serif);
+      font-size: clamp(22px, 4vw, 48px);
+      font-style: italic; font-weight: 900;
+      color: var(--bg); opacity: 0;
+      letter-spacing: -0.02em; text-align: center; padding: 0 40px;
+    }
+
+    /* ─── CURSOR ─── */
+    #cursor {
+      position: fixed; width: 8px; height: 8px; border-radius: 50%;
+      background: var(--rosa); pointer-events: none; z-index: 9999;
+      top: 0; left: 0; transform: translate(-50%,-50%);
+      will-change: transform;
+    }
+    @media (max-width: 640px) { #cursor { display: none; } }
+
+    /* ─── NAV ─── */
+    .page-nav {
+      max-width: 920px; margin: 0 auto; padding: 0 40px;
+      display: flex; justify-content: space-between; align-items: center;
+      padding-top: 28px; padding-bottom: 28px;
+      border-bottom: 0.5px solid var(--border);
+    }
+    .nav-back {
+      font-family: var(--mono); font-size: 10px; color: var(--muted);
+      letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer;
+      display: flex; align-items: center; gap: 6px;
+      background: none; border: none; transition: color 0.2s; padding: 0;
+    }
+    .nav-back:hover { color: var(--ink); }
+    .nav-back .arrow { transition: transform 0.2s; display: inline-block; }
+    .nav-back:hover .arrow { transform: translateX(-4px); }
+    .nav-label { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+
+    /* ─── INTRO ─── */
+    .intro {
+      max-width: 920px; margin: 0 auto;
+      padding: 72px 40px 56px;
+      border-bottom: 0.5px solid var(--border);
+    }
+    .slbl {
+      font-family: var(--mono); font-size: 9px; color: var(--muted);
+      letter-spacing: 0.18em; text-transform: uppercase;
+    }
+    .intro-title {
+      font-family: var(--serif);
+      font-size: clamp(36px, 6vw, 64px);
+      font-weight: 900; letter-spacing: -0.02em;
+      margin-top: 10px; line-height: 0.95;
+    }
+    .intro-title em { font-style: italic; color: var(--rosa); display: block; }
+    .intro-sub {
+      font-size: 15px; line-height: 1.8; color: var(--muted);
+      font-weight: 300; max-width: 520px; margin-top: 24px;
+    }
+
+    /* META ROW */
+    .meta-row {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 1px; background: var(--border);
+      margin-top: 40px;
+    }
+    .meta-block { background: var(--bg); padding: 20px 18px; }
+    .meta-label { font-family: var(--mono); font-size: 8px; color: var(--muted); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 6px; }
+    .meta-val { font-family: var(--serif); font-size: 15px; font-weight: 900; letter-spacing: -0.01em; }
+
+    .intro-context { margin-top: 48px; max-width: 620px; }
+    .context-label {
+      font-family: var(--mono); font-size: 9px; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 10px;
+    }
+    .context-title {
+      font-family: var(--serif); font-size: 22px; font-weight: 900;
+      line-height: 1.25; margin-bottom: 14px;
+    }
+    .context-title em { font-style: italic; color: var(--rosa); }
+    .context-text { font-size: 13px; line-height: 1.85; color: var(--muted); font-weight: 300; }
+    .intro-quote {
+      margin-top: 44px;
+      font-family: var(--serif); font-size: 19px; font-style: italic;
+      line-height: 1.6; max-width: 520px; color: var(--ink); opacity: 0.8;
+    }
+    .intro-quote span { color: var(--rosa); }
+
+    /* ─── DECISIONS ─── */
+    .decision {
+      display: grid; grid-template-columns: 1fr 1fr;
+      border-bottom: 0.5px solid var(--border);
+      overflow: hidden;
+    }
+    .decision.right { direction: rtl; }
+    .decision.right * { direction: ltr; }
+
+    .dec-text {
+      padding: 56px 48px;
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .dec-num {
+      font-family: var(--serif); font-size: 11px; font-style: italic;
+      color: var(--muted); margin-bottom: 20px;
+    }
+    .dec-title {
+      font-family: var(--serif); font-size: 28px; font-weight: 900;
+      letter-spacing: -0.01em; line-height: 1.1; margin-bottom: 16px;
+    }
+    .dec-title em { font-style: italic; color: var(--rosa); }
+    .dec-body { font-size: 13px; line-height: 1.85; color: var(--muted); font-weight: 300; }
+    .dec-body strong { color: var(--ink); font-weight: 500; }
+
+    .dec-img {
+  overflow: hidden;
+  /* background: var(--surface); */
+  position: relative;
+  min-height: 400px;
+  padding: 20px;
+}
+
+.dec-img img {
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  object-fit: contain;
+  object-position: top center;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px 0px;
+}
+
+.dec-img img:last-child {
+  transform: translateX(-20%) translateY(-5px);
+}
+
+
+    /* Placeholder when no image */
+    .dec-img-placeholder {
+      width: 100%; height: 100%; min-height: 400px;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--surface);
+    }
+    .dec-img-placeholder span {
+      font-family: var(--serif); font-size: 72px; font-style: italic;
+      color: var(--rosa); opacity: 0.25; font-weight: 900;
+      letter-spacing: -0.02em;
+    }
+
+    /* ─── PHONES ─── */
+    .phones-wrap {
+      background: var(--surface); padding: 64px 40px;
+      display: flex; justify-content: center; align-items: flex-end;
+      gap: 24px; border-bottom: 0.5px solid var(--border);
+    }
+    .phone-card { flex: 1; max-width: 220px; }
+    .phone-card img {
+      width: 100%; border-radius: 28px; display: block;
+      box-shadow: 0 24px 48px rgba(0,0,0,0.12);
+    }
+    .phone-card-placeholder {
+      width: 100%; aspect-ratio: 9/19;
+      border-radius: 28px; background: var(--bg);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 24px 48px rgba(0,0,0,0.08);
+    }
+    .phone-card-placeholder span {
+      font-family: var(--mono); font-size: 9px; color: var(--muted);
+      letter-spacing: 0.1em; text-transform: uppercase; text-align: center; padding: 0 16px;
+    }
+    .phone-card:nth-child(2) { transform: translateY(-20px); }
+    .phone-caption {
+      font-family: var(--mono); font-size: 9px; color: var(--muted);
+      letter-spacing: 0.1em; text-transform: uppercase;
+      text-align: center; margin-top: 14px;
+    }
+
+    /* ─── ANNOTATIONS ─── */
+    .annotations {
+      max-width: 920px; margin: 0 auto; padding: 0;
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 1px; background: var(--border);
+    }
+    .ann-block { background: var(--bg); padding: 32px 28px; }
+    .ann-label {
+      font-family: var(--mono); font-size: 8px; color: var(--rosa);
+      letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 12px;
+    }
+    .ann-title { font-family: var(--serif); font-size: 16px; font-weight: 900; margin-bottom: 10px; }
+    .ann-text { font-size: 12px; line-height: 1.7; color: var(--muted); font-weight: 300; }
+
+    /* ─── STATEMENT ─── */
+    .statement { background: var(--rosa); padding: 80px 48px; text-align: center; }
+    .statement-q {
+      font-family: var(--serif);
+      font-size: clamp(20px, 3.5vw, 34px);
+      font-style: italic; font-weight: 400;
+      color: rgba(247,245,242,0.9); line-height: 1.45;
+      max-width: 580px; margin: 0 auto 24px;
+    }
+    .statement-src {
+      font-family: var(--mono); font-size: 10px;
+      color: rgba(247,245,242,0.3); letter-spacing: 0.12em; text-transform: uppercase;
+    }
+
+    /* ─── BACK CTA ─── */
+    .back-cta-wrap {
+      max-width: 920px; margin: 0 auto; padding: 64px 40px 96px;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;
+    }
+    .back-cta-wrap p { font-family: var(--mono); font-size: 9px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+    .btn-pill {
+      display: inline-flex; align-items: center; background: var(--ink);
+      border: none; border-radius: 100px; cursor: pointer; overflow: hidden;
+    }
+    .btn-pill-text {
+      font-family: var(--serif); font-size: 13px; font-weight: 700; font-style: italic;
+      color: var(--bg); padding: 13px 22px 13px 26px; transition: transform 0.2s;
+    }
+    .btn-pill:hover .btn-pill-text { transform: translateX(-4px); }
+    .btn-pill-icon {
+      width: 40px; height: 40px; border-radius: 50%; background: var(--rosa);
+      display: flex; align-items: center; justify-content: center;
+      margin: 4px 4px 4px 0; flex-shrink: 0; transition: transform 0.3s;
+    }
+    .btn-pill:hover .btn-pill-icon { transform: rotate(-45deg); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .dec-img img { transition: none !important; }
+    }
+
+    @media (max-width: 640px) {
+      .page-nav, .intro, .back-cta-wrap { padding-left: 24px; padding-right: 24px; }
+      .decision { grid-template-columns: 1fr; }
+      .decision.right { direction: ltr; }
+      .dec-img { min-height: 260px; }
+      .meta-row { grid-template-columns: 1fr 1fr; }
+      .phones-wrap { padding: 40px 24px; gap: 12px; }
+      .annotations { grid-template-columns: 1fr; }
+      .dec-text { padding: 36px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TRANSITION OVERLAY -->
+  <div id="transition-overlay" aria-hidden="true">
+    <span id="transition-title"></span>
+  </div>
+
+  <!-- CURSOR -->
+  <div id="cursor" aria-hidden="true"></div>
+
+  <!-- NAV -->
+  <nav class="page-nav">
+    <button class="nav-back" onclick="goBack()">
+      <span class="arrow">←</span> Volver al portfolio
+    </button>
+    <span class="nav-label">Caso de estudio 002</span>
+  </nav>
+
+  <!-- INTRO -->
+  <div class="intro">
+    <p class="slbl">Caso de estudio — Zonaprop</p>
+    <h1 class="intro-title">
+      Redefiniendo la búsqueda
+      <em>inmobiliaria</em>
+    </h1>
+    <p class="intro-sub">
+      En la era de la inteligencia artificial, buscar una propiedad
+      no debería sentirse como completar formularios.
+    </p>
+
+    <div class="meta-row">
+      <div class="meta-block">
+        <p class="meta-label">Rol</p>
+        <p class="meta-val">UX/UI Designer</p>
+      </div>
+      <div class="meta-block">
+        <p class="meta-label">Tipo</p>
+        <p class="meta-val">Concept redesign</p>
+      </div>
+      <div class="meta-block">
+        <p class="meta-label">Plataforma</p>
+        <p class="meta-val">iOS · Web</p>
+      </div>
+      <div class="meta-block">
+        <p class="meta-label">Enfoque</p>
+        <p class="meta-val">IA aplicada</p>
+      </div>
+    </div>
+
+    <div class="intro-context">
+      <p class="context-label">Contexto</p>
+      <p class="context-title">
+        El mercado inmobiliario necesita
+        <em>una nueva interfaz</em>
+      </p>
+      <p class="context-text">
+        Zonaprop es el portal inmobiliario más grande de Argentina.
+        Con millones de usuarios mensuales y miles de publicaciones activas,
+        el producto enfrenta un problema que pocas veces se nombra explícitamente:
+        la interfaz fue diseñada para un mundo anterior a la IA, y se nota.
+        <br><br>
+        Este ejercicio de rediseño nace de una pregunta simple —
+        ¿cómo sería buscar una propiedad si el producto hubiera sido concebido hoy? —
+        y propone respuestas concretas basadas en hallazgos reales documentados
+        en reviews de usuarios.
+      </p>
+    </div>
+
+    <!-- <div class="intro-quote">
+      Rediseñar no es mover componentes.<br>
+      <span>Es decidir qué historia querés contar…</span><br>
+      y con qué objetivo.
+    </div> -->
+  </div>
+
+  <!-- DECISION 01 -->
+  <div class="decision left">
+    <div class="dec-text">
+      <p class="dec-num">01 — Onboarding</p>
+      <h3 class="dec-title">
+        Cinco pasos antes de empezar<br>
+        <em>ya es fricción</em>
+      </h3>
+      <p class="dec-body">
+        El flujo inicial obligaba a completar cinco pasos antes de poder explorar.
+        Esto retrasa el momento de valor y aumenta el abandono.
+        <br><br>
+        <strong>Decisión:</strong> eliminar el onboarding y permitir comenzar
+        directamente con una búsqueda en lenguaje natural.
+      </p>
+    </div>
+    <div class="dec-img">
+      <!-- Imagen de fondo -->
+      <img src="assets/zonaprop/antes.png" 
+           alt="Pantalla de filtros de Zonaprop" 
+           style="opacity: 0.2; z-index: 1;"> 
+    
+      <!-- Imagen principal (arriba) -->
+      <img src="assets/zonaprop/ZP-home.png" 
+           alt="Pantalla de inicio de Zonaprop propuesta" 
+           style="z-index: 2;"> 
+    </div>
+  </div>
+
+  <!-- DECISION 02 -->
+  <div class="decision right">
+    <div class="dec-img">
+      <!-- Imagen de fondo -->
+      <img src="assets/zonaprop/filtros-antes.png" 
+           alt="Pantalla de filtros de Zonaprop" 
+           style="opacity: 0.2; z-index: 1;"> 
+    
+      <!-- Imagen principal (arriba) -->
+      <img src="assets/zonaprop/resultado-busqueda.png" 
+           alt="Pantalla de inicio de Zonaprop propuesta" 
+           style="z-index: 2;"> 
+    </div>
+    <div class="dec-text">
+      <p class="dec-num">02 — Filtros</p>
+      <h3 class="dec-title">
+        Demasiadas opciones,<br>
+        <em>poca guía</em>
+      </h3>
+      <p class="dec-body">
+        Los filtros estaban fragmentados y repetidos, obligando al usuario
+        a tomar múltiples decisiones manuales.
+        <br><br>
+        <strong>Decisión:</strong> convertir los filtros en sugerencias
+        inteligentes generadas por IA según lo que el usuario escribe.
+      </p>
+    </div>
+    
+  </div>
+
+  <!-- DECISION 03 -->
+  <div class="decision left">
+    <div class="dec-text">
+      <p class="dec-num">03 — Ficha</p>
+      <h3 class="dec-title">
+        Mucha información,<br>
+        <em>sin jerarquía</em>
+      </h3>
+      <p class="dec-body">
+        La ficha de propiedad no priorizaba lo importante, dificultando
+        la lectura rápida y la comparación.
+        <br><br>
+        <strong>Decisión:</strong> reorganizar la información destacando
+        imagen, precio y ubicación como primer nivel.
+      </p>
+    </div>
+    <div class="dec-img">
+      <!-- Imagen de fondo -->
+      <img src="assets/zonaprop/jerarquia-antes.png" 
+           alt="Pantalla de propiedad de Zonaprop" 
+           style="opacity: 0.2; z-index: 1;"> 
+    
+      <!-- Imagen principal (arriba) -->
+      <img src="assets/zonaprop/propiedad.png" 
+           alt="Pantalla de propiedad propuesta" 
+           style="z-index: 2;"> 
+    </div>
+  </div>
+
+  <!-- DECISION 04 -->
+  <div class="decision right">
+    <div>
+      <img src="assets/zonaprop/problemas.png" 
+      alt="problemas" width="100%">
+    </div>
+    <div class="dec-text">
+      <p class="dec-num">04 — Experiencia real</p>
+      <h3 class="dec-title">
+        Los problemas ya existían,<br>
+        <em>solo había que escucharlos</em>
+      </h3>
+      <p class="dec-body">
+        Reviews de usuarios mostraban bugs en mapa, filtros inconsistentes
+        y fricción en navegación.
+        <br><br>
+        <strong>Decisión:</strong> usar evidencia real como base del rediseño,
+        priorizando estabilidad y claridad.
+      </p>
+    </div>
+  </div>
+
+  <!-- MOCKUPS / PHONES
+  <div class="phones-wrap">
+    <div class="phone-card">
+      <div class="phone-card-placeholder"><span>Lenguaje natural</span></div>
+      <p class="phone-caption">Búsqueda conversacional</p>
+    </div>
+    <div class="phone-card">
+      <div class="phone-card-placeholder"><span>Filtros IA</span></div>
+      <p class="phone-caption">Sugerencias inteligentes</p>
+    </div>
+    <div class="phone-card">
+      <div class="phone-card-placeholder"><span>Resultados</span></div>
+      <p class="phone-caption">Información jerarquizada</p>
+    </div>
+  </div> -->
+
+ 
+
+
+   <!-- ANNOTATIONS -->
+   <div class="annotations">
+    <div class="ann-block">
+      <p class="ann-label">UX</p>
+      <h4 class="ann-title">Menos fricción</h4>
+      <p class="ann-text">
+        El usuario empieza desde su intención, no desde configuraciones.
+        El primer contacto con el producto es una conversación, no un formulario.
+      </p>
+    </div>
+    <div class="ann-block">
+      <p class="ann-label">IA</p>
+      <h4 class="ann-title">Interpretar, no reemplazar</h4>
+      <p class="ann-text">
+        La inteligencia artificial acompaña la búsqueda en lugar de complejizarla.
+        Traduce intención en parámetros de búsqueda de forma invisible.
+      </p>
+    </div>
+    <div class="ann-block">
+      <p class="ann-label">Producto</p>
+      <h4 class="ann-title">Mejor decisión</h4>
+      <p class="ann-text">
+        Información clara y jerarquizada reduce la carga cognitiva y
+        mejora la tasa de conversión desde listado a contacto.
+      </p>
+    </div>
+  </div>
+
+
+  <!-- STATEMENT -->
+  <div class="statement">
+    <p class="statement-q">
+      "Buscar una propiedad ya no debería ser aplicar filtros,
+      sino expresar lo que estás buscando."
+    </p>
+    <p class="statement-src">Zonaprop — Concept redesign · Jimena Zapolski</p>
+  </div>
+
+  <!-- BACK CTA -->
+  <div class="back-cta-wrap">
+<p></p>
+    <button class="btn-pill" onclick="goBack()">
+      <span class="btn-pill-text">Volver a la página principal</span>
+      <span class="btn-pill-icon">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#F7F5F2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 8H3M7 4L3 8l4 4"/></svg>
+      </span>
+    </button>
+  </div>
+
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isMobile = window.innerWidth < 640;
+
+    /* ─── LENIS ─── */
+    const lenis = new Lenis({ lerp: 0.1, smoothWheel: true });
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+    gsap.ticker.lagSmoothing(0);
+
+    /* ─── CURSOR ─── */
+    if (!isMobile && !prefersReducedMotion) {
+      const cursor = document.getElementById('cursor');
+      const xTo = gsap.quickTo(cursor, 'x', { duration: 0.35, ease: 'power3' });
+      const yTo = gsap.quickTo(cursor, 'y', { duration: 0.35, ease: 'power3' });
+      window.addEventListener('mousemove', e => { xTo(e.clientX); yTo(e.clientY); });
+      document.querySelectorAll('a, button').forEach(el => {
+        el.addEventListener('mouseenter', () => gsap.to(cursor, { scale: 3, duration: 0.2 }));
+        el.addEventListener('mouseleave', () => gsap.to(cursor, { scale: 1, duration: 0.2 }));
+      });
+    }
+
+    /* ─── TRANSITION IN ─── */
+    (function initTransitionIn() {
+      const overlay = document.getElementById('transition-overlay');
+      if (sessionStorage.getItem('pageTransition')) {
+        sessionStorage.removeItem('pageTransition');
+        gsap.set(overlay, { scaleY: 1, transformOrigin: 'top' });
+        gsap.to(overlay, { scaleY: 0, duration: 0.65, ease: 'power3.inOut', delay: 0.1 });
+      }
+    })();
+
+    /* ─── TRANSITION OUT ─── */
+    function goTo(href, title) {
+      const overlay = document.getElementById('transition-overlay');
+      const titleEl = document.getElementById('transition-title');
+      overlay.style.pointerEvents = 'all';
+      if (title) titleEl.textContent = title;
+      const tl = gsap.timeline({
+        onComplete: () => { sessionStorage.setItem('pageTransition', '1'); window.location.href = href; }
+      });
+      tl.set(overlay, { scaleY: 0, transformOrigin: 'bottom' })
+        .to(overlay, { scaleY: 1, duration: 0.5, ease: 'power3.inOut' })
+        .to(titleEl, { opacity: 1, scale: 1, duration: 0.25 }, '-=0.15');
+    }
+
+    function goBack() { goTo('index.html', ''); }
+
+    /* ─── SCROLL ANIMATIONS ─── */
+    if (!prefersReducedMotion) {
+
+      // Intro entrance
+      gsap.timeline({ delay: 0.15 })
+        .from('.slbl', { y: 16, opacity: 0, duration: 0.5, ease: 'power3.out' })
+        .from('.intro-title', { y: 40, opacity: 0, duration: 0.9, ease: 'expo.out' }, '-=0.2')
+        .from('.intro-sub', { y: 20, opacity: 0, duration: 0.6, ease: 'power3.out' }, '-=0.4')
+        .from('.meta-block', { y: 16, opacity: 0, stagger: 0.07, duration: 0.5, ease: 'power3.out' }, '-=0.3')
+        .from('.intro-context', { y: 24, opacity: 0, duration: 0.7, ease: 'power3.out' }, '-=0.2')
+        .from('.intro-quote', { y: 20, opacity: 0, duration: 0.6, ease: 'power3.out' }, '-=0.3');
+
+      // Decision sections — text from side, image with parallax
+      gsap.utils.toArray('.decision').forEach((dec, i) => {
+        const isRight = dec.classList.contains('right');
+        const textEl = dec.querySelector('.dec-text');
+        const imgEl = dec.querySelector('.dec-img, .dec-img-placeholder');
+
+        gsap.from(textEl, {
+          x: isRight ? 40 : -40, opacity: 0, duration: 0.8, ease: 'power3.out',
+          scrollTrigger: { trigger: dec, start: 'top 80%' }
+        });
+        gsap.from(imgEl, {
+          x: isRight ? -30 : 30, opacity: 0, duration: 0.8, ease: 'power3.out',
+          scrollTrigger: { trigger: dec, start: 'top 80%' }
+        });
+
+        // Parallax on real images only
+        const img = dec.querySelector('.dec-img img');
+        if (img) {
+          gsap.fromTo(img,
+            { y: '-6%' },
+            { y: '6%', ease: 'none',
+              scrollTrigger: { trigger: dec, start: 'top bottom', end: 'bottom top', scrub: 0.8 }
+            }
+          );
+        }
+      });
+
+      // Phone cards
+      gsap.utils.toArray('.phone-card').forEach((card, i) => {
+        const isMiddle = i === 1;
+        gsap.from(card, {
+          y: isMiddle ? 60 : 40, opacity: 0, rotation: i === 0 ? -4 : i === 2 ? 4 : 0,
+          duration: 0.8, ease: 'back.out(1.3)',
+          delay: i * 0.12,
+          scrollTrigger: { trigger: '.phones-wrap', start: 'top 85%' }
+        });
+      });
+
+      // Annotations
+      gsap.utils.toArray('.ann-block').forEach((block, i) => {
+        gsap.from(block, {
+          y: 24, opacity: 0, duration: 0.6, ease: 'power3.out',
+          delay: i * 0.12,
+          scrollTrigger: { trigger: '.annotations', start: 'top 85%' }
+        });
+      });
+
+      // Statement
+      gsap.from('.statement-q', {
+        y: 30, opacity: 0, duration: 0.9, ease: 'expo.out',
+        scrollTrigger: { trigger: '.statement', start: 'top 80%' }
+      });
+      gsap.from('.statement-src', {
+        opacity: 0, duration: 0.6, ease: 'power2.out', delay: 0.3,
+        scrollTrigger: { trigger: '.statement', start: 'top 80%' }
+      });
+
+      // Back CTA
+      gsap.from('.back-cta-wrap', {
+        y: 20, opacity: 0, duration: 0.6, ease: 'power3.out',
+        scrollTrigger: { trigger: '.back-cta-wrap', start: 'top 90%' }
+      });
+    }
+  </script>
+</body>
+</html>
