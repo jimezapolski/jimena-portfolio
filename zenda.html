@@ -89,6 +89,20 @@
     .meta-label { font-family:var(--mono); font-size:8px; color:var(--muted); letter-spacing:0.15em; text-transform:uppercase; margin-bottom:6px; }
     .meta-val { font-family:var(--serif); font-size:15px; font-weight:900; letter-spacing:-0.01em; }
 
+    /* ─── DOWNLOAD BTN ─── */
+    .nav-download {
+      font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--ink); border: 0.5px solid var(--border-hi);
+      padding: 7px 14px; text-decoration: none;
+      display: inline-flex; align-items: center; gap: 7px;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+      background: transparent;
+    }
+    .nav-download:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+    .nav-download svg { flex-shrink: 0; transition: transform 0.2s; }
+    .nav-download:hover svg { transform: translateY(2px); }
+    .nav-right { display: flex; align-items: center; gap: 20px; }
+
     /* ─── SECTIONS ─── */
     .slbl { font-family:var(--mono); font-size:9px; color:var(--muted); letter-spacing:0.18em; text-transform:uppercase; }
     .section { margin-top:72px; }
@@ -255,7 +269,15 @@
         <button class="nav-back" onclick="goBack()">
           <span class="arrow">←</span> Volver al portfolio
         </button>
-        <span class="nav-label">Caso de estudio 001</span>
+        <div class="nav-right">
+          <span class="nav-label">Caso de estudio 001</span>
+          <a class="nav-download" href="assets/tesis-zenda.pdf" download="Tesis-Zenda-JimenaZapolski.pdf" target="_blank">
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 1v5.5M2.5 4.5L5 7l2.5-2.5M1.5 9h7" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Descargar tesis
+          </a>
+        </div>
       </nav>
 
       <!-- HERO -->
