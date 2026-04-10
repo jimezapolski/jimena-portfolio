@@ -152,9 +152,9 @@
     .hero-intro { font-size:16px; font-weight:300; color:var(--muted); margin-bottom:12px; }
     .hero-name { font-family:var(--serif); line-height:0.88; letter-spacing:-0.02em; display: grid; justify-content: left; margin-bottom: -40px;}
     /* .hero-name .n1 { display:block; font-style:italic; font-weight:700; font-size:clamp(64px,11vw,104px); color:var(--rosa); } */
-    .hero-name .n1 {height:auto; width:250px; display:inline-block;}
+    .hero-name .n1 {height:auto; width:250px; display:inline-block; will-change:transform; }
     /* .hero-name .n2 { display:block; font-weight:900; font-size:clamp(64px,11vw,104px); text-transform:uppercase; color:var(--ink); } */
-    .hero-name .n2 {height:auto; width:300px; margin-top: -90px; }
+    .hero-name .n2 {height:auto; width:300px; margin-top: -90px; will-change:transform; }
     .hero-copy { font-size:14px; line-height:1.8; color:var(--muted); font-weight:300; max-width:420px; margin-top:40px; margin-bottom:16px; }
     .hero-copy .hl { color:var(--rosa); font-style:italic; }
     .hero-tags { display:flex; flex-wrap:wrap; gap:5px; margin-bottom:36px; }
@@ -303,7 +303,9 @@
   <script>if(sessionStorage.getItem('pageTransition'))document.write('<style>#loader{display:none!important}</style>');</script>
   <div id="loader" aria-hidden="true">
     <div class="loader-name">
-      <span class="lc lc-first">j</span><span class="lc lc-first">i</span><span class="lc lc-first">m</span><span class="lc lc-first">e</span><span class="lc lc-first">n</span><span class="lc lc-first">a</span><span class="lc-space"></span><span class="lc">Z</span><span class="lc">a</span><span class="lc">p</span><span class="lc">o</span><span class="lc">l</span><span class="lc">s</span><span class="lc">k</span><span class="lc">i</span>
+      <!-- <span class="lc lc-first">j</span><span class="lc lc-first">i</span><span class="lc lc-first">m</span><span class="lc lc-first">e</span><span class="lc lc-first">n</span><span class="lc lc-first">a</span><span class="lc-space"></span><span class="lc">Z</span><span class="lc">a</span><span class="lc">p</span><span class="lc">o</span><span class="lc">l</span><span class="lc">s</span><span class="lc">k</span><span class="lc">i</span> -->
+
+     <span class="lc">Z</span><span class="lc">a</span><span class="lc">p</span><span class="lc">o</span><span class="lc">l</span><span class="lc">s</span><span class="lc">k</span><span class="lc">i</span>
     </div>
     <div class="loader-line"></div>
   </div>
@@ -451,17 +453,17 @@
           <div class="proj-row anim-ready" onclick="toggle(this)">
             <div class="proj-top">
               <span class="pnum">003</span>
-              <span class="pname">Billetera Digital — Fintech</span>
-              <div class="ptags"><span class="ptag">Fintech</span><span class="ptag">Design System</span><span class="ptag">A11y</span><span class="ptag">IA</span></div>
+              <span class="pname">Proyectos anteriores</span>
+              <div class="ptags"><span class="ptag"></span><span class="ptag"></span><span class="ptag"></span><span class="ptag"></span></div>
               <span class="parrow">+</span>
             </div>
             <div class="proj-expand">
-              <div class="xgrid">
-                <div class="xblock"><p class="xlabel">Proceso UX</p><p class="xtext">Research del mercado fintech local, personas, arquitectura de información y design system desde cero con IA aplicada al flujo de onboarding.</p></div>
-                <div class="xblock"><p class="xlabel">Impacto en usuarios</p><p class="xtext">Onboarding simplificado. Lenguaje financiero cotidiano para usuarios que se acercan por primera vez al mundo digital.</p></div>
-                <div class="xblock"><p class="xlabel">Impacto en el negocio</p><p class="xtext">Modelo validado con métricas de activación y retención. Diferenciador en mercado saturado.</p></div>
-              </div>
-              <button class="xcta" onclick="event.stopPropagation(); showComingSoon(this)">Próximamente ↗</button>
+              <!-- <div class="xgrid">
+                <div class="xblock"><p class="xlabel">Enfoque</p><p class="xtext"></p></div>
+                <div class="xblock"><p class="xlabel">Impacto en usuarios</p><p class="xtext"></p></div>
+                <div class="xblock"><p class="xlabel">Resultados</p><p class="xtext"></p></div>
+              </div> -->
+              <button class="xcta" onclick="openLink('https://www.behance.net/jimezapolski')">proyectos en BEHANCE ↗</button>
             </div>
           </div>
 
@@ -846,6 +848,38 @@
       });
     }
 
+    /* ─── NAME PARALLAX ─── */
+    function initNameParallax() {
+      if (prefersReducedMotion) return;
+      const hero = document.querySelector('.hero');
+      const n1   = document.querySelector('.n1');
+      const n2   = document.querySelector('.n2');
+      if (!n1 || !n2 || !hero) return;
+
+      // n1 (jimena) — primer plano: sigue al cursor
+      const n1x = gsap.quickTo(n1, 'x', { duration: 0.7, ease: 'power3.out' });
+      const n1y = gsap.quickTo(n1, 'y', { duration: 0.7, ease: 'power3.out' });
+      // n2 (zapolski) — fondo: se mueve en contra, más lento
+      const n2x = gsap.quickTo(n2, 'x', { duration: 1.1, ease: 'power3.out' });
+      const n2y = gsap.quickTo(n2, 'y', { duration: 1.1, ease: 'power3.out' });
+
+      hero.addEventListener('mousemove', e => {
+        const r  = hero.getBoundingClientRect();
+        const cx = (e.clientX - r.left  - r.width  / 2) / r.width;   // -0.5 → 0.5
+        const cy = (e.clientY - r.top   - r.height / 2) / r.height;
+
+        n1x( cx * 30);   // jimena: primer plano, más movimiento
+        n1y( cy * 18);
+        n2x(-cx * 18);   // zapolski: fondo, sentido contrario → profundidad
+        n2y(-cy * 11);
+      });
+
+      hero.addEventListener('mouseleave', () => {
+        gsap.to(n1, { x: 0, y: 0, duration: 1.2, ease: 'elastic.out(1, 0.4)' });
+        gsap.to(n2, { x: 0, y: 0, duration: 1.4, ease: 'elastic.out(1, 0.35)' });
+      });
+    }
+
     /* ─── MAGNETIC EFFECT ─── */
     function initMagnetic() {
       if (isMobile || prefersReducedMotion) return;
@@ -887,6 +921,7 @@
     /* ─── INIT ─── */
     initLenis();
     initCursor();
+    initNameParallax();
     initLoader();
   </script>
 </body>
