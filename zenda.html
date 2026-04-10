@@ -70,8 +70,15 @@
       transition:color 0.2s; padding: 0;
     }
     .nav-back:hover { color:var(--ink); }
-    .nav-back .arrow { transition: transform 0.2s; display:inline-block; }
-    .nav-back:hover .arrow { transform: translateX(-4px); }
+    @keyframes arrow-bounce-left {
+      0%         { transform: translateX(0); }
+      30%        { transform: translateX(-8px); }
+      55%        { transform: translateX(-1px); }
+      78%        { transform: translateX(-6px); }
+      100%       { transform: translateX(-4px); }
+    }
+    .nav-back .arrow { display:inline-block; }
+    .nav-back:hover .arrow { animation: arrow-bounce-left 0.48s cubic-bezier(0.4,0,0.2,1) forwards; }
     .nav-label { font-family:var(--mono); font-size:10px; color:var(--muted); letter-spacing:0.1em; text-transform:uppercase; }
 
     /* ─── HERO ─── */
@@ -97,6 +104,7 @@
       display: inline-flex; align-items: center; gap: 7px;
       transition: background 0.2s, color 0.2s, border-color 0.2s;
       background: transparent;
+      margin-bottom: 20px;
     }
     .nav-download:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
     .nav-download svg { flex-shrink: 0; transition: transform 0.2s; }
@@ -112,7 +120,7 @@
     /* ─── PROBLEM ─── */
     .problem-grid { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border); }
     .problem-block { background:var(--bg); padding:28px 24px; }
-    .problem-block.dark { background:var(--ink); }
+    .problem-block.dark { background:var(--rosa); }
     .pb-label { font-family:var(--mono); font-size:8px; color:var(--muted); letter-spacing:0.15em; text-transform:uppercase; margin-bottom:12px; }
     .problem-block.dark .pb-label { color:rgba(255,255,255,0.4); }
     .pb-text { font-size:13px; line-height:1.8; color:var(--muted); font-weight:300; }
@@ -167,7 +175,7 @@
     .impact-section { margin-top:72px; padding-top:64px; border-top:0.5px solid var(--border); }
     .impact-grid { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border); margin-top:28px; }
     .impact-block { background:var(--bg); padding:32px 28px; }
-    .impact-block.accent { background:var(--ink); }
+    .impact-block.accent { background:var(--rosa); }
     .impact-label { font-family:var(--mono); font-size:8px; color:var(--muted); letter-spacing:0.15em; text-transform:uppercase; margin-bottom:16px; }
     .impact-block.accent .impact-label { color:rgba(255,255,255,0.4); }
     .impact-text { font-size:13px; line-height:1.85; color:var(--muted); font-weight:300; }
@@ -271,18 +279,20 @@
         </button>
         <div class="nav-right">
           <span class="nav-label">Caso de estudio 001</span>
-          <a class="nav-download" href="assets/tesis-zenda.pdf" download="Tesis-Zenda-JimenaZapolski.pdf" target="_blank">
-            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M5 1v5.5M2.5 4.5L5 7l2.5-2.5M1.5 9h7" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            Descargar tesis
-          </a>
+          
         </div>
       </nav>
 
       <!-- HERO -->
       <section class="cs-hero">
+        <a class="nav-download" href="assets/tesis-zenda.pdf" download="Tesis-Zenda-JimenaZapolski.pdf" target="_blank">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5 1v5.5M2.5 4.5L5 7l2.5-2.5M1.5 9h7" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Descargar tesis
+        </a>
         <div class="cs-eyebrow">
+          
           <span class="cs-tag hi">AR / Realidad Aumentada</span>
           <span class="cs-tag">Ed-Tech</span>
           <span class="cs-tag">React Native</span>

@@ -66,8 +66,15 @@
       background: none; border: none; transition: color 0.2s; padding: 0;
     }
     .nav-back:hover { color: var(--ink); }
-    .nav-back .arrow { transition: transform 0.2s; display: inline-block; }
-    .nav-back:hover .arrow { transform: translateX(-4px); }
+    @keyframes arrow-bounce-left {
+      0%   { transform: translateX(0); }
+      30%  { transform: translateX(-8px); }
+      55%  { transform: translateX(-1px); }
+      78%  { transform: translateX(-6px); }
+      100% { transform: translateX(-4px); }
+    }
+    .nav-back .arrow { display: inline-block; }
+    .nav-back:hover .arrow { animation: arrow-bounce-left 0.48s cubic-bezier(0.4,0,0.2,1) forwards; }
     .nav-label { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
 
     /* ─── INTRO ─── */
