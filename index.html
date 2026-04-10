@@ -202,6 +202,63 @@
     }
     .btn-pill-icon { animation: pill-glow 2.6s ease-in-out infinite; }
 
+    /* ─── SWIPE STACK ─── */
+    .swipe-section { padding:80px 40px 72px; max-width:920px; margin:0 auto; }
+    .swipe-layout { display:grid; grid-template-columns:1fr 280px; gap:64px; align-items:center; }
+    @media (max-width:720px) { .swipe-layout { grid-template-columns:1fr; } .swipe-arena { align-items:flex-start; } }
+
+    .swipe-eyebrow { font-family:var(--mono); font-size:9px; color:var(--muted); letter-spacing:0.18em; text-transform:uppercase; margin-bottom:14px; }
+    .swipe-title { font-family:var(--serif); font-size:clamp(28px,4vw,40px); font-weight:900; letter-spacing:-0.02em; line-height:1; margin-bottom:20px; }
+    .swipe-title em { font-style:italic; color:var(--rosa); display:block; }
+    .swipe-desc { font-size:13px; line-height:1.8; color:var(--muted); font-weight:300; max-width:340px; margin-bottom:32px; }
+
+    .swipe-arena { display:flex; flex-direction:column; align-items:center; gap:20px; }
+    .swipe-stack {
+      position:relative; width:280px; height:390px;
+      cursor:grab; user-select:none; -webkit-user-select:none;
+    }
+    .swipe-stack:active { cursor:grabbing; }
+
+    .scard {
+      position:absolute; top:0; left:0; width:280px; height:390px;
+      border:0.5px solid var(--border-hi); overflow:hidden;
+      transform-origin:center bottom; will-change:transform;
+      background:var(--surface);
+    }
+    .scard-img { width:100%; height:305px; object-fit:cover; display:block; }
+    .scard-ph {
+      width:100%; height:305px; display:flex; align-items:center; justify-content:center;
+      font-family:var(--serif); font-size:13px; font-style:italic; font-weight:400;
+      color:rgba(255,255,255,0.45); letter-spacing:0.02em; flex-direction:column; gap:8px;
+    }
+    .scard-ph span { font-family:var(--mono); font-size:8px; letter-spacing:0.1em; text-transform:uppercase; opacity:0.5; }
+    .scard-ph-1 { background:linear-gradient(145deg,#C38F8F,#8B6565); }
+    .scard-ph-2 { background:linear-gradient(145deg,#7DB800,#4a6d00); }
+    .scard-ph-3 { background:linear-gradient(145deg,#111010,#2a2a2a); }
+    .scard-ph-4 { background:linear-gradient(145deg,#8F9FC3,#5a6a8b); }
+    .scard-ph-5 { background:linear-gradient(145deg,#C3A88F,#8b6845); }
+    .scard-ph-6 { background:linear-gradient(145deg,#8FC3B8,#4a8b7e); }
+
+    .scard-info { padding:14px 18px; border-top:0.5px solid var(--border); background:var(--bg); height:85px; }
+    .scard-name { font-family:var(--serif); font-size:14px; font-weight:900; letter-spacing:-0.01em; margin-bottom:3px; }
+    .scard-sub { font-family:var(--mono); font-size:8px; color:var(--muted); letter-spacing:0.12em; text-transform:uppercase; }
+
+    /* drag indicators */
+    .sd { position:absolute; top:18px; font-family:var(--mono); font-size:9px; letter-spacing:0.12em; text-transform:uppercase; padding:5px 12px; border:1.5px solid; opacity:0; pointer-events:none; z-index:20; }
+    .sd-r { right:16px; color:var(--lime); border-color:var(--lime); transform:rotate(12deg); }
+    .sd-l { left:16px; color:var(--rosa); border-color:var(--rosa); transform:rotate(-12deg); }
+
+    /* nav */
+    .swipe-nav { display:flex; align-items:center; gap:16px; }
+    .swipe-btn {
+      width:42px; height:42px; border-radius:50%; border:0.5px solid var(--border-hi);
+      background:var(--bg); display:flex; align-items:center; justify-content:center;
+      cursor:pointer; transition:background 0.2s, border-color 0.2s, color 0.2s;
+      font-size:14px; color:var(--ink); flex-shrink:0;
+    }
+    .swipe-btn:hover { background:var(--ink); color:var(--bg); border-color:var(--ink); }
+    .swipe-counter { font-family:var(--mono); font-size:9px; color:var(--muted); letter-spacing:0.12em; min-width:36px; text-align:center; }
+
     /* ─── MARQUEE ─── */
     .marquee-wrap { border-top:0.5px solid var(--border); border-bottom:0.5px solid var(--border); overflow:hidden; padding:12px 0;margin-top: -10px; }
     .marquee-track { display:flex; white-space:nowrap; animation:mq 22s linear infinite; }
@@ -485,6 +542,90 @@
         <span class="mi">IA aplicada</span><span class="mi l">✦</span>
       </div>
     </div>
+
+    <!-- SWIPE STACK -->
+    <div class="swipe-section">
+      <div class="swipe-layout">
+        <!-- texto izquierda -->
+        <div>
+          <p class="swipe-eyebrow anim-ready">Exploración visual</p>
+          <h2 class="swipe-title anim-ready">Un mix de<br><em>lo que hice</em></h2>
+          <p class="swipe-desc anim-ready">Pantallas reales de proyectos, explorations y sistemas de diseño. Deslizá para explorar.</p>
+          <div class="swipe-nav anim-ready">
+            <button class="swipe-btn" id="swipePrev" title="Anterior">←</button>
+            <span class="swipe-counter"><span class="swipe-counter-num">1 / 6</span></span>
+            <button class="swipe-btn" id="swipeNext" title="Siguiente">→</button>
+          </div>
+        </div>
+
+        <!-- stack derecha -->
+        <div class="swipe-arena anim-ready">
+          <div class="swipe-stack" id="swipeStack">
+
+            <!-- CARD 1 — cambiá src por assets/mix/01.jpg -->
+            <div class="scard">
+              <div class="sd sd-r">siguiente →</div>
+              <div class="sd sd-l">← anterior</div>
+              <img class="scard-img" src="assets/mix/01.jpg" alt="Pantalla 1"
+                   onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+              <div class="scard-ph scard-ph-1" style="display:none">Subí tu pantalla<span>assets/mix/01.jpg</span></div>
+              <div class="scard-info"><p class="scard-name">Proyecto 1</p><p class="scard-sub">UX Design · 2024</p></div>
+            </div>
+
+            <!-- CARD 2 -->
+            <div class="scard">
+              <div class="sd sd-r">siguiente →</div>
+              <div class="sd sd-l">← anterior</div>
+              <img class="scard-img" src="assets/mix/02.jpg" alt="Pantalla 2"
+                   onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+              <div class="scard-ph scard-ph-2" style="display:none">Subí tu pantalla<span>assets/mix/02.jpg</span></div>
+              <div class="scard-info"><p class="scard-name">Proyecto 2</p><p class="scard-sub">UI Design · 2024</p></div>
+            </div>
+
+            <!-- CARD 3 -->
+            <div class="scard">
+              <div class="sd sd-r">siguiente →</div>
+              <div class="sd sd-l">← anterior</div>
+              <img class="scard-img" src="assets/mix/03.jpg" alt="Pantalla 3"
+                   onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+              <div class="scard-ph scard-ph-3" style="display:none">Subí tu pantalla<span>assets/mix/03.jpg</span></div>
+              <div class="scard-info"><p class="scard-name">Proyecto 3</p><p class="scard-sub">Product Design · 2023</p></div>
+            </div>
+
+            <!-- CARD 4 -->
+            <div class="scard">
+              <div class="sd sd-r">siguiente →</div>
+              <div class="sd sd-l">← anterior</div>
+              <img class="scard-img" src="assets/mix/04.jpg" alt="Pantalla 4"
+                   onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+              <div class="scard-ph scard-ph-4" style="display:none">Subí tu pantalla<span>assets/mix/04.jpg</span></div>
+              <div class="scard-info"><p class="scard-name">Proyecto 4</p><p class="scard-sub">AR/VR Design · 2023</p></div>
+            </div>
+
+            <!-- CARD 5 -->
+            <div class="scard">
+              <div class="sd sd-r">siguiente →</div>
+              <div class="sd sd-l">← anterior</div>
+              <img class="scard-img" src="assets/mix/05.jpg" alt="Pantalla 5"
+                   onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+              <div class="scard-ph scard-ph-5" style="display:none">Subí tu pantalla<span>assets/mix/05.jpg</span></div>
+              <div class="scard-info"><p class="scard-name">Proyecto 5</p><p class="scard-sub">Design System · 2023</p></div>
+            </div>
+
+            <!-- CARD 6 -->
+            <div class="scard">
+              <div class="sd sd-r">siguiente →</div>
+              <div class="sd sd-l">← anterior</div>
+              <img class="scard-img" src="assets/mix/06.jpg" alt="Pantalla 6"
+                   onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+              <div class="scard-ph scard-ph-6" style="display:none">Subí tu pantalla<span>assets/mix/06.jpg</span></div>
+              <div class="scard-info"><p class="scard-name">Proyecto 6</p><p class="scard-sub">Strategy · 2022</p></div>
+            </div>
+
+          </div><!-- /swipeStack -->
+        </div><!-- /swipe-arena -->
+      </div><!-- /swipe-layout -->
+    </div><!-- /swipe-section -->
 
     <div class="wrap">
 
@@ -992,6 +1133,117 @@
       });
     }
 
+    /* ─── SWIPE STACK ─── */
+    function initSwipeStack() {
+      const stack = document.getElementById('swipeStack');
+      if (!stack) return;
+      const cards = [...stack.querySelectorAll('.scard')];
+      const N = cards.length;
+      if (!N) return;
+
+      // Config por posición en el stack (0 = encima)
+      const CFG = [
+        { y:0,  rot:0,    scale:1,    opacity:1   },
+        { y:7,  rot:2.8,  scale:0.97, opacity:1   },
+        { y:13, rot:-1.8, scale:0.94, opacity:1   },
+        { y:17, rot:1.4,  scale:0.91, opacity:0.8 },
+        { y:20, rot:-1.2, scale:0.88, opacity:0.5 },
+      ];
+
+      let order = [...Array(N).keys()]; // order[0] = índice de la card encima
+      let cyclePos = 0;
+
+      function placeCard(card, pos, animate) {
+        const c = CFG[Math.min(pos, CFG.length - 1)];
+        const p = { x:0, y:c.y, rotation:c.rot, scale:c.scale, zIndex:N - pos, opacity: pos < CFG.length ? c.opacity : 0 };
+        animate ? gsap.to(card, { ...p, duration:0.4, ease:'power3.out' })
+                : gsap.set(card, p);
+      }
+
+      // Layout inicial
+      order.forEach((ci, si) => placeCard(cards[ci], si, false));
+
+      // Counter
+      const cntEl = document.querySelector('.swipe-counter-num');
+      function updateCounter() {
+        if (!cntEl) return;
+        cntEl.textContent = (cyclePos % N + 1) + ' / ' + N;
+        gsap.fromTo(cntEl, { y:-6, opacity:0 }, { y:0, opacity:1, duration:0.25, ease:'power2.out' });
+      }
+
+      // Drag
+      let dragging = false, sx = 0, sy = 0;
+      const top  = () => cards[order[0]];
+      const next = () => cards[order[1]];
+
+      function startDrag(cx, cy) { dragging = true; sx = cx; sy = cy; }
+      function moveDrag(cx, cy) {
+        if (!dragging) return;
+        const dx = cx - sx, dy = cy - sy;
+        gsap.set(top(), { x:dx, y:dy * 0.18, rotation:dx / 15 });
+        // indicadores de dirección
+        const t = Math.min(Math.abs(dx) / 75, 1);
+        const tR = top().querySelector('.sd-r');
+        const tL = top().querySelector('.sd-l');
+        if (tR) gsap.set(tR, { opacity: dx > 18 ? t : 0 });
+        if (tL) gsap.set(tL, { opacity: dx < -18 ? t : 0 });
+        // la siguiente card sube
+        const nc = next();
+        if (nc) {
+          const p = Math.min(Math.abs(dx) / 110, 1);
+          gsap.set(nc, { scale: CFG[1].scale + p * (1 - CFG[1].scale), y: CFG[1].y * (1 - p) });
+        }
+      }
+      function endDrag(cx) {
+        if (!dragging) return;
+        dragging = false;
+        const dx = cx - sx;
+        top().querySelectorAll('.sd').forEach(t => gsap.set(t, { opacity:0 }));
+        if (Math.abs(dx) > 88) {
+          dismiss(dx > 0 ? 1 : -1);
+        } else {
+          gsap.to(top(), { x:0, y:0, rotation:0, duration:0.65, ease:'elastic.out(1, 0.42)' });
+          if (next()) gsap.to(next(), { scale:CFG[1].scale, y:CFG[1].y, duration:0.3 });
+        }
+      }
+
+      stack.addEventListener('mousedown',  e => { if (!e.target.closest('.swipe-btn')) startDrag(e.clientX, e.clientY); });
+      stack.addEventListener('touchstart', e => startDrag(e.touches[0].clientX, e.touches[0].clientY), { passive:true });
+      window.addEventListener('mousemove',  e => moveDrag(e.clientX, e.clientY));
+      window.addEventListener('touchmove',  e => moveDrag(e.touches[0].clientX, e.touches[0].clientY), { passive:true });
+      window.addEventListener('mouseup',   e => endDrag(e.clientX));
+      window.addEventListener('touchend',  e => endDrag(e.changedTouches[0].clientX));
+
+      function dismiss(dir) {
+        const card = top();
+        cyclePos++;
+        updateCounter();
+
+        // Las cartas de atrás empiezan a avanzar inmediatamente
+        order.slice(1).forEach((ci, si) => placeCard(cards[ci], si, true));
+
+        gsap.to(card, {
+          x: dir * 420, y:30, rotation: dir * 22, opacity:0,
+          duration:0.38, ease:'power2.in',
+          onComplete: () => {
+            order.push(order.shift());           // la carta va al fondo
+            const backPos = Math.min(N-1, CFG.length-1);
+            const bc = CFG[backPos];
+            gsap.set(card, { x:0, y:bc.y, rotation:bc.rot, scale:bc.scale, zIndex:1, opacity:0 });
+            setTimeout(() => gsap.to(card, { opacity:bc.opacity, duration:0.4 }), 260);
+          }
+        });
+      }
+
+      // Botones y teclado
+      document.getElementById('swipePrev')?.addEventListener('click', () => dismiss(-1));
+      document.getElementById('swipeNext')?.addEventListener('click', () => dismiss(1));
+      window.addEventListener('keydown', e => {
+        if (e.key === 'ArrowLeft')  dismiss(-1);
+        if (e.key === 'ArrowRight') dismiss(1);
+      });
+    }
+
     /* ─── MAGNETIC EFFECT ─── */
     function initMagnetic() {
       if (isMobile || prefersReducedMotion) return;
@@ -1035,6 +1287,7 @@
     initCursor();
     initNameParallax();
     initButtonAnimations();
+    initSwipeStack();
     initLoader();
   </script>
 </body>
