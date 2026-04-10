@@ -393,14 +393,86 @@
       .marquee-track { animation: none; }
     }
 
-    /* ─── MOBILE ─── */
+    /* ─── TABLET (≤768px) ─── */
+    @media (max-width:768px) {
+      .diff-row { grid-template-columns:1fr 1fr; }
+      .stats-bar { grid-template-columns:1fr 1fr; }
+      .meta-row { grid-template-columns:1fr 1fr; }
+    }
+
+    /* ─── MOBILE (≤640px) ─── */
     @media (max-width:640px) {
-      .wrap { padding:0 24px 80px; }
-      .stats-bar, .diff-row { grid-template-columns:1fr 1fr; }
-      .about-section { grid-template-columns:1fr; gap:40px; }
-      .xgrid { grid-template-columns:1fr; }
-      .proj-top { grid-template-columns:32px 1fr auto; }
+
+      /* ── Wrapper ── */
+      .wrap { padding:0 20px 64px; }
+
+      /* ── Nav ── */
+      nav { padding:18px 0 12px; }
+      .nav-links { display:none; }
+      .nav-right { gap:0; }
+
+      /* ── Hero ── */
+      .hero { padding:40px 0 32px; }
+      .hero-name { margin-bottom:-28px; }
+      .hero-name .n1 { width: min(240px, 68vw); }
+      .hero-name .n2 { width: min(320px, 88vw); margin-top:-48px; }
+      .hero-copy { margin-top:28px; max-width:100%; font-size:13px; }
+      .hero-tags { gap:4px; margin-bottom:28px; }
+      .hero-tag { font-size:8px; padding:4px 8px; }
+
+      /* ── Swipe stack ── */
+      .hero-layout { gap:32px; }
+      .swipe-arena { align-items:center; }
+      .swipe-stack  { width:min(280px, calc(100vw - 56px)); height:390px; }
+      .scard        { width:min(280px, calc(100vw - 56px)); height:390px; }
+      .scard-img    { height:min(305px, calc((100vw - 56px) * 1.09)); }
+      .swipe-section { padding:40px 20px 40px; }
+      .swipe-layout  { gap:28px; }
+      .swipe-title   { font-size:26px; }
+
+      /* ── Projects ── */
+      .projects-section { margin-top:48px; }
+      .proj-top { grid-template-columns:28px 1fr auto; gap:12px; padding:16px 0; }
+      .pname { font-size:15px; }
       .ptags { display:none; }
+      .xgrid { grid-template-columns:1fr; }
+      .xblock { padding:16px; }
+      .xcta { font-size:8px; padding:7px 12px; }
+
+      /* ── Diferencial ── */
+      .diff-section { margin-top:48px; }
+      .diff-row { grid-template-columns:1fr 1fr; }
+      .diff-stat { padding:22px 14px 18px; }
+      .diff-word { font-size:22px; }
+      .diff-text { font-size:10px; }
+
+      /* ── Stats ── */
+      .stats-bar { margin-top:48px; grid-template-columns:1fr 1fr; }
+      .stat-val { font-size:26px; }
+      .stat-block { padding:20px 16px; }
+
+      /* ── Experiencia ── */
+      .exp-section { margin-top:48px; }
+      .exp-row { grid-template-columns:1fr; gap:2px; padding:22px 0; }
+      .exp-period { margin-top:6px; }
+      .exp-role { font-size:15px; }
+      .exp-bullet { font-size:11px; }
+
+      /* ── About ── */
+      .about-section { margin-top:48px; grid-template-columns:1fr; gap:32px; padding-top:40px; }
+      .about-head { font-size:clamp(28px,8vw,38px); }
+      .skpills { gap:4px; }
+      .skp { font-size:9px; padding:3px 8px; }
+
+      /* ── Contact ── */
+      .contact-section { margin-top:48px; padding-top:48px; }
+      .contact-big { font-size:clamp(34px,10vw,48px); margin-bottom:32px; line-height:0.92; }
+      .crow { flex-direction:column; align-items:flex-start; gap:14px; }
+      .clinks { flex-wrap:wrap; gap:6px; }
+      .clnk { font-size:8px; padding:8px 12px; }
+
+      /* ── Footer ── */
+      .footer { flex-direction:column; gap:6px; padding-top:16px; margin-top:32px; }
     }
   </style>
 </head>
