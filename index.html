@@ -221,7 +221,7 @@
 
     .scard {
       position:absolute; top:0; left:0; width:280px; height:390px;
-      border:0.5px solid var(--border-hi); overflow:hidden;
+      border:0.5px solid var(--rosa); overflow:hidden;
       transform-origin:center bottom; will-change:transform;
       background:var(--surface);
     }
@@ -242,6 +242,10 @@
     .scard-info { padding:14px 18px; border-top:0.5px solid var(--border); background:var(--bg); height:85px; }
     .scard-name { font-family:var(--serif); font-size:14px; font-weight:900; letter-spacing:-0.01em; margin-bottom:3px; }
     .scard-sub { font-family:var(--mono); font-size:8px; color:var(--muted); letter-spacing:0.12em; text-transform:uppercase; }
+
+    /* progress bar autoplay */
+    .swipe-progress { position:absolute; bottom:0; left:0; right:0; height:2px; background:rgba(0,0,0,0.07); z-index:100; pointer-events:none; overflow:hidden; }
+    .swipe-progress-bar { height:100%; width:100%; background:var(--rosa); transform:scaleX(0); transform-origin:left; }
 
     /* drag indicators */
     .sd { position:absolute; top:18px; font-family:var(--mono); font-size:9px; letter-spacing:0.12em; text-transform:uppercase; padding:5px 12px; border:1.5px solid; opacity:0; pointer-events:none; z-index:20; }
@@ -481,7 +485,7 @@
             </button>
           </div>
 
-          <!-- derecha — card de status -->
+          <!-- derecha — card de status
           <div class="hero-card anim-ready">
             <div class="hcard-top">
               <div class="hcard-avail">
@@ -509,7 +513,57 @@
               </div>
             </div>
             <p class="hcard-quote">«Diseño que <strong>no necesita manual</strong> — intuitivo por definición.»</p>
-          </div>
+          </div> -->
+          <div class="swipe-arena anim-ready">
+            <div class="swipe-stack" id="swipeStack">
+  
+              <!-- CARD 1 — cambiá src por assets/mix/01.jpg -->
+              <div class="scard">
+                <img class="scard-img" src="assets/mix/01.png" alt="Pantalla 1"
+                     onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                <div class="scard-info"><p class="scard-name">CARTHAGE - Ecommerce</p><p class="scard-sub">UX / UI · 2025</p></div>
+              </div>
+  
+              <!-- CARD 2 -->
+              <div class="scard">
+                <div class="sd sd-r">→</div>
+                <div class="sd sd-l">←</div>
+                <img class="scard-img" src="assets/mix/02.png" alt="Pantalla 2"
+                     onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                <div class="scard-info"><p class="scard-name">Sistema Gamificado</p><p class="scard-sub">UI · 2024</p></div>
+              </div>
+  
+              <!-- CARD 3 -->
+              <div class="scard">
+                <div class="sd sd-r"> →</div>
+                <div class="sd sd-l">← </div>
+                <img class="scard-img" src="assets/mix/03.png" alt="Pantalla 3"
+                     onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                <div class="scard-ph scard-ph-3" style="display:none">Subí tu pantalla<span>assets/mix/03.jpg</span></div>
+                <div class="scard-info"><p class="scard-name">IA para medicos</p><p class="scard-sub"> End-to-End · 2025</p></div>
+              </div>
+  
+              <!-- CARD 4 -->
+              <div class="scard">
+                <div class="sd sd-r"> →</div>
+                <div class="sd sd-l">← </div>
+                <img class="scard-img" src="assets/mix/04.png" alt="Pantalla 4"
+                     onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                <div class="scard-info"><p class="scard-name">Abbvie Brasil</p><p class="scard-sub">AR/VR · 2026</p></div>
+              </div>
+  
+              <!-- CARD 5 -->
+              <div class="scard">
+                <div class="sd sd-r"> →</div>
+                <div class="sd sd-l">← </div>
+                <img class="scard-img" src="assets/mix/05.png" alt="Pantalla 5"
+                     onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                <div class="scard-info"><p class="scard-name">Laboratorios Bagó</p><p class="scard-sub"> App · 2024</p></div>
+              </div>
+  
+            
+            </div><!-- /swipeStack -->
+          </div><!-- /swipe-arena -->
         </div>
       </section>
 
@@ -543,10 +597,9 @@
       </div>
     </div>
 
-    <!-- SWIPE STACK -->
+    <!-- SWIPE STACK
     <div class="swipe-section">
       <div class="swipe-layout">
-        <!-- texto izquierda -->
         <div>
           <p class="swipe-eyebrow anim-ready">Exploración visual</p>
           <h2 class="swipe-title anim-ready">Un mix de<br><em>lo que hice</em></h2>
@@ -558,74 +611,10 @@
           </div>
         </div>
 
-        <!-- stack derecha -->
-        <div class="swipe-arena anim-ready">
-          <div class="swipe-stack" id="swipeStack">
-
-            <!-- CARD 1 — cambiá src por assets/mix/01.jpg -->
-            <div class="scard">
-              <div class="sd sd-r">siguiente →</div>
-              <div class="sd sd-l">← anterior</div>
-              <img class="scard-img" src="assets/mix/01.jpg" alt="Pantalla 1"
-                   onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-              <div class="scard-ph scard-ph-1" style="display:none">Subí tu pantalla<span>assets/mix/01.jpg</span></div>
-              <div class="scard-info"><p class="scard-name">Proyecto 1</p><p class="scard-sub">UX Design · 2024</p></div>
-            </div>
-
-            <!-- CARD 2 -->
-            <div class="scard">
-              <div class="sd sd-r">siguiente →</div>
-              <div class="sd sd-l">← anterior</div>
-              <img class="scard-img" src="assets/mix/02.jpg" alt="Pantalla 2"
-                   onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-              <div class="scard-ph scard-ph-2" style="display:none">Subí tu pantalla<span>assets/mix/02.jpg</span></div>
-              <div class="scard-info"><p class="scard-name">Proyecto 2</p><p class="scard-sub">UI Design · 2024</p></div>
-            </div>
-
-            <!-- CARD 3 -->
-            <div class="scard">
-              <div class="sd sd-r">siguiente →</div>
-              <div class="sd sd-l">← anterior</div>
-              <img class="scard-img" src="assets/mix/03.jpg" alt="Pantalla 3"
-                   onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-              <div class="scard-ph scard-ph-3" style="display:none">Subí tu pantalla<span>assets/mix/03.jpg</span></div>
-              <div class="scard-info"><p class="scard-name">Proyecto 3</p><p class="scard-sub">Product Design · 2023</p></div>
-            </div>
-
-            <!-- CARD 4 -->
-            <div class="scard">
-              <div class="sd sd-r">siguiente →</div>
-              <div class="sd sd-l">← anterior</div>
-              <img class="scard-img" src="assets/mix/04.jpg" alt="Pantalla 4"
-                   onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-              <div class="scard-ph scard-ph-4" style="display:none">Subí tu pantalla<span>assets/mix/04.jpg</span></div>
-              <div class="scard-info"><p class="scard-name">Proyecto 4</p><p class="scard-sub">AR/VR Design · 2023</p></div>
-            </div>
-
-            <!-- CARD 5 -->
-            <div class="scard">
-              <div class="sd sd-r">siguiente →</div>
-              <div class="sd sd-l">← anterior</div>
-              <img class="scard-img" src="assets/mix/05.jpg" alt="Pantalla 5"
-                   onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-              <div class="scard-ph scard-ph-5" style="display:none">Subí tu pantalla<span>assets/mix/05.jpg</span></div>
-              <div class="scard-info"><p class="scard-name">Proyecto 5</p><p class="scard-sub">Design System · 2023</p></div>
-            </div>
-
-            <!-- CARD 6 -->
-            <div class="scard">
-              <div class="sd sd-r">siguiente →</div>
-              <div class="sd sd-l">← anterior</div>
-              <img class="scard-img" src="assets/mix/06.jpg" alt="Pantalla 6"
-                   onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-              <div class="scard-ph scard-ph-6" style="display:none">Subí tu pantalla<span>assets/mix/06.jpg</span></div>
-              <div class="scard-info"><p class="scard-name">Proyecto 6</p><p class="scard-sub">Strategy · 2022</p></div>
-            </div>
-
-          </div><!-- /swipeStack -->
-        </div><!-- /swipe-arena -->
-      </div><!-- /swipe-layout -->
-    </div><!-- /swipe-section -->
+       stack derecha -->
+       
+      <!-- </div>
+    </div> -->
 
     <div class="wrap">
 
@@ -1235,7 +1224,62 @@
         });
       }
 
-      // Botones y teclado
+      // ── AUTOPLAY CON BARRA DE PROGRESO ──────────────────────
+      const AUTO_MS = 3200;
+      // Inyectar barra de progreso en el DOM
+      const progressWrap = document.createElement('div');
+      progressWrap.className = 'swipe-progress';
+      const progressBar  = document.createElement('div');
+      progressBar.className = 'swipe-progress-bar';
+      progressWrap.appendChild(progressBar);
+      stack.appendChild(progressWrap);
+
+      let autoTween = null;
+      let hovered   = false;
+
+      function startProgress() {
+        if (autoTween) autoTween.kill();
+        gsap.set(progressBar, { scaleX: 0 });
+        if (hovered || dragging || prefersReducedMotion) return;
+        autoTween = gsap.to(progressBar, {
+          scaleX: 1,
+          duration: AUTO_MS / 1000,
+          ease: 'none',
+          onComplete: () => { dismiss(1); }
+        });
+      }
+
+      function pauseProgress() {
+        if (autoTween) autoTween.pause();
+      }
+      function resumeProgress() {
+        if (autoTween) autoTween.resume();
+      }
+
+      // Pausa al hover, retoma al salir
+      stack.addEventListener('mouseenter', () => { hovered = true;  pauseProgress(); });
+      stack.addEventListener('mouseleave', () => {
+        hovered = false;
+        setTimeout(() => { if (!dragging) resumeProgress(); }, 600);
+      });
+
+      // Pausa al arrastrar, retoma al soltar
+      const _startDrag = startDrag;
+      startDrag = (cx, cy) => { _startDrag(cx, cy); pauseProgress(); };
+
+      const _endDrag = endDrag;
+      endDrag = (cx) => {
+        _endDrag(cx);
+        setTimeout(() => { if (!hovered) resumeProgress(); }, 800);
+      };
+
+      // Reinicia la barra en cada dismiss (manual o auto)
+      const _dismiss = dismiss;
+      dismiss = (dir) => { _dismiss(dir); startProgress(); };
+
+      startProgress(); // arrancar
+
+      // ── BOTONES Y TECLADO ───────────────────────────────────
       document.getElementById('swipePrev')?.addEventListener('click', () => dismiss(-1));
       document.getElementById('swipeNext')?.addEventListener('click', () => dismiss(1));
       window.addEventListener('keydown', e => {
