@@ -149,17 +149,46 @@
 
     /* ─── HERO ─── */
     .hero { padding:88px 0 72px; border-bottom:0px solid var(--border); }
+    .hero-layout { display:grid; grid-template-columns:1fr 248px; gap:48px; align-items:start; }
+    @media (max-width:720px) { .hero-layout { grid-template-columns:1fr; } .hero-card { display:none; } }
+
     .hero-intro { font-size:16px; font-weight:300; color:var(--muted); margin-bottom:12px; }
     .hero-name { font-family:var(--serif); line-height:0.88; letter-spacing:-0.02em; display: grid; justify-content: left; margin-bottom: -40px;}
     /* .hero-name .n1 { display:block; font-style:italic; font-weight:700; font-size:clamp(64px,11vw,104px); color:var(--rosa); } */
-    .hero-name .n1 {height:auto; width:250px; display:inline-block; will-change:transform; }
+    .hero-name .n1 {height:auto; width:300px; display:inline-block; will-change:transform; }
     /* .hero-name .n2 { display:block; font-weight:900; font-size:clamp(64px,11vw,104px); text-transform:uppercase; color:var(--ink); } */
-    .hero-name .n2 {height:auto; width:300px; margin-top: -90px; will-change:transform; }
+    .hero-name .n2 {height:auto; width:400px; margin-top: -90px; will-change:transform; }
     .hero-copy { font-size:14px; line-height:1.8; color:var(--muted); font-weight:300; max-width:420px; margin-top:40px; margin-bottom:16px; }
     .hero-copy .hl { color:var(--rosa); font-style:italic; }
     .hero-tags { display:flex; flex-wrap:wrap; gap:5px; margin-bottom:36px; }
     .hero-tag { font-family:var(--mono); font-size:9px; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); border:0.5px solid var(--border); padding:4px 10px; }
     .hero-tag.hi { border-color:var(--rosa-border); color:var(--rosa); }
+
+    /* ─── HERO CARD ─── */
+    .hero-card {
+      margin-top:58px; border:0.5px solid var(--border-hi);
+      display:flex; flex-direction:column;
+      will-change:transform;
+    }
+    .hcard-top { padding:18px 20px; border-bottom:0.5px solid var(--border); }
+    .hcard-avail { display:flex; align-items:center; gap:7px; margin-bottom:4px; }
+    .hcard-dot {
+      width:6px; height:6px; border-radius:50%; background:var(--lime); flex-shrink:0;
+      animation: hcdot 2.2s ease-in-out infinite;
+    }
+    @keyframes hcdot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.45;transform:scale(0.65)} }
+    .hcard-avail-txt { font-family:var(--mono); font-size:9px; letter-spacing:0.12em; text-transform:uppercase; color:var(--lime); }
+    .hcard-sub { font-family:var(--mono); font-size:8px; color:var(--muted); letter-spacing:0.1em; text-transform:uppercase; padding-left:13px; }
+    .hcard-grid { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border); }
+    .hcard-cell { background:var(--bg); padding:14px 16px; }
+    .hcard-cell-label { font-family:var(--mono); font-size:7.5px; color:var(--muted); letter-spacing:0.15em; text-transform:uppercase; margin-bottom:5px; }
+    .hcard-cell-val { font-family:var(--serif); font-size:13px; font-weight:900; letter-spacing:-0.01em; }
+    .hcard-quote {
+      padding:18px 20px;
+      font-family:var(--serif); font-size:12px; font-style:italic; font-weight:400;
+      line-height:1.6; color:var(--muted); border-top:0.5px solid var(--border);
+    }
+    .hcard-quote strong { font-weight:900; font-style:normal; color:var(--ink); }
 
     .btn-pill { display:inline-flex; align-items:center; background:var(--ink); border:none; border-radius:100px; cursor:pointer; overflow:hidden; transition: box-shadow 0.35s ease; transform-origin: center; }
     .btn-pill:hover { box-shadow: 0 10px 36px rgba(17,16,16,0.22); }
@@ -359,37 +388,72 @@
 
       <!-- HERO -->
       <section class="hero">
-        <p class="hero-intro anim-ready">Hola, soy</p>
-        <h1 class="hero-name">
-          <img class="n1 anim-ready"
-            src="assets/jimena.png"
-            alt="jimena"
-            onerror="this.outerHTML='<span style=\'font-family:var(--serif);font-size:22px;font-weight:900;font-style:italic;color:var(--rosa);letter-spacing:-0.02em\'>jimena</span>'"
-          /></img>
-          <img class="n2 anim-ready"
-          src="assets/zapolski.png"
-          alt="zapolski"
-          onerror="this.outerHTML='<span style=\'font-family:var(--serif);font-size:22px;font-weight:900;font-style:italic;color:var(--ink);letter-spacing:-0.02em\'>zapolski</span>'"
-        /></img>
-        </h1>
-        <p class="hero-copy anim-ready">Transformo ideas en experiencias digitales claras, útiles y memorables. — <span class="hl">cada decisión tiene un propósito.</span></p>
-        <div class="hero-tags anim-ready">
-          <span class="hero-tag hi">Diseño UX / UI</span>
-          <span class="hero-tag hi">Producto</span>
-          <span class="hero-tag hi">AR / VR</span>
-          <span class="hero-tag hi">IA</span>
-          <span class="hero-tag hi"> Diseño End-to-end</span>
-          <span class="hero-tag">Salud · Pharma</span>
-          <span class="hero-tag">Ed-Tech</span>
-          <span class="hero-tag">Logística</span>
-          <span class="hero-tag">E-commerce</span>
+        <div class="hero-layout">
+          <!-- izquierda -->
+          <div class="hero-left">
+            <p class="hero-intro anim-ready">Hola, soy</p>
+            <h1 class="hero-name">
+              <img class="n1 anim-ready"
+                src="assets/jimena.png"
+                alt="jimena"
+                onerror="this.outerHTML='<span style=\'font-family:var(--serif);font-size:22px;font-weight:900;font-style:italic;color:var(--rosa);letter-spacing:-0.02em\'>jimena</span>'"
+              /></img>
+              <img class="n2 anim-ready"
+                src="assets/zapolski.png"
+                alt="zapolski"
+                onerror="this.outerHTML='<span style=\'font-family:var(--serif);font-size:22px;font-weight:900;font-style:italic;color:var(--ink);letter-spacing:-0.02em\'>zapolski</span>'"
+              /></img>
+            </h1>
+            <p class="hero-copy anim-ready">Transformo ideas en experiencias digitales claras, útiles y memorables. — <span class="hl">cada decisión tiene un propósito.</span></p>
+            <div class="hero-tags anim-ready">
+              <span class="hero-tag hi">Diseño UX / UI</span>
+              <span class="hero-tag hi">Producto</span>
+              <span class="hero-tag hi">AR / VR</span>
+              <span class="hero-tag hi">IA</span>
+              <span class="hero-tag hi">Diseño End-to-end</span>
+              <span class="hero-tag">Salud · Pharma</span>
+              <span class="hero-tag">Ed-Tech</span>
+              <span class="hero-tag">Logística</span>
+              <span class="hero-tag">E-commerce</span>
+            </div>
+            <button class="btn-pill anim-ready" onclick="scrollToSection('.contact-section')">
+              <span class="btn-pill-text">Conectemos</span>
+              <span class="btn-pill-icon">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#F7F5F2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+              </span>
+            </button>
+          </div>
+
+          <!-- derecha — card de status -->
+          <div class="hero-card anim-ready">
+            <div class="hcard-top">
+              <div class="hcard-avail">
+                <span class="hcard-dot"></span>
+                <span class="hcard-avail-txt">Disponible</span>
+              </div>
+              <p class="hcard-sub">para proyectos · freelance</p>
+            </div>
+            <div class="hcard-grid">
+              <div class="hcard-cell">
+                <p class="hcard-cell-label">Ubicación</p>
+                <p class="hcard-cell-val">Buenos Aires</p>
+              </div>
+              <div class="hcard-cell">
+                <p class="hcard-cell-label">Foco</p>
+                <p class="hcard-cell-val">UX · UI</p>
+              </div>
+              <div class="hcard-cell">
+                <p class="hcard-cell-label">Experiencia</p>
+                <p class="hcard-cell-val">5+ años</p>
+              </div>
+              <div class="hcard-cell">
+                <p class="hcard-cell-label">Idiomas</p>
+                <p class="hcard-cell-val">ES · EN</p>
+              </div>
+            </div>
+            <p class="hcard-quote">«Diseño que <strong>no necesita manual</strong> — intuitivo por definición.»</p>
+          </div>
         </div>
-        <button class="btn-pill anim-ready" onclick="scrollToSection('.contact-section')">
-          <span class="btn-pill-text">Conectemos</span>
-          <span class="btn-pill-icon">
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#F7F5F2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
-          </span>
-        </button>
       </section>
 
     </div>
@@ -723,13 +787,15 @@
         .to('.hero-name .n2', { opacity: 1, x: 0, duration: 0.7, ease: 'expo.out' }, '-=0.5')
         .to('.hero-copy', { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, '-=0.3')
         .to('.hero-tags', { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' }, '-=0.3')
-        .to('.btn-pill', { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(1.5)' }, '-=0.2');
+        .to('.btn-pill', { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(1.5)' }, '-=0.2')
+        .to('.hero-card', { opacity: 1, x: 0, duration: 0.7, ease: 'expo.out' }, '-=0.55');
       gsap.set('.hero-intro', { y: 20, opacity: 0 });
       gsap.set('.hero-name .n1', { x: -80, opacity: 0 });
       gsap.set('.hero-name .n2', { x: 80, opacity: 0 });
       gsap.set('.hero-copy', { y: 20, opacity: 0 });
       gsap.set('.hero-tags', { y: 16, opacity: 0 });
       gsap.set('.btn-pill', { scale: 0.9, opacity: 0 });
+      gsap.set('.hero-card', { x: 40, opacity: 0 });
     }
 
     /* ─── SCROLL ANIMATIONS ─── */
@@ -895,29 +961,34 @@
       const hero = document.querySelector('.hero');
       const n1   = document.querySelector('.n1');
       const n2   = document.querySelector('.n2');
+      const card = document.querySelector('.hero-card');
       if (!n1 || !n2 || !hero) return;
 
-      // n1 (jimena) — primer plano: sigue al cursor
+      // n1 (jimena) — primer plano
       const n1x = gsap.quickTo(n1, 'x', { duration: 0.7, ease: 'power3.out' });
       const n1y = gsap.quickTo(n1, 'y', { duration: 0.7, ease: 'power3.out' });
-      // n2 (zapolski) — fondo: se mueve en contra, más lento
+      // n2 (zapolski) — fondo, sentido contrario
       const n2x = gsap.quickTo(n2, 'x', { duration: 1.1, ease: 'power3.out' });
       const n2y = gsap.quickTo(n2, 'y', { duration: 1.1, ease: 'power3.out' });
+      // card — capa media, movimiento sutil vertical
+      const cardY = card ? gsap.quickTo(card, 'y', { duration: 1.3, ease: 'power3.out' }) : null;
 
       hero.addEventListener('mousemove', e => {
         const r  = hero.getBoundingClientRect();
-        const cx = (e.clientX - r.left  - r.width  / 2) / r.width;   // -0.5 → 0.5
+        const cx = (e.clientX - r.left  - r.width  / 2) / r.width;
         const cy = (e.clientY - r.top   - r.height / 2) / r.height;
 
-        n1x( cx * 30);   // jimena: primer plano, más movimiento
+        n1x( cx * 30);
         n1y( cy * 18);
-        n2x(-cx * 18);   // zapolski: fondo, sentido contrario → profundidad
+        n2x(-cx * 18);
         n2y(-cy * 11);
+        if (cardY) cardY(cy * 10);   // la card flota suavemente en Y
       });
 
       hero.addEventListener('mouseleave', () => {
-        gsap.to(n1, { x: 0, y: 0, duration: 1.2, ease: 'elastic.out(1, 0.4)' });
-        gsap.to(n2, { x: 0, y: 0, duration: 1.4, ease: 'elastic.out(1, 0.35)' });
+        gsap.to(n1,   { x: 0, y: 0, duration: 1.2, ease: 'elastic.out(1, 0.4)' });
+        gsap.to(n2,   { x: 0, y: 0, duration: 1.4, ease: 'elastic.out(1, 0.35)' });
+        if (card) gsap.to(card, { y: 0, duration: 1.3, ease: 'elastic.out(1, 0.35)' });
       });
     }
 
