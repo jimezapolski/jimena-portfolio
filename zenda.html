@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Zenda — AR Education · Jimena Zapolski</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,900;1,400;1,700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,600;0,700;1,400;1,600;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
@@ -23,7 +24,7 @@
       --rosa: #C38F8F;
       --rosa-border: rgba(195,143,143,0.3);
       --lime: #7DB800;
-      --serif: 'Playfair Display', Georgia, serif;
+      --serif: 'Cormorant', Georgia, serif;
       --sans: 'DM Sans', system-ui, sans-serif;
       --mono: 'DM Mono', monospace;
     }
@@ -44,7 +45,7 @@
     #transition-title {
       font-family: var(--serif);
       font-size: clamp(22px, 4vw, 48px);
-      font-style: italic; font-weight: 900;
+      font-style: italic; font-weight: 700;
       color: var(--bg); opacity: 0;
       letter-spacing: -0.02em; text-align: center; padding: 0 40px;
     }
@@ -86,7 +87,7 @@
     .cs-eyebrow { display:flex; align-items:center; gap:12px; margin-bottom:28px; flex-wrap:wrap; }
     .cs-tag { font-family:var(--mono); font-size:9px; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); border:0.5px solid var(--border); padding:4px 10px; }
     .cs-tag.hi { border-color:var(--rosa-border); color:var(--rosa); }
-    .cs-title { font-family:var(--serif); font-size:clamp(40px,7vw,72px); font-weight:900; line-height:0.92; letter-spacing:-0.02em; margin-bottom:24px; }
+    .cs-title { font-family:var(--serif); font-size:clamp(40px,7vw,72px); font-weight:700; line-height:0.92; letter-spacing:-0.02em; margin-bottom:24px; }
     .cs-title em { font-style:italic; color:var(--rosa); display:block; }
     .cs-subtitle { font-size:15px; line-height:1.8; color:var(--muted); font-weight:300; max-width:600px; margin-bottom:48px; }
 
@@ -94,7 +95,7 @@
     .meta-row { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border); }
     .meta-block { background:var(--bg); padding:20px 18px; }
     .meta-label { font-family:var(--mono); font-size:8px; color:var(--muted); letter-spacing:0.15em; text-transform:uppercase; margin-bottom:6px; }
-    .meta-val { font-family:var(--serif); font-size:15px; font-weight:900; letter-spacing:-0.01em; }
+    .meta-val { font-family:var(--serif); font-size:15px; font-weight:700; letter-spacing:-0.01em; }
 
     /* ─── DOWNLOAD BTN ─── */
     .nav-download {
@@ -114,7 +115,7 @@
     /* ─── SECTIONS ─── */
     .slbl { font-family:var(--mono); font-size:9px; color:var(--muted); letter-spacing:0.18em; text-transform:uppercase; }
     .section { margin-top:72px; }
-    .section-title { font-family:var(--serif); font-size:28px; font-weight:900; letter-spacing:-0.01em; margin-top:6px; margin-bottom:32px; }
+    .section-title { font-family:var(--serif); font-size:28px; font-weight:700; letter-spacing:-0.01em; margin-top:6px; margin-bottom:32px; }
     .section-title em { font-style:italic; color:var(--rosa); }
 
     /* ─── PROBLEM ─── */
@@ -133,7 +134,7 @@
     .step-num { background:var(--surface2); display:flex; align-items:flex-start; justify-content:center; padding:24px 0; }
     .step-num span { font-family:var(--serif); font-size:11px; font-style:italic; color:var(--muted); }
     .step-content { background:var(--bg); padding:24px 28px; }
-    .step-title { font-family:var(--serif); font-size:16px; font-weight:900; margin-bottom:8px; }
+    .step-title { font-family:var(--serif); font-size:16px; font-weight:700; margin-bottom:8px; }
     .step-text { font-size:12px; line-height:1.75; color:var(--muted); font-weight:300; }
     .step-tags { display:flex; flex-wrap:wrap; gap:4px; margin-top:10px; }
     .step-tag { font-family:var(--mono); font-size:8px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); border:0.5px solid var(--border); padding:3px 7px; }
@@ -141,7 +142,7 @@
     /* ─── INSIGHTS ─── */
     .insights-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border); margin-bottom:32px; }
     .insight-block { background:var(--bg); padding:24px 20px; }
-    .insight-num { font-family:var(--serif); font-size:36px; font-weight:900; line-height:1; letter-spacing:-0.02em; margin-bottom:8px; }
+    .insight-num { font-family:var(--serif); font-size:36px; font-weight:700; line-height:1; letter-spacing:-0.02em; margin-bottom:8px; }
     .insight-num em { font-style:italic; color:var(--rosa); }
     .insight-text { font-size:11px; line-height:1.65; color:var(--muted); font-weight:300; }
 
@@ -149,7 +150,7 @@
     .solution-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:1px; background:var(--border); }
     .sol-block { background:var(--bg); padding:28px 24px; }
     .sol-icon { font-family:var(--serif); font-size:22px; font-style:italic; color:var(--rosa); margin-bottom:14px; font-weight:700; }
-    .sol-title { font-family:var(--serif); font-size:16px; font-weight:900; margin-bottom:8px; }
+    .sol-title { font-family:var(--serif); font-size:16px; font-weight:700; margin-bottom:8px; }
     .sol-text { font-size:12px; line-height:1.7; color:var(--muted); font-weight:300; }
 
     /* ─── TECH STACK ─── */
@@ -159,7 +160,7 @@
     /* ─── RESULTS ─── */
     .results-bar { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border); }
     .result-block { background:var(--bg); padding:28px 20px; }
-    .result-val { font-family:var(--serif); font-size:38px; font-weight:900; line-height:1; letter-spacing:-0.02em; margin-bottom:8px; }
+    .result-val { font-family:var(--serif); font-size:38px; font-weight:700; line-height:1; letter-spacing:-0.02em; margin-bottom:8px; }
     .result-val em { font-style:italic; color:var(--rosa); }
     .result-text { font-size:11px; line-height:1.6; color:var(--muted); font-weight:300; }
 
@@ -180,7 +181,7 @@
     .impact-block.accent .impact-label { color:rgba(255,255,255,0.4); }
     .impact-text { font-size:13px; line-height:1.85; color:var(--muted); font-weight:300; }
     .impact-block.accent .impact-text { color:rgba(247,245,242,0.65); }
-    .impact-highlight { font-family:var(--serif); font-size:18px; font-weight:900; color:var(--ink); margin-bottom:10px; letter-spacing:-0.01em; }
+    .impact-highlight { font-family:var(--serif); font-size:18px; font-weight:700; color:var(--ink); margin-bottom:10px; letter-spacing:-0.01em; }
     .impact-block.accent .impact-highlight { color:var(--bg); }
 
     /* ─── NEXT ─── */
@@ -213,7 +214,7 @@
       font-family: var(--mono); font-size: 8px; color: var(--rosa);
       letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 12px;
     }
-    .ann-title { font-family: var(--serif); font-size: 16px; font-weight: 900; margin-bottom: 10px; }
+    .ann-title { font-family: var(--serif); font-size: 16px; font-weight: 700; margin-bottom: 10px; }
     .ann-text { font-size: 12px; line-height: 1.7; color: var(--muted); font-weight: 300; }
 
 
@@ -226,7 +227,7 @@
     .tech-dec.right * { direction:ltr; }
     .tech-dec-text { padding:40px 36px; display:flex; flex-direction:column; justify-content:center; }
     .tech-dec-num { font-family:var(--serif); font-size:11px; font-style:italic; color:var(--muted); margin-bottom:18px; }
-    .tech-dec-title { font-family:var(--serif); font-size:22px; font-weight:900; letter-spacing:-0.01em; line-height:1.15; margin-bottom:12px; }
+    .tech-dec-title { font-family:var(--serif); font-size:22px; font-weight:700; letter-spacing:-0.01em; line-height:1.15; margin-bottom:12px; }
     .tech-dec-title em { font-style:italic; color:var(--rosa); }
     .tech-dec-body { font-size:12px; line-height:1.85; color:var(--muted); font-weight:300; }
     .tech-dec-body strong { color:var(--ink); font-weight:500; }
@@ -622,7 +623,7 @@
       <div style="background:var(--surface);display:flex;align-items:center;justify-content:center;padding:48px;min-height:220px;">
         <div style="text-align:center">
           <p style="font-family:var(--mono);font-size:8px;color:var(--muted);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:12px">Stack de reconocimiento</p>
-          <p style="font-family:var(--serif);font-size:26px;font-weight:900;color:var(--ink);margin-bottom:8px;letter-spacing:-0.02em">VisionKit + Jaccard</p>
+          <p style="font-family:var(--serif);font-size:26px;font-weight:700;color:var(--ink);margin-bottom:8px;letter-spacing:-0.02em">VisionKit + Jaccard</p>
           <p style="font-family:var(--sans);font-size:12px;color:var(--muted);line-height:1.7;max-width:200px;margin:0 auto;font-weight:300">OCR nativo iOS · Correspondencia semántica · Tasa de error &lt;1%</p>
         </div>
       </div>
