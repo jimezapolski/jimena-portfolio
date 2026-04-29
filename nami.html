@@ -1,0 +1,1535 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nami — Mental Health · Jimena Zapolski</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,600;0,700;1,400;1,600;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    :root {
+      --bg: #F7F5F2;
+      --surface: #EFEDE9;
+      --border: rgba(0,0,0,0.08);
+      --border-hi: rgba(0,0,0,0.18);
+      --ink: #111010;
+      --muted: #888;
+      --nami-dark: #1B1A51;
+      --nami-mid: #2D2C72;
+      --nami-lavender: #99A8F9;
+      --nami-teal: #00BFCA;
+      --serif: 'Cormorant', Georgia, serif;
+      --sans: 'DM Sans', system-ui, sans-serif;
+      --mono: 'DM Mono', monospace;
+    }
+
+    html { scroll-behavior: auto; }
+    body { background:var(--bg); color:var(--ink); font-family:var(--sans); overflow-x:hidden; }
+
+    /* ─── TRANSITION OVERLAY ─── */
+    #transition-overlay {
+      position: fixed; inset: 0;
+      background: var(--ink); z-index: 2000;
+      transform: scaleY(0); transform-origin: bottom;
+      display: flex; align-items: center; justify-content: center;
+      pointer-events: none;
+    }
+    #transition-title {
+      font-family: var(--serif);
+      font-size: clamp(22px, 4vw, 48px);
+      font-style: italic; font-weight: 700;
+      color: var(--bg); opacity: 0;
+      letter-spacing: -0.02em; text-align: center; padding: 0 40px;
+    }
+
+    /* ─── CURSOR ─── */
+    #cursor {
+      position: fixed; width: 8px; height: 8px; border-radius: 50%;
+      background: var(--nami-lavender); pointer-events: none; z-index: 9999;
+      top: 0; left: 0; transform: translate(-50%,-50%);
+      will-change: transform; transition: background 0.2s;
+    }
+    @media (max-width: 640px) { #cursor { display: none; } }
+
+    /* ─── LANG SWITCHER ─── */
+    .lang-switcher { display: flex; align-items: center; gap: 4px; }
+    .lang-btn { font-family: var(--mono); font-size: 9px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; background: none; border: none; cursor: pointer; padding: 2px 4px; transition: color 0.2s; }
+    .lang-btn.active { color: var(--ink); font-weight: 400; }
+    .lang-btn:hover { color: var(--ink); }
+    .lang-sep { color: rgba(0,0,0,0.2); font-family: var(--mono); font-size: 9px; }
+
+    /* ─── NAV ─── */
+    .page-nav {
+      max-width: 920px; margin: 0 auto; padding: 28px 40px;
+      display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 0.5px solid var(--border);
+    }
+    .nav-back {
+      font-family: var(--mono); font-size: 10px; color: var(--muted);
+      letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer;
+      display: flex; align-items: center; gap: 6px;
+      background: none; border: none; transition: color 0.2s; padding: 0;
+    }
+    .nav-back:hover { color: var(--ink); }
+    @keyframes arrow-bounce-left {
+      0%  { transform: translateX(0); }
+      30% { transform: translateX(-8px); }
+      55% { transform: translateX(-1px); }
+      78% { transform: translateX(-6px); }
+      100%{ transform: translateX(-4px); }
+    }
+    .nav-back .arrow { display: inline-block; }
+    .nav-back:hover .arrow { animation: arrow-bounce-left 0.48s cubic-bezier(0.4,0,0.2,1) forwards; }
+    .nav-label { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+
+    /* ─── SHARED ─── */
+    .slbl { font-family: var(--mono); font-size: 9px; color: var(--muted); letter-spacing: 0.18em; text-transform: uppercase; }
+
+    /* ─── INTRO ─── */
+    .intro {
+      max-width: 920px; margin: 0 auto;
+      padding: 72px 40px 64px;
+      border-bottom: 0.5px solid var(--border);
+    }
+    .intro-title {
+      font-family: var(--serif);
+      font-size: clamp(38px, 6vw, 68px);
+      font-weight: 700; letter-spacing: -0.025em;
+      margin-top: 12px; line-height: 0.93;
+    }
+    .intro-title em { font-style: italic; color: var(--nami-lavender); }
+    .intro-sub {
+      font-size: 15px; line-height: 1.8; color: var(--muted);
+      font-weight: 300; max-width: 520px; margin-top: 24px;
+    }
+    .meta-row {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 1px; background: var(--border); margin-top: 40px;
+    }
+    .meta-block { background: var(--bg); padding: 20px 18px; }
+    .meta-label { font-family: var(--mono); font-size: 8px; color: var(--muted); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 6px; }
+    .meta-val { font-family: var(--serif); font-size: 15px; font-weight: 700; letter-spacing: -0.01em; }
+
+    /* ─── SECTION LABEL (small, above sections) ─── */
+    .sec-lbl-wrap {
+      max-width: 920px; margin: 0 auto;
+      padding: 56px 40px 0;
+    }
+    .sec-lbl {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding-bottom: 14px;
+      border-bottom: 0.5px solid var(--border);
+      width: 100%;
+    }
+    .sec-lbl-num {
+      font-family: var(--mono); font-size: 9px; color: var(--nami-lavender);
+      letter-spacing: 0.18em; text-transform: uppercase;
+    }
+    .sec-lbl-sep { color: var(--border-hi); font-family: var(--mono); font-size: 9px; }
+    .sec-lbl-text {
+      font-family: var(--mono); font-size: 9px; color: var(--muted);
+      letter-spacing: 0.18em; text-transform: uppercase;
+    }
+
+    /* ─── CHALLENGE ─── */
+    .challenge-wrap { border-bottom: 0.5px solid var(--border); }
+    .challenge-inner {
+      max-width: 920px; margin: 0 auto; padding: 64px 40px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start;
+    }
+    .challenge-title {
+      font-family: var(--serif); font-size: clamp(20px, 2.8vw, 28px);
+      font-weight: 700; margin-top: 12px; margin-bottom: 16px;
+      line-height: 1.2; letter-spacing: -0.01em;
+    }
+    .challenge-title em { font-style: italic; color: var(--nami-lavender); }
+    .challenge-text { font-size: 13px; line-height: 1.85; color: var(--muted); font-weight: 300; }
+    .brief-box {
+      background: var(--nami-dark); padding: 28px 26px;
+      margin-top: 26px;
+    }
+    .brief-box-label { font-family: var(--mono); font-size: 8px; color: var(--nami-lavender); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 12px; }
+    .brief-box p { font-size: 13px; line-height: 1.85; color: rgba(240,240,240,0.62); font-weight: 300; }
+    .brief-box strong { color: rgba(153,168,249,0.9); font-weight: 500; }
+
+    /* ─── STATS GRID (2×2 inside challenge column) ─── */
+    .challenge-stats-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1px; background: rgba(153,168,249,0.12);
+    }
+    .stat-block { background: var(--nami-dark); padding: 28px 22px; }
+    .stat-num {
+      font-family: var(--serif); font-size: clamp(24px, 3.5vw, 36px); font-weight: 700;
+      color: var(--nami-lavender); letter-spacing: -0.02em; line-height: 1; margin-bottom: 10px;
+    }
+    .stat-desc { font-size: 10px; line-height: 1.65; color: rgba(240,240,240,0.5); font-weight: 300; }
+
+    /* ─── RESEARCH FINDINGS ─── */
+    .research-wrap { border-bottom: 0.5px solid var(--border); }
+    .research-inner { max-width: 920px; margin: 0 auto; padding: 64px 40px; }
+    .research-title {
+      font-family: var(--serif); font-size: clamp(20px, 2.8vw, 28px);
+      font-weight: 700; margin-top: 12px; margin-bottom: 20px;
+      letter-spacing: -0.01em; line-height: 1.2;
+    }
+    .research-title em { font-style: italic; color: var(--nami-lavender); }
+    .research-body { font-size: 13px; line-height: 1.85; color: var(--muted); font-weight: 300; max-width: 640px; margin-bottom: 20px; }
+    .research-body strong { color: var(--ink); font-weight: 500; }
+    .dec-quote {
+      margin-top: 20px; padding: 16px 20px;
+      border-left: 2px solid var(--nami-lavender);
+      background: rgba(153,168,249,0.06); max-width: 520px;
+    }
+    .dec-quote p {
+      font-family: var(--serif); font-size: 14px; font-style: italic;
+      line-height: 1.6; color: var(--ink); opacity: 0.72;
+    }
+
+    /* ─── PERSONA ─── */
+    .persona-wrap { border-bottom: 0.5px solid var(--border); background: var(--surface); }
+    .persona-inner {
+      max-width: 920px; margin: 0 auto; padding: 64px 40px;
+      display: grid; grid-template-columns: 1fr 1.3fr; gap: 64px; align-items: start;
+    }
+    .persona-name {
+      font-family: var(--serif); font-size: clamp(32px, 5vw, 52px);
+      font-weight: 700; letter-spacing: -0.025em; line-height: 0.95;
+      margin-top: 12px; margin-bottom: 4px;
+    }
+    .persona-name em { font-style: italic; color: var(--nami-lavender); }
+    .persona-id {
+      font-family: var(--mono); font-size: 9px; color: var(--muted);
+      letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 22px;
+    }
+    .persona-desc { font-size: 13px; line-height: 1.85; color: var(--muted); font-weight: 300; margin-bottom: 18px; }
+    .persona-traits { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 22px; }
+    .persona-trait {
+      font-family: var(--mono); font-size: 9px; color: var(--nami-lavender);
+      border: 0.5px solid rgba(153,168,249,0.28); padding: 4px 10px; letter-spacing: 0.06em;
+    }
+    .persona-quote {
+      border-left: 2px solid var(--nami-lavender);
+      background: rgba(153,168,249,0.06); padding: 16px 20px;
+    }
+    .persona-quote p { font-family: var(--serif); font-size: 14px; font-style: italic; line-height: 1.6; color: var(--ink); opacity: 0.72; }
+    .persona-bullets { display: flex; flex-direction: column; gap: 20px; }
+    .pb-label { font-family: var(--mono); font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--nami-lavender); margin-bottom: 5px; }
+    .pb-text { font-size: 12px; line-height: 1.75; color: var(--muted); font-weight: 300; }
+    .pb-text strong { color: var(--ink); font-weight: 500; }
+
+    /* ─── HMW ─── */
+    .hmw-wrap { border-bottom: 0.5px solid var(--border); }
+    .hmw-inner { max-width: 920px; margin: 0 auto; padding: 64px 40px; }
+    .hmw-list { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 48px; list-style: none; margin-top: 28px; }
+    .hmw-list li {
+      font-family: var(--serif); font-size: 15px; font-weight: 600;
+      line-height: 1.4; color: var(--ink); padding-left: 22px; position: relative;
+    }
+    .hmw-list li::before { content: '→'; position: absolute; left: 0; color: var(--nami-lavender); }
+
+    /* ─── BENCHMARK ─── */
+    .bench-wrap { border-bottom: 0.5px solid var(--border); }
+    .bench-inner { max-width: 920px; margin: 0 auto; padding: 64px 40px; }
+    .bench-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 1px; background: var(--border); margin-top: 32px;
+    }
+    .bench-card { background: var(--bg); padding: 28px 20px; }
+    .bench-app { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink); margin-bottom: 8px; }
+    .bench-focus { font-family: var(--serif); font-size: 14px; font-weight: 700; margin-bottom: 10px; letter-spacing: -0.01em; line-height: 1.2; }
+    .bench-gap { font-size: 11px; line-height: 1.65; color: var(--muted); font-weight: 300; }
+    .bench-gap strong { color: #C38F8F; font-weight: 500; }
+    .bench-conclusion {
+      margin-top: 28px; padding: 20px 24px;
+      background: var(--nami-dark);
+      max-width: 100%;
+    }
+    .bench-conclusion p { font-size: 13px; line-height: 1.75; color: rgba(240,240,240,0.62); font-weight: 300; }
+    .bench-conclusion strong { color: var(--nami-lavender); font-weight: 500; }
+
+    /* ─── DECISIONS ─── */
+    .decision {
+      display: grid; grid-template-columns: 1fr 1fr;
+      border-bottom: 0.5px solid var(--border);
+      overflow: hidden;
+    }
+    .dec-text {
+      padding: 56px 48px;
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .dec-num {
+      font-family: var(--serif); font-size: 11px; font-style: italic;
+      color: var(--muted); margin-bottom: 20px;
+    }
+    .dec-title {
+      font-family: var(--serif); font-size: clamp(22px, 2.8vw, 30px);
+      font-weight: 700; letter-spacing: -0.01em; line-height: 1.1; margin-bottom: 16px;
+    }
+    .dec-title em { font-style: italic; color: var(--nami-lavender); }
+    .dec-body { font-size: 13px; line-height: 1.85; color: var(--muted); font-weight: 300; }
+    .dec-body strong { color: var(--ink); font-weight: 500; }
+
+    /* Dark screen panel */
+    .dec-img-dark {
+      overflow: hidden; position: relative;
+      min-height: 440px;
+      background: var(--nami-dark);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .dec-img-dark img {
+      width: 52%; max-width: 240px;
+      object-fit: contain;
+      filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5));
+      position: relative; z-index: 1;
+      will-change: transform;
+    }
+    .dec-img-dark { cursor: zoom-in; }
+    .wave-accent {
+      position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(ellipse 70% 50% at 50% 75%, rgba(0,191,202,0.10) 0%, transparent 70%);
+      z-index: 0;
+    }
+    .wave-accent-top {
+      position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(ellipse 70% 50% at 50% 30%, rgba(153,168,249,0.08) 0%, transparent 70%);
+      z-index: 0;
+    }
+
+    /* ─── CHARACTER IMAGES ─── */
+    .character-img-band {
+      background: var(--nami-dark);
+      border-bottom: 0.5px solid rgba(255,255,255,0.04);
+      display: flex; align-items: center; justify-content: center;
+      padding: 48px 40px; gap: 40px; flex-wrap: wrap;
+    }
+    .character-img-band img {
+      max-width: 220px; width: 28%;
+      object-fit: contain;
+      filter: drop-shadow(0 16px 48px rgba(0,191,202,0.2));
+    }
+    .character-states-strip {
+      background: var(--nami-dark);
+      border-bottom: 0.5px solid var(--border);
+      overflow: hidden;
+    }
+    .character-states-strip img {
+      width: 100%; display: block;
+      object-fit: cover;
+    }
+    .character-states-placeholder {
+      background: var(--nami-dark);
+      border-bottom: 0.5px solid var(--border);
+      display: grid; grid-template-columns: repeat(5, 1fr);
+      gap: 1px; background: var(--nami-mid);
+    }
+    .char-img-cell {
+      background: var(--nami-dark); aspect-ratio: 1;
+      display: flex; align-items: center; justify-content: center;
+      min-height: 200px;
+    }
+    .char-img-cell {
+      cursor: pointer;
+    }
+    .char-img-cell img {
+      width: 70%; max-width: 180px; object-fit: contain;
+      filter: drop-shadow(0 12px 32px rgba(0,0,0,0.5));
+      will-change: transform;
+    }
+    .char-img-cell-empty {
+      background: var(--nami-dark); aspect-ratio: 3/4;
+      min-height: 200px;
+    }
+
+    /* ─── PERSONAJE ─── */
+    .character-wrap { border-bottom: 0.5px solid var(--border); }
+    .character-inner {
+      max-width: 920px; margin: 0 auto; padding: 64px 40px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start;
+    }
+    .character-title {
+      font-family: var(--serif); font-size: clamp(22px, 3vw, 32px);
+      font-weight: 700; margin-top: 12px; margin-bottom: 16px;
+      letter-spacing: -0.01em; line-height: 1.1;
+    }
+    .character-title em { font-style: italic; color: var(--nami-lavender); }
+    .character-text { font-size: 13px; line-height: 1.85; color: var(--muted); font-weight: 300; margin-bottom: 16px; }
+    .character-text strong { color: var(--ink); font-weight: 500; }
+    .character-right { display: flex; flex-direction: column; gap: 18px; }
+    .character-meaning {
+      font-family: var(--mono); font-size: 10px; color: var(--nami-lavender);
+      letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 18px;
+    }
+    .character-img-slot {
+      /* background: var(--nami-dark); */
+      display: flex; align-items: center; justify-content: center;
+      position: relative; min-height: 400px; overflow: hidden;
+      border-radius: 2px;
+    }
+    .character-img-slot img {
+      width: 65%; max-width: 280px; object-fit: contain;
+      position: relative; z-index: 1;
+      filter: drop-shadow(0 20px 60px rgba(0,191,202,0.25));
+      will-change: transform;
+    }
+    .character-img-glow {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 50% 40% at 40% 50%, rgba(153,168,249,0.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .char-state {
+      display: flex; gap: 16px; align-items: flex-start;
+      padding: 16px 18px; border: 0.5px solid var(--border);
+    }
+    .char-state-icon { font-size: 18px; line-height: 1; margin-top: 1px; flex-shrink: 0; }
+    .char-state-name { font-family: var(--serif); font-size: 13px; font-weight: 700; margin-bottom: 2px; }
+    .char-state-tag { font-family: var(--mono); font-size: 8px; color: var(--nami-teal); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px; }
+    .char-state-desc { font-size: 11px; color: var(--muted); line-height: 1.6; font-weight: 300; }
+
+    /* ─── STATES STRIP ─── */
+    .states-strip {
+      display: grid; grid-template-columns: repeat(5, 1fr);
+      gap: 1px; background: var(--border);
+      border-bottom: 0.5px solid var(--border);
+    }
+    .state-block { background: var(--nami-dark); padding: 32px 24px; transition: background 0.3s; }
+    .state-block:hover { background: var(--nami-mid); }
+    .state-icon { font-size: 20px; margin-bottom: 14px; }
+    .state-name {
+      font-family: var(--serif); font-size: 15px; font-weight: 700;
+      color: rgba(240,240,240,0.9); letter-spacing: -0.01em; margin-bottom: 6px;
+    }
+    .state-tagline { font-family: var(--mono); font-size: 8px; color: var(--nami-teal); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; }
+    .state-desc { font-size: 11px; line-height: 1.65; color: rgba(240,240,240,0.4); font-weight: 300; }
+
+    /* ─── ONBOARDING (text only) ─── */
+    .onboarding-wrap { border-bottom: 0.5px solid var(--border); }
+    .onboarding-inner {
+      max-width: 920px; margin: 0 auto; padding: 64px 40px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start;
+    }
+    .onboarding-title {
+      font-family: var(--serif); font-size: clamp(20px, 2.8vw, 28px);
+      font-weight: 700; margin-top: 12px; margin-bottom: 16px;
+      letter-spacing: -0.01em; line-height: 1.2;
+    }
+    .onboarding-title em { font-style: italic; color: var(--nami-lavender); }
+    .onboarding-text { font-size: 13px; line-height: 1.85; color: var(--muted); font-weight: 300; margin-bottom: 18px; }
+    .onboarding-text strong { color: var(--ink); font-weight: 500; }
+    .onboarding-steps { display: flex; flex-direction: column; gap: 0; border: 0.5px solid var(--border); }
+    .ob-step { display: flex; gap: 0; border-bottom: 0.5px solid var(--border); }
+    .ob-step:last-child { border-bottom: none; }
+    .ob-step-num {
+      font-family: var(--mono); font-size: 9px; color: var(--nami-lavender);
+      letter-spacing: 0.1em; min-width: 48px; padding: 18px 16px;
+      border-right: 0.5px solid var(--border); display: flex; align-items: flex-start;
+      padding-top: 20px;
+    }
+    .ob-step-body { padding: 16px 20px; }
+    .ob-step-label { font-family: var(--mono); font-size: 8px; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 4px; }
+    .ob-step-text { font-size: 12px; line-height: 1.7; color: var(--muted); font-weight: 300; }
+    .ob-step-text strong { color: var(--ink); font-weight: 500; }
+
+    /* ─── ACCESIBILIDAD ─── */
+    .access-wrap { border-bottom: 0.5px solid var(--border); }
+    .access-inner { max-width: 920px; margin: 0 auto; padding: 64px 40px; }
+    .access-title {
+      font-family: var(--serif); font-size: clamp(20px, 2.8vw, 28px);
+      font-weight: 700; margin-top: 12px; margin-bottom: 32px;
+      letter-spacing: -0.01em; line-height: 1.2;
+    }
+    .access-title em { font-style: italic; color: var(--nami-lavender); }
+    .access-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1px; background: var(--border);
+    }
+    .access-card { background: var(--bg); padding: 32px 28px; }
+    .access-label { font-family: var(--mono); font-size: 8px; color: var(--nami-lavender); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 10px; }
+    .access-card-title { font-family: var(--serif); font-size: 17px; font-weight: 700; margin-bottom: 10px; letter-spacing: -0.01em; }
+    .access-text { font-size: 12px; line-height: 1.75; color: var(--muted); font-weight: 300; }
+    .access-text strong { color: var(--ink); font-weight: 500; }
+
+    /* ─── NEXT STEPS ─── */
+    .next-wrap { border-bottom: 0.5px solid var(--border); }
+    .next-inner { max-width: 920px; margin: 0 auto; padding: 64px 40px; }
+    .next-title {
+      font-family: var(--serif); font-size: clamp(20px, 2.8vw, 28px);
+      font-weight: 700; margin-top: 12px; margin-bottom: 32px;
+      letter-spacing: -0.01em;
+    }
+    .next-title em { font-style: italic; color: var(--nami-lavender); }
+    .next-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 1px; background: var(--border);
+    }
+    .next-card { background: var(--surface); padding: 32px 24px; }
+    .next-num { font-family: var(--mono); font-size: 9px; color: var(--muted); letter-spacing: 0.1em; margin-bottom: 18px; }
+    .next-card-title { font-family: var(--serif); font-size: 16px; font-weight: 700; margin-bottom: 10px; letter-spacing: -0.01em; line-height: 1.2; }
+    .next-text { font-size: 11px; line-height: 1.7; color: var(--muted); font-weight: 300; }
+
+    /* ─── OUTCOMES ─── */
+    .outcomes-wrap { border-bottom: 0.5px solid var(--border); background: var(--nami-dark); }
+    .outcomes-inner { max-width: 920px; margin: 0 auto; padding: 64px 40px; }
+    .outcomes-title {
+      font-family: var(--serif); font-size: clamp(20px, 2.8vw, 28px);
+      font-weight: 700; margin-top: 12px; margin-bottom: 8px;
+      letter-spacing: -0.01em; color: rgba(240,240,240,0.9);
+    }
+    .outcomes-title em { font-style: italic; color: var(--nami-lavender); }
+    .outcomes-sub { font-size: 12px; color: rgba(240,240,240,0.38); font-weight: 300; margin-bottom: 36px; font-family: var(--mono); letter-spacing: 0.06em; }
+    .outcomes-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 1px; background: rgba(153,168,249,0.12);
+    }
+    .outcome-block { background: rgba(27,26,81,0.85); padding: 28px 22px; }
+    .outcome-val {
+      font-family: var(--serif); font-size: clamp(22px, 3.5vw, 36px);
+      font-weight: 700; color: var(--nami-lavender); letter-spacing: -0.02em;
+      line-height: 1; margin-bottom: 10px;
+    }
+    .outcome-desc { font-size: 10px; line-height: 1.65; color: rgba(240,240,240,0.45); font-weight: 300; }
+
+    /* ─── STATEMENT ─── */
+    .statement { background: var(--nami-dark); padding: 80px 48px; text-align: center; border-top: 0.5px solid rgba(153,168,249,0.15); }
+    .statement-q {
+      font-family: var(--serif); font-size: clamp(20px, 3.5vw, 34px);
+      font-style: italic; font-weight: 400;
+      color: rgba(240,240,240,0.88); line-height: 1.45;
+      max-width: 620px; margin: 0 auto 24px;
+    }
+    .statement-q span { color: var(--nami-lavender); }
+    .statement-src {
+      font-family: var(--mono); font-size: 10px;
+      color: rgba(240,240,240,0.25); letter-spacing: 0.12em; text-transform: uppercase;
+    }
+
+    /* ─── BACK CTA ─── */
+    .back-cta-wrap {
+      max-width: 920px; margin: 0 auto; padding: 64px 40px 96px;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;
+    }
+    .ext-link-row { display: flex; align-items: center; gap: 12px; }
+    .btn-ext {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: var(--mono); font-size: 10px; color: var(--muted);
+      letter-spacing: 0.1em; text-transform: uppercase;
+      border: 0.5px solid var(--border-hi); border-radius: 100px;
+      padding: 11px 20px; background: none; cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+      text-decoration: none;
+    }
+    .btn-ext:hover { color: var(--ink); border-color: var(--border-hi); }
+    .btn-pill {
+      display: inline-flex; align-items: center; background: var(--ink);
+      border: none; border-radius: 100px; cursor: pointer; overflow: hidden;
+    }
+    .btn-pill-text {
+      font-family: var(--serif); font-size: 13px; font-weight: 700; font-style: italic;
+      color: var(--bg); padding: 13px 22px 13px 26px; transition: transform 0.2s;
+    }
+    .btn-pill:hover .btn-pill-text { transform: translateX(-4px); }
+    .btn-pill-icon {
+      width: 40px; height: 40px; border-radius: 50%; background: var(--nami-lavender);
+      display: flex; align-items: center; justify-content: center;
+      margin: 4px 4px 4px 0; flex-shrink: 0; transition: transform 0.3s;
+    }
+    .btn-pill:hover .btn-pill-icon { transform: rotate(-45deg); }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      .bench-grid { grid-template-columns: 1fr 1fr; }
+      .next-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 640px) {
+      .page-nav, .intro, .challenge-inner, .research-inner, .persona-inner,
+      .hmw-inner, .bench-inner, .character-inner, .onboarding-inner,
+      .access-inner, .next-inner, .outcomes-inner, .back-cta-wrap { padding-left: 20px; padding-right: 20px; }
+      .intro { padding-top: 40px; padding-bottom: 40px; }
+      .sec-hdr-inner { padding-left: 20px; padding-right: 20px; }
+      .challenge-inner, .persona-inner, .character-inner, .onboarding-inner { grid-template-columns: 1fr; gap: 36px; }
+      .meta-row { grid-template-columns: 1fr 1fr; }
+      .intro-stats { flex-direction: column; }
+      .decision { grid-template-columns: 1fr; }
+      .dec-img-dark { min-height: 300px; }
+      .dec-text { padding: 32px 20px; }
+      .states-strip { grid-template-columns: 1fr 1fr; }
+      .states-strip .state-block:last-child { grid-column: 1 / -1; }
+      .hmw-list { grid-template-columns: 1fr; }
+      .access-grid { grid-template-columns: 1fr; }
+      .bench-grid { grid-template-columns: 1fr 1fr; }
+      .next-grid { grid-template-columns: 1fr 1fr; }
+      .outcomes-grid { grid-template-columns: 1fr 1fr; }
+      .statement { padding: 56px 24px; }
+      .back-cta-wrap { flex-direction: column; align-items: flex-start; gap: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TRANSITION OVERLAY -->
+  <div id="transition-overlay" aria-hidden="true">
+    <span id="transition-title"></span>
+  </div>
+
+  <!-- CURSOR -->
+  <div id="cursor" aria-hidden="true"></div>
+
+  <!-- ─── NAV ─── -->
+  <nav class="page-nav">
+    <button class="nav-back" onclick="goBack()">
+      <span class="arrow">←</span> <span data-i18n-es="Volver al portfolio" data-i18n-en="Back to portfolio">Volver al portfolio</span>
+    </button>
+    <div style="display:flex;align-items:center;gap:14px;"><span class="nav-label" data-i18n-es="Caso de estudio 003" data-i18n-en="Case study 003">Caso de estudio 003</span><div class="lang-switcher"><button class="lang-btn active" data-lang="es">ES</button><span class="lang-sep">|</span><button class="lang-btn" data-lang="en">EN</button></div></div>
+  </nav>
+
+  <!-- ─── INTRO ─── -->
+  <div class="intro">
+    <p class="slbl" data-i18n-es="Caso de estudio — Salud mental" data-i18n-en="Case study — Mental health">Caso de estudio — Salud mental</p>
+    <h1 class="intro-title" data-i18n-es="<em>Nami</em> — una app para<br>acompañar la ansiedad" data-i18n-en="<em>Nami</em> — an app to<br>accompany anxiety">
+      <em>Nami</em> — una app para<br>acompañar la ansiedad
+    </h1>
+    <p class="intro-sub" data-i18n-es="La ansiedad no espera a la próxima sesión de terapia. Nami nace de una pregunta: ¿cómo acompañar a un adolescente en el peor momento, cuando el profesional no está disponible?" data-i18n-en="Anxiety doesn't wait for the next therapy session. Nami was born from a question: how do you support a teenager in their worst moment, when their professional is not available?">
+      La ansiedad no espera a la próxima sesión de terapia.
+      Nami nace de una pregunta: ¿cómo acompañar a un adolescente
+      en el peor momento, cuando el profesional no está disponible?
+    </p>
+    <div class="meta-row">
+      <div class="meta-block">
+        <p class="meta-label" data-i18n-es="Rol" data-i18n-en="Role">Rol</p>
+        <p class="meta-val">UX/UI Designer</p>
+      </div>
+      <div class="meta-block">
+        <p class="meta-label" data-i18n-es="Tipo" data-i18n-en="Type">Tipo</p>
+        <p class="meta-val">Design Challenge</p>
+      </div>
+      <div class="meta-block">
+        <p class="meta-label" data-i18n-es="Plataforma" data-i18n-en="Platform">Plataforma</p>
+        <p class="meta-val">iOS Mobile</p>
+      </div>
+      <div class="meta-block">
+        <p class="meta-label" data-i18n-es="Enfoque" data-i18n-en="Approach">Enfoque</p>
+        <p class="meta-val">Design Thinking</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- ─── 01 INVESTIGACIÓN ─── -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="sec-lbl-wrap">
+    <div class="sec-lbl">
+      <span class="sec-lbl-num">01</span>
+      <span class="sec-lbl-sep">/</span>
+      <span class="sec-lbl-text" data-i18n-es="Investigación" data-i18n-en="Research">Investigación</span>
+    </div>
+  </div>
+
+  <!-- EL DESAFÍO -->
+  <div class="challenge-wrap">
+    <div class="challenge-inner">
+      <div>
+        <p class="slbl" data-i18n-es="El desafío" data-i18n-en="The challenge">El desafío</p>
+        <h3 class="challenge-title" data-i18n-es="El problema ocurre <em>entre las sesiones</em>" data-i18n-en="The problem happens <em>between sessions</em>">El problema ocurre <em>entre las sesiones</em></h3>
+        <p class="challenge-text">
+          <span data-i18n-es="El brief pedía diseñar una experiencia digital que ayude a personas a manejar la ansiedad fuera de la terapia." data-i18n-en="The brief asked to design a digital experience to help people manage anxiety outside of therapy.">El brief pedía diseñar una experiencia digital que ayude a personas a
+          manejar la ansiedad fuera de la terapia.</span> <span data-i18n-es="El foco no era prevención ni meditación: era el momento agudo de crisis, cuando las herramientas aprendidas con el terapeuta se vuelven inalcanzables." data-i18n-en="The focus wasn't prevention or meditation: it was the acute moment of crisis, when the tools learned with the therapist become unreachable.">El foco no era prevención ni meditación:
+          era el momento agudo de crisis, cuando las herramientas aprendidas con el terapeuta
+          se vuelven inalcanzables.</span><br><br>
+          <span data-i18n-es="La investigación mostró que los adolescentes ya en terapia sufren sus episodios más intensos en horas nocturnas, ante exámenes, en situaciones sociales — no en el consultorio. Nami busca cerrar ese gap siendo el puente entre sesiones." data-i18n-en="Research showed that teenagers already in therapy experience their most intense episodes at night, before exams, in social situations — not in the therapist's office. Nami aims to close that gap by being the bridge between sessions.">La investigación mostró que los adolescentes ya en terapia sufren sus episodios
+          más intensos en horas nocturnas, ante exámenes, en situaciones sociales —
+          no en el consultorio. Nami busca cerrar ese gap siendo el puente entre sesiones.</span>
+        </p>
+      </div>
+      <div>
+        <div class="challenge-stats-grid">
+          <div class="stat-block">
+            <p class="stat-num">359M</p>
+            <p class="stat-desc" data-i18n-es="personas con trastornos de ansiedad en 2021 — el trastorno mental más común del mundo" data-i18n-en="people with anxiety disorders in 2021 — the most common mental disorder in the world">personas con trastornos de ansiedad en 2021 — el trastorno mental más común del mundo</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-num">1 de 4</p>
+            <p class="stat-desc" data-i18n-es="personas que necesitan tratamiento realmente lo reciben" data-i18n-en="people who need treatment actually receive it">personas que necesitan tratamiento realmente lo reciben</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-num">+52%</p>
+            <p class="stat-desc" data-i18n-es="aumento de ansiedad en jóvenes de 10 a 24 años entre 1990 y 2021, con aceleración post-2019" data-i18n-en="increase in anxiety among youth aged 10–24 between 1990 and 2021, accelerating post-2019">aumento de ansiedad en jóvenes de 10 a 24 años entre 1990 y 2021, con aceleración post-2019</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-num">1–2 sem.</p>
+            <p class="stat-desc" data-i18n-es="es la frecuencia promedio entre sesiones de terapia — el gap donde más sufren los pacientes" data-i18n-en="is the average frequency between therapy sessions — the gap where patients suffer most">es la frecuencia promedio entre sesiones de terapia — el gap donde más sufren los pacientes</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HALLAZGOS DE INVESTIGACIÓN -->
+  <div class="research-wrap">
+    <div class="research-inner">
+      <p class="slbl" data-i18n-es="Hallazgos" data-i18n-en="Findings">Hallazgos</p>
+      <h3 class="research-title" data-i18n-es="No quieren resolver la ansiedad.<br><em>Quieren bajar la intensidad.</em>" data-i18n-en="They don't want to solve anxiety.<br><em>They want to lower the intensity.</em>">No quieren resolver la ansiedad.<br><em>Quieren bajar la intensidad.</em></h3>
+      <p class="research-body">
+        <span data-i18n-es="El análisis de foros, reseñas de apps y literatura clínica reveló un patrón claro: durante un episodio agudo, los usuarios no buscan solucionar nada. Buscan sobrevivir los próximos 60 segundos." data-i18n-en="Analysis of forums, app reviews and clinical literature revealed a clear pattern: during an acute episode, users aren't trying to fix anything. They're trying to survive the next 60 seconds.">El análisis de foros, reseñas de apps y literatura clínica reveló un patrón claro:
+        durante un episodio agudo, los usuarios no buscan solucionar nada. Buscan sobrevivir
+        los próximos 60 segundos.</span>
+      </p>
+      <p class="research-body" data-i18n-es="Lo que hacen en realidad: aislarse, poner música, caminar, tomar agua fría, apretarse las manos. <strong>Acciones físicas y de movimiento grueso</strong> — no meditación ni respiración guiada." data-i18n-en="What they actually do: isolate, play music, walk, drink cold water, squeeze their hands. <strong>Physical and gross motor actions</strong> — not meditation or guided breathing.">
+        Lo que hacen en realidad: aislarse, poner música, caminar, tomar agua fría, apretarse
+        las manos. <strong>Acciones físicas y de movimiento grueso</strong> — no meditación ni respiración guiada.
+      </p>
+      <p class="research-body" data-i18n-es="<strong>Insight crítico:</strong> las instrucciones de respiración pueden empeorar el ataque de pánico. Al focalizarse en cómo se respira, muchos usuarios sienten que les falta el aire y la crisis se intensifica. Las apps existentes basan casi todo su flujo de crisis en respiración guiada." data-i18n-en="<strong>Critical insight:</strong> breathing instructions can worsen a panic attack. By focusing on how they breathe, many users feel short of breath and the crisis intensifies. Existing apps base almost their entire crisis flow on guided breathing.">
+        <strong>Insight crítico:</strong> las instrucciones de respiración pueden empeorar el ataque de pánico.
+        Al focalizarse en cómo se respira, muchos usuarios sienten que les falta el aire y la crisis se intensifica.
+        Las apps existentes basan casi todo su flujo de crisis en respiración guiada.
+      </p>
+      <div class="dec-quote">
+        <p data-i18n-es="&quot;Probé apps antes, pero se sienten genéricas — como que no me entienden realmente.&quot;" data-i18n-en="&quot;I tried apps before, but they feel generic — like they don't really understand me.&quot;">"Probé apps antes, pero se sienten genéricas — como que no me entienden realmente."</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUIÉN ES SOFÍA -->
+  <div class="persona-wrap">
+    <div class="persona-inner">
+      <div>
+        <p class="slbl" data-i18n-es="Persona" data-i18n-en="Persona">Persona</p>
+        <h3 class="persona-name" data-i18n-es="Sofía,<br><em>16 años</em>" data-i18n-en="Sofía,<br><em>16 years old</em>">Sofía,<br><em>16 años</em></h3>
+        <p class="persona-id" data-i18n-es="Buenos Aires · Gen Z" data-i18n-en="Buenos Aires · Gen Z">Buenos Aires · Gen Z</p>
+        <p class="persona-desc" data-i18n-es="Terapia cada dos semanas. TikTok, Instagram, Spotify como reguladores emocionales. Sus episodios de ansiedad aparecen en exámenes, situaciones sociales, noches sola con sus pensamientos." data-i18n-en="Therapy every two weeks. TikTok, Instagram, Spotify as emotional regulators. Her anxiety episodes appear during exams, social situations, nights alone with her thoughts.">
+          Terapia cada dos semanas. TikTok, Instagram, Spotify como reguladores emocionales.
+          Sus episodios de ansiedad aparecen en exámenes, situaciones sociales, noches sola con sus pensamientos.
+        </p>
+        <p class="persona-desc" data-i18n-es="Habla de ansiedad, burnout y salud mental con total naturalidad — el tema está destigmatizado. Conoce el vocabulario: sistema nervioso, triggers, grounding. Pero durante un episodio real, no puede ejecutar ninguna de las técnicas que aprendió." data-i18n-en="She talks about anxiety, burnout and mental health completely naturally — the topic is destigmatized. She knows the vocabulary: nervous system, triggers, grounding. But during a real episode, she can't execute any of the techniques she learned.">
+          Habla de ansiedad, burnout y salud mental con total naturalidad — el tema está destigmatizado.
+          Conoce el vocabulario: sistema nervioso, triggers, grounding. Pero durante un episodio real,
+          no puede ejecutar ninguna de las técnicas que aprendió.
+        </p>
+        <div class="persona-traits">
+          <span class="persona-trait">Gen Z</span>
+          <span class="persona-trait" data-i18n-es="En terapia" data-i18n-en="In therapy">En terapia</span>
+          <span class="persona-trait" data-i18n-es="Alta alfabetización emocional" data-i18n-en="High emotional literacy">Alta alfabetización emocional</span>
+          <span class="persona-trait" data-i18n-es="Desconfía de lo clínico" data-i18n-en="Distrusts clinical aesthetics">Desconfía de lo clínico</span>
+          <span class="persona-trait">Mobile-native</span>
+        </div>
+        <div class="persona-quote">
+          <p data-i18n-es="&quot;Quiero que alguien me entienda pero que no preocupe a mis papás.&quot;" data-i18n-en="&quot;I want someone to understand me but not worry my parents.&quot;">"Quiero que alguien me entienda pero que no preocupe a mis papás."</p>
+        </div>
+      </div>
+      <div class="persona-bullets">
+        <div>
+          <p class="pb-label" data-i18n-es="Motivaciones" data-i18n-en="Motivations">Motivaciones</p>
+          <p class="pb-text" data-i18n-es="Manejar la ansiedad sin interrumpir su vida social. <strong>No quiere que sus amigos sepan</strong> que está en crisis. Busca herramientas que funcionen en 2 minutos, no en 20." data-i18n-en="Manage anxiety without disrupting her social life. <strong>She doesn't want her friends to know</strong> she's in crisis. She looks for tools that work in 2 minutes, not 20.">Manejar la ansiedad sin interrumpir su vida social. <strong>No quiere que sus amigos sepan</strong> que está en crisis. Busca herramientas que funcionen en 2 minutos, no en 20.</p>
+        </div>
+        <div>
+          <p class="pb-label" data-i18n-es="Frustraciones" data-i18n-en="Frustrations">Frustraciones</p>
+          <p class="pb-text" data-i18n-es="Apps que se sienten como tarea médica. Notificaciones de &quot;¿cómo te sentís hoy?&quot; a las 9am. <strong>Streaks que generan culpa</strong> cuando no los mantenés. Pantallas blancas que duelen de noche." data-i18n-en="Apps that feel like medical homework. &quot;How are you feeling today?&quot; notifications at 9am. <strong>Streaks that generate guilt</strong> when you break them. White screens that hurt at night.">Apps que se sienten como tarea médica. Notificaciones de "¿cómo te sentís hoy?" a las 9am. <strong>Streaks que generan culpa</strong> cuando no los mantenés. Pantallas blancas que duelen de noche.</p>
+        </div>
+        <div>
+          <p class="pb-label" data-i18n-es="Comportamiento digital" data-i18n-en="Digital behavior">Comportamiento digital</p>
+          <p class="pb-text" data-i18n-es="Le da <strong>30 segundos a una app</strong> antes de cerrarla. Si el onboarding pide demasiado, sale. Confía en lo honesto, imperfecto, humano — desconfía del branding clínico y del tono corporativo." data-i18n-en="She gives an app <strong>30 seconds</strong> before closing it. If the onboarding asks too much, she leaves. She trusts what's honest, imperfect, human — she distrusts clinical branding and corporate tone.">Le da <strong>30 segundos a una app</strong> antes de cerrarla. Si el onboarding pide demasiado, sale. Confía en lo honesto, imperfecto, humano — desconfía del branding clínico y del tono corporativo.</p>
+        </div>
+        <div>
+          <p class="pb-label" data-i18n-es="Contexto de uso" data-i18n-en="Usage context">Contexto de uso</p>
+          <p class="pb-text" data-i18n-es="Noche, habitación oscura. Antes de un examen. En el baño de una fiesta. <strong>Los peores momentos ocurren cuando no puede pedir ayuda</strong> en voz alta y necesita algo silencioso y rápido." data-i18n-en="Night, dark bedroom. Before an exam. In the bathroom at a party. <strong>The worst moments happen when she can't ask for help</strong> out loud and needs something silent and fast.">Noche, habitación oscura. Antes de un examen. En el baño de una fiesta. <strong>Los peores momentos ocurren cuando no puede pedir ayuda</strong> en voz alta y necesita algo silencioso y rápido.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HMW -->
+  <div class="hmw-wrap">
+    <div class="hmw-inner">
+      <p class="slbl" data-i18n-es="Preguntas How Might We" data-i18n-en="How Might We Questions">Preguntas How Might We</p>
+      <ul class="hmw-list">
+        <li data-i18n-es="¿Cómo reducir la fricción de entrada a cero para que el acceso sea posible en menos de 3 segundos con las manos temblando?" data-i18n-en="How might we reduce entry friction to zero so access is possible in under 3 seconds with shaking hands?">¿Cómo reducir la fricción de entrada a cero para que el acceso sea posible en menos de 3 segundos con las manos temblando?</li>
+        <li data-i18n-es="¿Cómo guiar los primeros 60 segundos sin requerir leer, decidir ni pensar?" data-i18n-en="How might we guide the first 60 seconds without requiring reading, deciding or thinking?">¿Cómo guiar los primeros 60 segundos sin requerir leer, decidir ni pensar?</li>
+        <li data-i18n-es="¿Cómo crear sensación de presencia sin depender de la disponibilidad de otra persona?" data-i18n-en="How might we create a sense of presence without depending on another person's availability?">¿Cómo crear sensación de presencia sin depender de la disponibilidad de otra persona?</li>
+        <li data-i18n-es="¿Cómo distinguir ansiedad leve de un episodio agudo y responder diferente?" data-i18n-en="How might we distinguish mild anxiety from an acute episode and respond differently?">¿Cómo distinguir ansiedad leve de un episodio agudo y responder diferente?</li>
+        <li data-i18n-es="¿Cómo hacer que la app y el terapeuta se sientan coordinados, no separados?" data-i18n-en="How might we make the app and the therapist feel coordinated, not separate?">¿Cómo hacer que la app y el terapeuta se sientan coordinados, no separados?</li>
+        <li data-i18n-es="¿Cómo diseñar para una generación que entiende la salud mental pero desconfía de la estética clínica?" data-i18n-en="How might we design for a generation that understands mental health but distrusts clinical aesthetics?">¿Cómo diseñar para una generación que entiende la salud mental pero desconfía de la estética clínica?</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- BENCHMARK -->
+  <div class="bench-wrap">
+    <div class="bench-inner">
+      <p class="slbl" data-i18n-es="Benchmark — Análisis competitivo" data-i18n-en="Benchmark — Competitive analysis">Benchmark — Análisis competitivo</p>
+      <h3 class="challenge-title" style="margin-top:12px;margin-bottom:8px;" data-i18n-es="Ninguna app está diseñada para <em style='font-style:italic;color:var(--nami-lavender);'>el momento de crisis</em>" data-i18n-en="No app is designed for <em style='font-style:italic;color:var(--nami-lavender);'>the moment of crisis</em>">Ninguna app está diseñada para <em style="font-style:italic;color:var(--nami-lavender);">el momento de crisis</em></h3>
+      <p class="challenge-text" style="max-width:580px;margin-bottom:0;" data-i18n-es="El mercado tiene apps para la calma diaria, meditación y CBT. El gap específico — el episodio agudo en los primeros 60 segundos — no está resuelto por ningún competidor relevante." data-i18n-en="The market has apps for daily calm, meditation and CBT. The specific gap — the acute episode in the first 60 seconds — is unresolved by any relevant competitor.">El mercado tiene apps para la calma diaria, meditación y CBT. El gap específico — el episodio agudo en los primeros 60 segundos — no está resuelto por ningún competidor relevante.</p>
+      <div class="bench-grid">
+        <div class="bench-card">
+          <p class="bench-app">Headspace</p>
+          <p class="bench-focus" data-i18n-es="Meditación guiada diaria" data-i18n-en="Daily guided meditation">Meditación guiada diaria</p>
+          <p class="bench-gap" data-i18n-es="Excelente para rutina preventiva. <strong>Falla en crisis aguda:</strong> requiere elegir una sesión, navegar menús y tener capacidad de atención sostenida — imposible durante un episodio." data-i18n-en="Excellent for preventive routine. <strong>Fails in acute crisis:</strong> requires choosing a session, navigating menus and sustained attention capacity — impossible during an episode.">Excelente para rutina preventiva. <strong>Falla en crisis aguda:</strong> requiere elegir una sesión, navegar menús y tener capacidad de atención sostenida — imposible durante un episodio.</p>
+        </div>
+        <div class="bench-card">
+          <p class="bench-app">Calm</p>
+          <p class="bench-focus" data-i18n-es="Sleep &amp; relaxación" data-i18n-en="Sleep &amp; relaxation">Sleep & relaxación</p>
+          <p class="bench-gap" data-i18n-es="Diseñada para el pre-sueño y el bienestar general. <strong>Falla en crisis aguda:</strong> su estética amplia y sus sonidos de naturaleza pueden irritar a alguien en estado de pánico activo." data-i18n-en="Designed for pre-sleep and general wellness. <strong>Fails in acute crisis:</strong> its broad aesthetic and nature sounds can irritate someone in an active panic state.">Diseñada para el pre-sueño y el bienestar general. <strong>Falla en crisis aguda:</strong> su estética amplia y sus sonidos de naturaleza pueden irritar a alguien en estado de pánico activo.</p>
+        </div>
+        <div class="bench-card">
+          <p class="bench-app">Wysa</p>
+          <p class="bench-focus" data-i18n-es="Chatbot de CBT" data-i18n-en="CBT chatbot">Chatbot de CBT</p>
+          <p class="bench-gap" data-i18n-es="Enfoque clínico sólido y empático. <strong>Falla en crisis aguda:</strong> exige tipear durante el episodio — imposible con manos temblorosas y pensamiento colapsado por la activación." data-i18n-en="Solid and empathetic clinical approach. <strong>Fails in acute crisis:</strong> requires typing during the episode — impossible with shaking hands and thinking collapsed by activation.">Enfoque clínico sólido y empático. <strong>Falla en crisis aguda:</strong> exige tipear durante el episodio — imposible con manos temblorosas y pensamiento colapsado por la activación.</p>
+        </div>
+        <div class="bench-card">
+          <p class="bench-app">Woebot</p>
+          <p class="bench-focus" data-i18n-es="CBT conversacional" data-i18n-en="Conversational CBT">CBT conversacional</p>
+          <p class="bench-gap" data-i18n-es="Muy efectivo para trabajo cognitivo en calma. <strong>Falla en crisis aguda:</strong> la CBT requiere reflexión activa. Con corteza prefrontal desconectada por el pánico, el usuario no puede usarla." data-i18n-en="Very effective for cognitive work in calm states. <strong>Fails in acute crisis:</strong> CBT requires active reflection. With the prefrontal cortex disconnected by panic, the user cannot use it.">Muy efectivo para trabajo cognitivo en calma. <strong>Falla en crisis aguda:</strong> la CBT requiere reflexión activa. Con corteza prefrontal desconectada por el pánico, el usuario no puede usarla.</p>
+        </div>
+      </div>
+      <div class="bench-conclusion">
+        <p data-i18n-es="<strong>Gap identificado:</strong> todas las apps asumen que el usuario tiene capacidad cognitiva normal. Nami es la única diseñada explícitamente para el estado de <strong>activación máxima</strong>, cuando esa capacidad no existe." data-i18n-en="<strong>Gap identified:</strong> all apps assume the user has normal cognitive capacity. Nami is the only one explicitly designed for the state of <strong>maximum activation</strong>, when that capacity doesn't exist."><strong>Gap identificado:</strong> todas las apps asumen que el usuario tiene capacidad cognitiva normal. Nami es la única diseñada explícitamente para el estado de <strong>activación máxima</strong>, cuando esa capacidad no existe.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- ─── 02 DECISIONES DE DISEÑO ─── -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="sec-lbl-wrap">
+    <div class="sec-lbl">
+      <span class="sec-lbl-num">02</span>
+      <span class="sec-lbl-sep">/</span>
+      <span class="sec-lbl-text" data-i18n-es="Decisiones de diseño" data-i18n-en="Design decisions">Decisiones de diseño</span>
+    </div>
+  </div>
+
+  <!-- PANTALLA 01: The Shore -->
+  <div class="decision">
+    <div class="dec-text">
+      <p class="dec-num" data-i18n-es="01 — The Shore · Pantalla de inicio" data-i18n-en="01 — The Shore · Home screen">01 — The Shore · Pantalla de inicio</p>
+      <h3 class="dec-title" data-i18n-es="En calma,<br><em>en control</em>" data-i18n-en="Calm,<br><em>in control</em>">
+        En calma,<br>
+        <em>en control</em>
+      </h3>
+      <p class="dec-body">
+        <span data-i18n-es="El estado por defecto de Nami es la calma." data-i18n-en="Nami's default state is calm.">El estado por defecto de Nami es la calma.</span> <span data-i18n-es="The Shore es la pantalla de inicio: un saludo personalizado, el estado emocional del momento y acceso rápido a todas las rutas posibles." data-i18n-en="The Shore is the home screen: a personalized greeting, the current emotional state and quick access to all possible routes.">The Shore es la pantalla de inicio:
+        un saludo personalizado, el estado emocional del momento y acceso rápido
+        a todas las rutas posibles.</span><br><br>
+        <span data-i18n-es="<strong>Decisión de diseño:</strong> no mostrar un dashboard de métricas ni barras de progreso. El home se siente como llegar a un lugar seguro — no como un reporte de rendimiento. Nami recuerda tu nombre, cuándo es tu próxima sesión y cómo te fue la última vez." data-i18n-en="<strong>Design decision:</strong> no metrics dashboard or progress bars. The home feels like arriving somewhere safe — not like a performance report. Nami remembers your name, when your next session is and how your last one went."><strong>Decisión de diseño:</strong> no mostrar un dashboard de métricas ni barras de progreso.
+        El home se siente como llegar a un lugar seguro — no como un reporte de rendimiento.
+        Nami recuerda tu nombre, cuándo es tu próxima sesión y cómo te fue la última vez.</span>
+      </p>
+    </div>
+    <div class="dec-img-dark">
+      <div class="wave-accent-top"></div>
+      <img src="assets/nami/TheShore.png" alt="The Shore — pantalla de inicio Nami">
+    </div>
+  </div>
+
+  <!-- PANTALLA 02: Storm Mode -->
+  <div class="decision">
+    <div class="dec-img-dark">
+      <div class="wave-accent"></div>
+      <img src="assets/nami/Stormmode.png" alt="Storm Mode — Nami">
+    </div>
+    <div class="dec-text">
+      <p class="dec-num" data-i18n-es="02 — Storm Mode · Crisis" data-i18n-en="02 — Storm Mode · Crisis">02 — Storm Mode · Crisis</p>
+      <h3 class="dec-title" data-i18n-es="Una pantalla,<br><em>una sola acción</em>" data-i18n-en="One screen,<br><em>one single action</em>">
+        Una pantalla,<br>
+        <em>una sola acción</em>
+      </h3>
+      <p class="dec-body">
+        <span data-i18n-es="En un episodio agudo, la activación cognitiva es tan alta que el usuario no puede ejecutar tareas de varios pasos. El control motor fino se deteriora. La visión en túnel limita lo que puede ver." data-i18n-en="In an acute episode, cognitive activation is so high that the user can't execute multi-step tasks. Fine motor control deteriorates. Tunnel vision limits what they can see.">En un episodio agudo, la activación cognitiva es tan alta que el usuario no puede
+        ejecutar tareas de varios pasos. El control motor fino se deteriora. La visión en túnel
+        limita lo que puede ver.</span><br><br>
+        <span data-i18n-es="<strong>Decisión de diseño:</strong> cero decisiones en el pico del pánico. Agitar el teléfono o presionar el botón de volumen tres veces activa Storm Mode instantáneamente — sin desbloquear, sin buscar, sin pantallas de bienvenida. Una pantalla. Un mensaje. Una acción física guiada por audio." data-i18n-en="<strong>Design decision:</strong> zero decisions at the peak of panic. Shaking the phone or pressing the volume button three times activates Storm Mode instantly — no unlocking, no searching, no welcome screens. One screen. One message. One physical action guided by audio."><strong>Decisión de diseño:</strong> cero decisiones en el pico del pánico.
+        Agitar el teléfono o presionar el botón de volumen tres veces activa Storm Mode
+        instantáneamente — sin desbloquear, sin buscar, sin pantallas de bienvenida.
+        Una pantalla. Un mensaje. Una acción física guiada por audio.</span>
+      </p>
+      <div class="dec-quote">
+        <p data-i18n-es="&quot;A las 3 de la madrugada con el corazón a 140 ppm, escuchar pájaros me hace sentir que la app se burla de mí.&quot;" data-i18n-en="&quot;At 3am with my heart at 140 bpm, hearing birds makes me feel like the app is mocking me.&quot;">"A las 3 de la madrugada con el corazón a 140 ppm, escuchar pájaros me hace sentir que la app se burla de mí."</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANTALLA 03: The Wave -->
+  <div class="decision">
+    <div class="dec-text">
+      <p class="dec-num" data-i18n-es="03 — The Wave · Puente emocional" data-i18n-en="03 — The Wave · Emotional bridge">03 — The Wave · Puente emocional</p>
+      <h3 class="dec-title" data-i18n-es="Primero la empatía,<br><em>después la acción</em>" data-i18n-en="Empathy first,<br><em>then action</em>">
+        Primero la empatía,<br>
+        <em>después la acción</em>
+      </h3>
+      <p class="dec-body">
+        <span data-i18n-es="Antes de dar cualquier instrucción, Nami valida lo que está pasando. The Wave es la pantalla de transición: reconoce el estado del usuario y crea el puente emocional necesario para que pueda actuar." data-i18n-en="Before giving any instruction, Nami validates what's happening. The Wave is the transition screen: it acknowledges the user's state and creates the emotional bridge needed for them to act.">Antes de dar cualquier instrucción, Nami valida lo que está pasando.
+        The Wave es la pantalla de transición: reconoce el estado del usuario
+        y crea el puente emocional necesario para que pueda actuar.</span><br><br>
+        <span data-i18n-es="<strong>Decisión de diseño:</strong> los usuarios en crisis rechazan pasar directo a las instrucciones. Necesitan sentir que alguien los escucha primero. &quot;Estoy acá, seguime&quot; hace más que cualquier técnica clínica sin ese paso previo." data-i18n-en="<strong>Design decision:</strong> users in crisis resist jumping straight to instructions. They need to feel heard first. &quot;I'm here, follow me&quot; does more than any clinical technique without that prior step."><strong>Decisión de diseño:</strong> los usuarios en crisis rechazan pasar directo
+        a las instrucciones. Necesitan sentir que alguien los escucha primero.
+        "Estoy acá, seguime" hace más que cualquier técnica clínica sin ese paso previo.</span>
+      </p>
+    </div>
+    <div class="dec-img-dark">
+      <div class="wave-accent"></div>
+      <img src="assets/nami/Thewave.png" alt="The Wave — Nami">
+    </div>
+  </div>
+
+  <!-- PANTALLA 04: Still Water -->
+  <div class="decision">
+    <div class="dec-img-dark">
+      <div class="wave-accent-top"></div>
+      <img src="assets/nami/Stillwater.png" alt="Still Water — Nami">
+    </div>
+    <div class="dec-text">
+      <p class="dec-num" data-i18n-es="04 — Still Water · Guía activa" data-i18n-en="04 — Still Water · Active guidance">04 — Still Water · Guía activa</p>
+      <h3 class="dec-title" data-i18n-es="Instrucciones físicas,<br><em>no cognitivas</em>" data-i18n-en="Physical instructions,<br><em>not cognitive</em>">
+        Instrucciones físicas,<br>
+        <em>no cognitivas</em>
+      </h3>
+      <p class="dec-body">
+        <span data-i18n-es="Still Water es la pantalla de acción: una instrucción física por vez, con un timer visible y la presencia de Nami como ancla emocional. Las instrucciones son movimiento grueso — pisotear el suelo, apretar las manos, sacudir los brazos — no respiración guiada." data-i18n-en="Still Water is the action screen: one physical instruction at a time, with a visible timer and Nami's presence as an emotional anchor. Instructions are gross motor movements — stomping on the floor, squeezing hands, shaking arms — not guided breathing.">Still Water es la pantalla de acción: una instrucción física por vez,
+        con un timer visible y la presencia de Nami como ancla emocional.
+        Las instrucciones son movimiento grueso — pisotear el suelo, apretar las manos,
+        sacudir los brazos — no respiración guiada.</span><br><br>
+        <span data-i18n-es="<strong>Decisión de diseño:</strong> la evidencia clínica muestra que el movimiento grueso reduce la activación del sistema nervioso autónomo más rápido que la respiración. Y a diferencia de la respiración, no puede &quot;empeorar&quot; el episodio." data-i18n-en="<strong>Design decision:</strong> clinical evidence shows that gross motor movement reduces autonomic nervous system activation faster than breathing. And unlike breathing, it can't &quot;worsen&quot; the episode."><strong>Decisión de diseño:</strong> la evidencia clínica muestra que el movimiento
+        grueso reduce la activación del sistema nervioso autónomo más rápido que la respiración.
+        Y a diferencia de la respiración, no puede "empeorar" el episodio.</span>
+      </p>
+    </div>
+  </div>
+
+  <!-- PANTALLA 05: After the Wave -->
+  <div class="decision">
+    <div class="dec-text">
+      <p class="dec-num" data-i18n-es="05 — After the Wave · Cierre" data-i18n-en="05 — After the Wave · Closure">05 — After the Wave · Cierre</p>
+      <h3 class="dec-title" data-i18n-es="Lo lograste —<br><em>sin presión</em>" data-i18n-en="You made it —<br><em>no pressure</em>">
+        Lo lograste —<br>
+        <em>sin presión</em>
+      </h3>
+      <p class="dec-body">
+        <span data-i18n-es="After the Wave celebra el episodio sin convertirlo en una tarea más. El momento de cierre reconoce lo que pasó, lo registra automáticamente y lo guarda para la próxima sesión con el terapeuta." data-i18n-en="After the Wave celebrates the episode without turning it into another task. The closing moment acknowledges what happened, records it automatically and saves it for the next therapist session.">After the Wave celebra el episodio sin convertirlo en una tarea más.
+        El momento de cierre reconoce lo que pasó, lo registra automáticamente
+        y lo guarda para la próxima sesión con el terapeuta.</span><br><br>
+        <span data-i18n-es="<strong>Decisión de diseño:</strong> no hay opción de &quot;volver a intentarlo&quot; ni barras de recuperación. La única acción posible es avanzar. El episodio se registra sin que el usuario tenga que escribir nada — después, el terapeuta puede verlo con contexto completo." data-i18n-en="<strong>Design decision:</strong> no &quot;try again&quot; option or recovery bars. The only possible action is to move forward. The episode is recorded without the user having to write anything — afterwards, the therapist can view it with full context."><strong>Decisión de diseño:</strong> no hay opción de "volver a intentarlo"
+        ni barras de recuperación. La única acción posible es avanzar.
+        El episodio se registra sin que el usuario tenga que escribir nada —
+        después, el terapeuta puede verlo con contexto completo.</span>
+      </p>
+    </div>
+    <div class="dec-img-dark">
+      <div class="wave-accent-top"></div>
+      <img src="assets/nami/Afterthewave.png" alt="After the Wave — Nami">
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- ─── 03 EL PERSONAJE ─── -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="sec-lbl-wrap">
+    <div class="sec-lbl">
+      <span class="sec-lbl-num">03</span>
+      <span class="sec-lbl-sep">/</span>
+      <span class="sec-lbl-text" data-i18n-es="El personaje y los estados" data-i18n-en="The character and states">El personaje y los estados</span>
+    </div>
+  </div>
+
+  <div class="character-wrap">
+    <div class="character-inner">
+      <div>
+        <p class="slbl" data-i18n-es="El personaje" data-i18n-en="The character">El personaje</p>
+        <h3 class="character-title"><em>Nami</em> (波)</h3>
+        <p class="character-meaning" data-i18n-es="En japonés, &quot;ola.&quot;" data-i18n-en="In Japanese, &quot;wave.&quot;">En japonés, "ola."</p>
+        <p class="character-text" data-i18n-es="La ansiedad es una ola. No podés detenerla. No podés ignorarla. Pero podés aprender a montarla. Nami no promete que no habrá olas — promete estar presente cuando lleguen." data-i18n-en="Anxiety is a wave. You can't stop it. You can't ignore it. But you can learn to ride it. Nami doesn't promise there won't be waves — it promises to be present when they arrive.">
+          La ansiedad es una ola. No podés detenerla. No podés ignorarla.
+          Pero podés aprender a montarla. Nami no promete que no habrá olas —
+          promete estar presente cuando lleguen.
+        </p>
+        <p class="character-text">
+          <span data-i18n-es="El personaje comparte el nombre con la app." data-i18n-en="The character shares the name with the app.">El personaje comparte el nombre con la app.</span> <span data-i18n-es="Eso lo hace más personal: no es &quot;la app&quot;, es Nami. Un amigo que sabe exactamente qué hacer. Cálido, directo, con un poco de humor. No es un bot. No es un médico." data-i18n-en="That makes it more personal: it's not &quot;the app&quot;, it's Nami. A friend who knows exactly what to do. Warm, direct, with a touch of humor. Not a bot. Not a doctor.">Eso lo hace más personal:
+          no es "la app", es Nami. Un amigo que sabe exactamente qué hacer.
+          Cálido, directo, con un poco de humor.
+          No es un bot. No es un médico.</span>
+        </p>
+        <p class="character-text" data-i18n-es="El personaje tiene cinco estados visuales que mapean los cinco momentos del flujo. Cada transición es animada y refleja el cambio emocional del usuario." data-i18n-en="The character has five visual states that map to the five moments of the flow. Each transition is animated and reflects the user's emotional shift.">
+          El personaje tiene cinco estados visuales que mapean los cinco momentos del flujo.
+          Cada transición es animada y refleja el cambio emocional del usuario.
+        </p>
+      </div>
+      <div class="character-img-slot">
+        <img
+          src="assets/nami/nami-character.png"
+          alt="Nami — el personaje"
+          onerror="this.style.display='none'"
+        >
+        <div class="character-img-glow"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHARACTER IMAGES — 5 estados del personaje -->
+  <div class="character-states-placeholder">
+    <div class="char-img-cell">
+      <img src="assets/nami/nami-shore.png" alt="The Shore" onerror="this.parentElement.classList.add('char-img-cell-empty'); this.style.display='none'">
+    </div>
+    <div class="char-img-cell">
+      <img src="assets/nami/nami-storm.png" alt="Storm Mode" onerror="this.parentElement.classList.add('char-img-cell-empty'); this.style.display='none'">
+    </div>
+    <div class="char-img-cell">
+      <img src="assets/nami/nami-wave.png" alt="The Wave" onerror="this.parentElement.classList.add('char-img-cell-empty'); this.style.display='none'">
+    </div>
+    <div class="char-img-cell">
+      <img src="assets/nami/nami-still.png" alt="Still Water" onerror="this.parentElement.classList.add('char-img-cell-empty'); this.style.display='none'">
+    </div>
+    <div class="char-img-cell">
+      <img src="assets/nami/nami-after.png" alt="After the Wave" onerror="this.parentElement.classList.add('char-img-cell-empty'); this.style.display='none'">
+    </div>
+  </div>
+
+  <!-- STATES STRIP
+  <div class="states-strip">
+    <div class="state-block">
+      <div class="state-icon">🏖</div>
+      <p class="state-tagline">Inicio</p>
+      <h4 class="state-name">The Shore</h4>
+      <p class="state-desc">"Hey, Sofía." Estado en calma. Saludo personalizado, acceso rápido a todas las rutas, próxima sesión visible.</p>
+    </div>
+    <div class="state-block">
+      <div class="state-icon">🌊</div>
+      <p class="state-tagline">Crisis</p>
+      <h4 class="state-name">Storm Mode</h4>
+      <p class="state-desc">"Hey, I've got you." Una pantalla. Una acción. Activado por agitar el teléfono o 3× el botón de volumen.</p>
+    </div>
+    <div class="state-block">
+      <div class="state-icon">〰️</div>
+      <p class="state-tagline">Transición</p>
+      <h4 class="state-name">The Wave</h4>
+      <p class="state-desc">"Estoy acá, seguime." Empatía antes de la instrucción. El puente que los usuarios necesitan antes de poder actuar.</p>
+    </div>
+    <div class="state-block">
+      <div class="state-icon">🫧</div>
+      <p class="state-tagline">Guía activa</p>
+      <h4 class="state-name">Still Water</h4>
+      <p class="state-desc">"Hagamos esto juntos." Instrucción física corta. Timer visible. Un paso por pantalla.</p>
+    </div>
+    <div class="state-block">
+      <div class="state-icon">✦</div>
+      <p class="state-tagline">Cierre</p>
+      <h4 class="state-name">After the Wave</h4>
+      <p class="state-desc">"Lo lograste." El episodio se registra automáticamente para la próxima sesión con el terapeuta.</p>
+    </div>
+  </div> -->
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- ─── 04 ONBOARDING ─── -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="sec-lbl-wrap">
+    <div class="sec-lbl">
+      <span class="sec-lbl-num">04</span>
+      <span class="sec-lbl-sep">/</span>
+      <span class="sec-lbl-text" data-i18n-es="Onboarding" data-i18n-en="Onboarding">Onboarding</span>
+    </div>
+  </div>
+
+  <div class="onboarding-wrap">
+    <div class="onboarding-inner">
+      <div>
+        <p class="slbl" data-i18n-es="Concepto" data-i18n-en="Concept">Concepto</p>
+        <h3 class="onboarding-title" data-i18n-es="Nami no muestra un tutorial,<br><em>tiene una conversación</em>" data-i18n-en="Nami doesn't show a tutorial,<br><em>it has a conversation</em>">Nami no muestra un tutorial,<br><em>tiene una conversación</em></h3>
+        <p class="onboarding-text" data-i18n-es="En lugar de pantallas de configuración con sliders y checkboxes, Nami pregunta. El onboarding dura menos de 3 minutos y se siente como conocer a alguien — no como llenar un formulario médico." data-i18n-en="Instead of configuration screens with sliders and checkboxes, Nami asks. Onboarding takes under 3 minutes and feels like meeting someone — not filling out a medical form.">
+          En lugar de pantallas de configuración con sliders y checkboxes, Nami pregunta.
+          El onboarding dura menos de 3 minutos y se siente como conocer a alguien —
+          no como llenar un formulario médico.
+        </p>
+        <p class="onboarding-text" data-i18n-es="<strong>Resultado:</strong> el usuario siente que Nami ya lo conoce desde el primer uso. Cada interacción posterior es personalizada — no genérica. El app sabe tu nombre, tus triggers, qué estrategias te funcionaron antes y cuándo tenés sesión con tu terapeuta." data-i18n-en="<strong>Result:</strong> the user feels Nami already knows them from the very first use. Every subsequent interaction is personalized — not generic. The app knows your name, your triggers, what strategies worked for you before and when your next therapy session is.">
+          <strong>Resultado:</strong> el usuario siente que Nami ya lo conoce desde el primer uso.
+          Cada interacción posterior es personalizada — no genérica.
+          El app sabe tu nombre, tus triggers, qué estrategias te funcionaron antes
+          y cuándo tenés sesión con tu terapeuta.
+        </p>
+      </div>
+      <div>
+        <div class="onboarding-steps">
+          <div class="ob-step">
+            <span class="ob-step-num">01</span>
+            <div class="ob-step-body">
+              <p class="ob-step-label" data-i18n-es="Presentación" data-i18n-en="Introduction">Presentación</p>
+              <p class="ob-step-text" data-i18n-es="Nami se presenta y pregunta el nombre del usuario. Sin formulario — es una conversación. <strong>Primer momento de confianza.</strong>" data-i18n-en="Nami introduces itself and asks the user's name. No form — it's a conversation. <strong>First moment of trust.</strong>">Nami se presenta y pregunta el nombre del usuario. Sin formulario — es una conversación. <strong>Primer momento de confianza.</strong></p>
+            </div>
+          </div>
+          <div class="ob-step">
+            <span class="ob-step-num">02</span>
+            <div class="ob-step-body">
+              <p class="ob-step-label" data-i18n-es="Triggers" data-i18n-en="Triggers">Triggers</p>
+              <p class="ob-step-text" data-i18n-es="¿En qué situaciones aparece la ansiedad? El usuario elige de una lista de contextos (social, exámenes, noche, soledad) o escribe el suyo." data-i18n-en="In what situations does anxiety appear? The user chooses from a list of contexts (social, exams, night, solitude) or writes their own.">¿En qué situaciones aparece la ansiedad? El usuario elige de una lista de contextos (social, exámenes, noche, soledad) o escribe el suyo.</p>
+            </div>
+          </div>
+          <div class="ob-step">
+            <span class="ob-step-num">03</span>
+            <div class="ob-step-body">
+              <p class="ob-step-label" data-i18n-es="Estrategias previas" data-i18n-en="Previous strategies">Estrategias previas</p>
+              <p class="ob-step-text" data-i18n-es="¿Qué le funcionó antes? <strong>Nami prioriza esas estrategias</strong> en futuras sesiones — no impone nuevas técnicas desde cero." data-i18n-en="What worked for them before? <strong>Nami prioritizes those strategies</strong> in future sessions — it doesn't impose new techniques from scratch.">¿Qué le funcionó antes? <strong>Nami prioriza esas estrategias</strong> en futuras sesiones — no impone nuevas técnicas desde cero.</p>
+            </div>
+          </div>
+          <div class="ob-step">
+            <span class="ob-step-num">04</span>
+            <div class="ob-step-body">
+              <p class="ob-step-label" data-i18n-es="Sesión de terapia" data-i18n-en="Therapy session">Sesión de terapia</p>
+              <p class="ob-step-text" data-i18n-es="¿Cuándo es la próxima sesión? Nami hace un check-in automático <strong>el día después</strong> para reforzar lo trabajado con el terapeuta." data-i18n-en="When is the next session? Nami does an automatic check-in <strong>the day after</strong> to reinforce the work done with the therapist.">¿Cuándo es la próxima sesión? Nami hace un check-in automático <strong>el día después</strong> para reforzar lo trabajado con el terapeuta.</p>
+            </div>
+          </div>
+          <div class="ob-step">
+            <span class="ob-step-num">05</span>
+            <div class="ob-step-body">
+              <p class="ob-step-label" data-i18n-es="Activación de emergencia" data-i18n-en="Emergency activation">Activación de emergencia</p>
+              <p class="ob-step-text" data-i18n-es="Tutorial de 20 segundos sobre cómo activar Storm Mode. <strong>El único tutorial obligatorio</strong> — lo más importante tiene que estar claro desde el día uno." data-i18n-en="20-second tutorial on how to activate Storm Mode. <strong>The only mandatory tutorial</strong> — the most important thing has to be clear from day one.">Tutorial de 20 segundos sobre cómo activar Storm Mode. <strong>El único tutorial obligatorio</strong> — lo más importante tiene que estar claro desde el día uno.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- ─── 05 ACCESIBILIDAD ─── -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="sec-lbl-wrap">
+    <div class="sec-lbl">
+      <span class="sec-lbl-num">05</span>
+      <span class="sec-lbl-sep">/</span>
+      <span class="sec-lbl-text" data-i18n-es="Accesibilidad" data-i18n-en="Accessibility">Accesibilidad</span>
+    </div>
+  </div>
+
+  <div class="access-wrap">
+    <div class="access-inner">
+      <p class="slbl" data-i18n-es="Diseñado para el peor escenario" data-i18n-en="Designed for the worst scenario">Diseñado para el peor escenario</p>
+      <h3 class="access-title" data-i18n-es="Manos que tiemblan,<br><em>visión en túnel, 3am</em>" data-i18n-en="Shaking hands,<br><em>tunnel vision, 3am</em>">Manos que tiemblan,<br><em>visión en túnel, 3am</em></h3>
+      <div class="access-grid">
+        <div class="access-card">
+          <p class="access-label" data-i18n-es="Contraste" data-i18n-en="Contrast">Contraste</p>
+          <h4 class="access-card-title" data-i18n-es="Alto contraste por defecto" data-i18n-en="High contrast by default">Alto contraste por defecto</h4>
+          <p class="access-text" data-i18n-es="Fondo navy oscuro <strong>#1B1A51</strong> con texto blanco cumple WCAG AA. Legible con visión en túnel durante la ansiedad. No hay modo claro — el diseño no ofrece la opción porque la ansiedad pega de noche y una pantalla blanca es fisiológicamente agresiva." data-i18n-en="Dark navy background <strong>#1B1A51</strong> with white text meets WCAG AA. Readable with tunnel vision during anxiety. There is no light mode — the design doesn't offer it because anxiety hits at night and a white screen is physiologically aggressive.">Fondo navy oscuro <strong>#1B1A51</strong> con texto blanco cumple WCAG AA. Legible con visión en túnel durante la ansiedad. No hay modo claro — el diseño no ofrece la opción porque la ansiedad pega de noche y una pantalla blanca es fisiológicamente agresiva.</p>
+        </div>
+        <div class="access-card">
+          <p class="access-label" data-i18n-es="Targets táctiles" data-i18n-en="Touch targets">Targets táctiles</p>
+          <h4 class="access-card-title" data-i18n-es="Botones sobredimensionados" data-i18n-en="Oversized buttons">Botones sobredimensionados</h4>
+          <p class="access-text" data-i18n-es="Todos los botones principales tienen un mínimo de <strong>56px de alto</strong>. El botón de activación de Storm Mode es intencionalmente sobredimensionado — diseñado para ser pulsado con manos que tiemblan sin mirar la pantalla." data-i18n-en="All primary buttons have a minimum of <strong>56px height</strong>. The Storm Mode activation button is intentionally oversized — designed to be pressed with shaking hands without looking at the screen.">Todos los botones principales tienen un mínimo de <strong>56px de alto</strong>. El botón de activación de Storm Mode es intencionalmente sobredimensionado — diseñado para ser pulsado con manos que tiemblan sin mirar la pantalla.</p>
+        </div>
+        <div class="access-card">
+          <p class="access-label" data-i18n-es="Audio + texto" data-i18n-en="Audio + text">Audio + texto</p>
+          <h4 class="access-card-title" data-i18n-es="Instrucciones en dos formatos" data-i18n-en="Instructions in two formats">Instrucciones en dos formatos</h4>
+          <p class="access-text" data-i18n-es="Cada instrucción existe en audio y texto simultáneamente. <strong>Audio para privacidad en espacios públicos</strong> (auriculares), texto para diferencias de procesamiento auditivo y entornos ruidosos. Ningún usuario queda fuera." data-i18n-en="Every instruction exists in audio and text simultaneously. <strong>Audio for privacy in public spaces</strong> (headphones), text for auditory processing differences and noisy environments. No user is left out.">Cada instrucción existe en audio y texto simultáneamente. <strong>Audio para privacidad en espacios públicos</strong> (auriculares), texto para diferencias de procesamiento auditivo y entornos ruidosos. Ningún usuario queda fuera.</p>
+        </div>
+        <div class="access-card">
+          <p class="access-label" data-i18n-es="Carga cognitiva" data-i18n-en="Cognitive load">Carga cognitiva</p>
+          <h4 class="access-card-title" data-i18n-es="Sin decisiones en crisis" data-i18n-en="No decisions during crisis">Sin decisiones en crisis</h4>
+          <p class="access-text" data-i18n-es="Durante Storm Mode, el usuario no tiene que <strong>elegir nada</strong>. No hay menú, no hay configuración, no hay opciones. Una instrucción por vez, avance automático con timer. Diseñado para que el cerebro en pánico pueda seguirlo." data-i18n-en="During Storm Mode, the user doesn't have to <strong>choose anything</strong>. No menu, no settings, no options. One instruction at a time, automatic advance with timer. Designed so the panicking brain can follow it.">Durante Storm Mode, el usuario no tiene que <strong>elegir nada</strong>. No hay menú, no hay configuración, no hay opciones. Una instrucción por vez, avance automático con timer. Diseñado para que el cerebro en pánico pueda seguirlo.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- ─── NEXT STEPS ─── -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="next-wrap">
+    <div class="next-inner">
+      <p class="slbl" data-i18n-es="Próximos pasos · v2" data-i18n-en="Next steps · v2">Próximos pasos · v2</p>
+      <h3 class="next-title" data-i18n-es="Lo que queda <em>por construir</em>" data-i18n-en="What's left <em>to build</em>">Lo que queda <em>por construir</em></h3>
+      <div class="next-grid">
+        <div class="next-card">
+          <p class="next-num">v2 · 01</p>
+          <h4 class="next-card-title" data-i18n-es="Dashboard para terapeutas" data-i18n-en="Therapist dashboard">Dashboard para terapeutas</h4>
+          <p class="next-text" data-i18n-es="Un portal B2B donde el terapeuta puede ver los episodios de su paciente entre sesiones — frecuencia, duración, triggers más comunes y qué estrategias funcionaron." data-i18n-en="A B2B portal where the therapist can view their patient's episodes between sessions — frequency, duration, most common triggers and what strategies worked.">Un portal B2B donde el terapeuta puede ver los episodios de su paciente entre sesiones — frecuencia, duración, triggers más comunes y qué estrategias funcionaron.</p>
+        </div>
+        <div class="next-card">
+          <p class="next-num">v2 · 02</p>
+          <h4 class="next-card-title" data-i18n-es="Integración con smartwatch" data-i18n-en="Smartwatch integration">Integración con smartwatch</h4>
+          <p class="next-text" data-i18n-es="Detección de variabilidad de frecuencia cardíaca para activar Storm Mode de forma proactiva, antes de que el usuario tenga que pedirlo." data-i18n-en="Heart rate variability detection to proactively activate Storm Mode before the user has to request it.">Detección de variabilidad de frecuencia cardíaca para activar Storm Mode de forma proactiva, antes de que el usuario tenga que pedirlo.</p>
+        </div>
+        <div class="next-card">
+          <p class="next-num">v2 · 03</p>
+          <h4 class="next-card-title" data-i18n-es="Evolución visual del personaje" data-i18n-en="Character visual evolution">Evolución visual del personaje</h4>
+          <p class="next-text" data-i18n-es="Nami cambia de aspecto con el tiempo según el progreso del usuario — no como reward de gamificación, sino como reflejo genuino del vínculo construido." data-i18n-en="Nami changes appearance over time according to the user's progress — not as a gamification reward, but as a genuine reflection of the bond built.">Nami cambia de aspecto con el tiempo según el progreso del usuario — no como reward de gamificación, sino como reflejo genuino del vínculo construido.</p>
+        </div>
+        <div class="next-card">
+          <p class="next-num">v2 · 04</p>
+          <h4 class="next-card-title" data-i18n-es="Memoria de largo plazo" data-i18n-en="Long-term memory">Memoria de largo plazo</h4>
+          <p class="next-text" data-i18n-es="Análisis de patrones a lo largo de meses: qué días son más difíciles, qué estrategias pierden efectividad, cuándo es el mejor momento para hacer check-in." data-i18n-en="Pattern analysis over months: which days are hardest, which strategies lose effectiveness, when is the best time to check in.">Análisis de patrones a lo largo de meses: qué días son más difíciles, qué estrategias pierden efectividad, cuándo es el mejor momento para hacer check-in.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── OUTCOMES ─── -->
+  <div class="outcomes-wrap">
+    <div class="outcomes-inner">
+      <p class="slbl" style="color:rgba(153,168,249,0.6)" data-i18n-es="Objetivos de diseño cumplidos" data-i18n-en="Design goals met">Objetivos de diseño cumplidos</p>
+      <h3 class="outcomes-title" data-i18n-es="Lo que este diseño<br><em>resuelve en concreto</em>" data-i18n-en="What this design<br><em>concretely solves</em>">Lo que este diseño<br><em>resuelve en concreto</em></h3>
+      <p class="outcomes-sub" data-i18n-es="Criterios de éxito definidos antes de prototipar — no después." data-i18n-en="Success criteria defined before prototyping — not after.">Criterios de éxito definidos antes de prototipar — no después.</p>
+      <div class="outcomes-grid">
+        <div class="outcome-block">
+          <p class="outcome-val">&lt;3 seg</p>
+          <p class="outcome-desc" data-i18n-es="tiempo máximo de acceso a Storm Mode desde pantalla bloqueada — sin desbloquear, sin navegar, sin buscar" data-i18n-en="maximum time to access Storm Mode from a locked screen — no unlock, no navigation, no search">tiempo máximo de acceso a Storm Mode desde pantalla bloqueada — sin desbloquear, sin navegar, sin buscar</p>
+        </div>
+        <div class="outcome-block">
+          <p class="outcome-val">0</p>
+          <p class="outcome-desc" data-i18n-es="decisiones que el usuario debe tomar durante un episodio agudo — una instrucción, una acción, avance automático" data-i18n-en="decisions the user must make during an acute episode — one instruction, one action, automatic advance">decisiones que el usuario debe tomar durante un episodio agudo — una instrucción, una acción, avance automático</p>
+        </div>
+        <div class="outcome-block">
+          <p class="outcome-val">5</p>
+          <p class="outcome-desc" data-i18n-es="estados emocionales mapeados en el personaje, cada uno con un flujo de interacción diferente según la intensidad del momento" data-i18n-en="emotional states mapped in the character, each with a different interaction flow based on the intensity of the moment">estados emocionales mapeados en el personaje, cada uno con un flujo de interacción diferente según la intensidad del momento</p>
+        </div>
+        <div class="outcome-block">
+          <p class="outcome-val">56px+</p>
+          <p class="outcome-desc" data-i18n-es="tamaño mínimo de targets táctiles en pantallas de crisis — diseñados para manos que tiemblan y visión en túnel" data-i18n-en="minimum touch target size on crisis screens — designed for shaking hands and tunnel vision">tamaño mínimo de targets táctiles en pantallas de crisis — diseñados para manos que tiemblan y visión en túnel</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── STATEMENT ─── -->
+  <div class="statement">
+    <p class="statement-q">
+      "<span data-i18n-es="Nami no promete evitar las olas — promete estar presente cuando lleguen." data-i18n-en="Nami doesn't promise to avoid the waves — it promises to be present when they arrive.">Nami no promete evitar las olas —
+      promete estar presente <span>cuando lleguen</span>.</span>"
+    </p>
+    <p class="statement-src" data-i18n-es="Nami — Design Challenge · Jimena Zapolski" data-i18n-en="Nami — Design Challenge · Jimena Zapolski">Nami — Design Challenge · Jimena Zapolski</p>
+  </div>
+
+  <!-- ─── BACK CTA ─── -->
+  <div class="back-cta-wrap">
+    <div class="ext-link-row">
+      <a class="btn-ext" href="https://nami-product-design-challenge.vercel.app/" target="_blank" rel="noopener">
+        <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3H3v10h10v-4M13 3H9m4 0v4m0-4L7 9"/></svg>
+        Ver presentación completa
+      </a>
+    </div>
+    <button class="btn-pill" onclick="goBack()">
+      <span class="btn-pill-text" data-i18n-es="Volver a la página principal" data-i18n-en="Back to main page">Volver a la página principal</span>
+      <span class="btn-pill-icon">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#F7F5F2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 8H3M7 4L3 8l4 4"/></svg>
+      </span>
+    </button>
+  </div>
+
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isMobile = window.innerWidth < 640;
+
+    /* ─── LENIS ─── */
+    const lenis = new Lenis({ lerp: 0.1, smoothWheel: true });
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+    gsap.ticker.lagSmoothing(0);
+
+    /* ─── CURSOR ─── */
+    if (!isMobile && !prefersReducedMotion) {
+      const cursor = document.getElementById('cursor');
+      const xTo = gsap.quickTo(cursor, 'x', { duration: 0.35, ease: 'power3' });
+      const yTo = gsap.quickTo(cursor, 'y', { duration: 0.35, ease: 'power3' });
+      window.addEventListener('mousemove', e => { xTo(e.clientX); yTo(e.clientY); });
+      document.querySelectorAll('a, button').forEach(el => {
+        el.addEventListener('mouseenter', () => gsap.to(cursor, { scale: 3, duration: 0.2 }));
+        el.addEventListener('mouseleave', () => gsap.to(cursor, { scale: 1, duration: 0.2 }));
+      });
+    }
+
+    /* ─── TRANSITION IN ─── */
+    (function() {
+      const overlay = document.getElementById('transition-overlay');
+      if (sessionStorage.getItem('pageTransition')) {
+        sessionStorage.removeItem('pageTransition');
+        gsap.set(overlay, { scaleY: 1, transformOrigin: 'top', pointerEvents: 'none' });
+        gsap.to(overlay, { scaleY: 0, duration: 0.65, ease: 'power3.inOut', delay: 0.1 });
+      }
+    })();
+
+    /* ─── TRANSITION OUT ─── */
+    function goTo(href, title) {
+      const overlay = document.getElementById('transition-overlay');
+      const titleEl = document.getElementById('transition-title');
+      overlay.style.pointerEvents = 'all';
+      if (title) titleEl.textContent = title;
+      const tl = gsap.timeline({
+        onComplete: () => { sessionStorage.setItem('pageTransition', '1'); window.location.href = href; }
+      });
+      tl.set(overlay, { scaleY: 0, transformOrigin: 'bottom' })
+        .to(overlay, { scaleY: 1, duration: 0.5, ease: 'power3.inOut' })
+        .to(titleEl, { opacity: 1, scale: 1, duration: 0.25 }, '-=0.15');
+    }
+
+    function goBack() { goTo('index.html', ''); }
+
+    /* ─── SCROLL ANIMATIONS ─── */
+    if (!prefersReducedMotion) {
+
+      // Intro entrance
+      gsap.timeline({ delay: 0.15 })
+        .from('.slbl', { y: 16, opacity: 0, duration: 0.5, ease: 'power3.out' })
+        .from('.intro-title', { y: 40, opacity: 0, duration: 0.9, ease: 'expo.out' }, '-=0.2')
+        .from('.intro-sub', { y: 20, opacity: 0, duration: 0.6, ease: 'power3.out' }, '-=0.4')
+        .from('.meta-block', { y: 16, opacity: 0, stagger: 0.07, duration: 0.5, ease: 'power3.out' }, '-=0.3');
+
+      // Section labels
+      gsap.utils.toArray('.sec-lbl-wrap').forEach(el => {
+        gsap.from(el, {
+          opacity: 0, duration: 0.4, ease: 'power2.out',
+          scrollTrigger: { trigger: el, start: 'top 90%' }
+        });
+      });
+
+      // Challenge
+      gsap.utils.toArray('.challenge-inner > div').forEach((el, i) => {
+        gsap.from(el, {
+          y: 24, opacity: 0, duration: 0.7, ease: 'power3.out', delay: i * 0.1,
+          scrollTrigger: { trigger: '.challenge-inner', start: 'top 82%' }
+        });
+      });
+
+      // Stats
+      gsap.utils.toArray('.stat-block').forEach((block, i) => {
+        gsap.from(block, {
+          y: 20, opacity: 0, duration: 0.55, ease: 'power3.out', delay: i * 0.08,
+          scrollTrigger: { trigger: '.challenge-stats-grid', start: 'top 85%' }
+        });
+      });
+
+      // Research
+      gsap.from('.research-inner', {
+        y: 24, opacity: 0, duration: 0.7, ease: 'power3.out',
+        scrollTrigger: { trigger: '.research-wrap', start: 'top 82%' }
+      });
+
+      // Persona
+      gsap.utils.toArray('.persona-inner > div').forEach((el, i) => {
+        gsap.from(el, {
+          y: 24, opacity: 0, duration: 0.8, ease: 'power3.out', delay: i * 0.12,
+          scrollTrigger: { trigger: '.persona-wrap', start: 'top 82%' }
+        });
+      });
+
+      // HMW
+      gsap.utils.toArray('.hmw-list li').forEach((item, i) => {
+        gsap.from(item, {
+          x: -20, opacity: 0, duration: 0.5, ease: 'power3.out', delay: i * 0.06,
+          scrollTrigger: { trigger: '.hmw-inner', start: 'top 85%' }
+        });
+      });
+
+      // Benchmark cards
+      gsap.utils.toArray('.bench-card').forEach((card, i) => {
+        gsap.from(card, {
+          y: 20, opacity: 0, duration: 0.6, ease: 'power3.out', delay: i * 0.08,
+          scrollTrigger: { trigger: '.bench-grid', start: 'top 85%' }
+        });
+      });
+
+      // Decision sections — text slide + image scale reveal + parallax
+      gsap.utils.toArray('.decision').forEach((dec) => {
+        const children = dec.children;
+        const img = dec.querySelector('.dec-img-dark img');
+
+        // Text panel: slide from left
+        gsap.from(children[0], {
+          x: -40, opacity: 0, duration: 0.85, ease: 'power3.out',
+          scrollTrigger: { trigger: dec, start: 'top 80%' }
+        });
+
+        // Image panel: slide from right
+        if (children[1]) {
+          gsap.from(children[1], {
+            x: 40, opacity: 0, duration: 0.85, ease: 'power3.out',
+            scrollTrigger: { trigger: dec, start: 'top 80%' }
+          });
+        }
+
+        // Screen image: scale up from slightly smaller, delayed after panel slides in
+        if (img) {
+          gsap.from(img, {
+            scale: 0.76, opacity: 0, y: 28, duration: 1.2, ease: 'expo.out', delay: 0.32,
+            scrollTrigger: { trigger: dec, start: 'top 80%' }
+          });
+
+          // Parallax — image drifts up slightly as the section scrolls past
+          gsap.to(img, {
+            y: -32, ease: 'none',
+            scrollTrigger: {
+              trigger: dec, start: 'top bottom', end: 'bottom top', scrub: 1.8
+            }
+          });
+
+          // Hover: scale up + brighter glow
+          const panel = dec.querySelector('.dec-img-dark');
+          if (panel) {
+            panel.addEventListener('mouseenter', () => {
+              gsap.to(img, {
+                scale: 1.06, duration: 0.5, ease: 'power2.out', overwrite: 'auto'
+              });
+              gsap.to(img, {
+                filter: 'drop-shadow(0 28px 56px rgba(0,191,202,0.4))',
+                duration: 0.4, ease: 'power2.out'
+              });
+            });
+            panel.addEventListener('mouseleave', () => {
+              gsap.to(img, {
+                scale: 1.0, duration: 0.5, ease: 'power2.out', overwrite: 'auto'
+              });
+              gsap.to(img, {
+                filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.5))',
+                duration: 0.4, ease: 'power2.out'
+              });
+            });
+          }
+        }
+      });
+
+      // Character — left column fades, right image slot has its own animation
+      gsap.from('.character-inner > div:first-child', {
+        x: -30, opacity: 0, duration: 0.85, ease: 'power3.out',
+        scrollTrigger: { trigger: '.character-wrap', start: 'top 82%' }
+      });
+
+      const charImg  = document.querySelector('.character-img-slot img');
+      const charGlow = document.querySelector('.character-img-glow');
+
+      if (charImg) {
+        // Entry animation
+        gsap.from(charImg, {
+          scale: 0.80, opacity: 0, y: 36, duration: 1.2, ease: 'expo.out', delay: 0.22,
+          scrollTrigger: {
+            trigger: '.character-wrap', start: 'top 82%',
+            onEnter: () => {
+              // Float loop starts after entry finishes
+              gsap.to(charImg, {
+                y: -14, duration: 3.2, ease: 'sine.inOut',
+                repeat: -1, yoyo: true, delay: 1.0
+              });
+            }
+          }
+        });
+      }
+
+      if (charGlow) {
+        // Glow pulse — syncs loosely with float
+        gsap.fromTo(charGlow,
+          { opacity: 0.35 },
+          {
+            opacity: 1, duration: 2.8, ease: 'sine.inOut',
+            repeat: -1, yoyo: true, delay: 1.4,
+            scrollTrigger: { trigger: '.character-wrap', start: 'top 82%' }
+          }
+        );
+      }
+
+      // Character states cells — stagger in with scale
+      gsap.utils.toArray('.char-img-cell').forEach((cell, i) => {
+        const img = cell.querySelector('img');
+        gsap.from(cell, {
+          opacity: 0, y: 22, duration: 0.7, ease: 'power3.out', delay: i * 0.08,
+          scrollTrigger: { trigger: '.character-states-placeholder', start: 'top 88%' }
+        });
+        if (img) {
+          gsap.from(img, {
+            scale: 0.82, opacity: 0, duration: 0.8, ease: 'expo.out', delay: 0.15 + i * 0.08,
+            scrollTrigger: { trigger: '.character-states-placeholder', start: 'top 88%' }
+          });
+          // Hover bounce
+          cell.addEventListener('mouseenter', () => {
+            gsap.to(img, { y: -8, scale: 1.07, duration: 0.35, ease: 'power2.out' });
+            gsap.to(img, {
+              filter: 'drop-shadow(0 20px 48px rgba(153,168,249,0.45))',
+              duration: 0.3, ease: 'power2.out'
+            });
+          });
+          cell.addEventListener('mouseleave', () => {
+            gsap.to(img, { y: 0, scale: 1, duration: 0.45, ease: 'power2.inOut' });
+            gsap.to(img, {
+              filter: 'drop-shadow(0 12px 32px rgba(0,0,0,0.5))',
+              duration: 0.35, ease: 'power2.out'
+            });
+          });
+        }
+      });
+
+      // States strip
+      gsap.utils.toArray('.state-block').forEach((block, i) => {
+        gsap.from(block, {
+          y: 28, opacity: 0, duration: 0.6, ease: 'power3.out', delay: i * 0.08,
+          scrollTrigger: { trigger: '.states-strip', start: 'top 85%' }
+        });
+      });
+
+      // Onboarding steps
+      gsap.utils.toArray('.ob-step').forEach((step, i) => {
+        gsap.from(step, {
+          x: -16, opacity: 0, duration: 0.5, ease: 'power3.out', delay: i * 0.07,
+          scrollTrigger: { trigger: '.onboarding-steps', start: 'top 85%' }
+        });
+      });
+
+      // Access cards
+      gsap.utils.toArray('.access-card').forEach((card, i) => {
+        gsap.from(card, {
+          y: 20, opacity: 0, duration: 0.6, ease: 'power3.out', delay: i * 0.09,
+          scrollTrigger: { trigger: '.access-grid', start: 'top 85%' }
+        });
+      });
+
+      // Next steps
+      gsap.utils.toArray('.next-card').forEach((card, i) => {
+        gsap.from(card, {
+          y: 20, opacity: 0, duration: 0.6, ease: 'power3.out', delay: i * 0.09,
+          scrollTrigger: { trigger: '.next-grid', start: 'top 85%' }
+        });
+      });
+
+      // Outcomes
+      gsap.from('.outcomes-title', {
+        y: 24, opacity: 0, duration: 0.8, ease: 'power3.out',
+        scrollTrigger: { trigger: '.outcomes-wrap', start: 'top 82%' }
+      });
+      gsap.utils.toArray('.outcome-block').forEach((block, i) => {
+        gsap.from(block, {
+          y: 20, opacity: 0, duration: 0.65, ease: 'power3.out', delay: i * 0.09,
+          scrollTrigger: { trigger: '.outcomes-grid', start: 'top 85%' }
+        });
+      });
+
+      // Statement
+      gsap.from('.statement-q', {
+        y: 30, opacity: 0, duration: 0.9, ease: 'expo.out',
+        scrollTrigger: { trigger: '.statement', start: 'top 80%' }
+      });
+
+      // Back CTA
+      gsap.from('.back-cta-wrap', {
+        y: 20, opacity: 0, duration: 0.6, ease: 'power3.out',
+        scrollTrigger: { trigger: '.back-cta-wrap', start: 'top 90%' }
+      });
+    }
+
+    /* ─── LANGUAGE SWITCHER ─── */
+    (function() {
+      const LANG_KEY = 'jz-lang';
+      function applyLang(lang, save) {
+        if (save) localStorage.setItem(LANG_KEY, lang);
+        document.querySelectorAll('.lang-btn').forEach(b => {
+          b.classList.toggle('active', b.dataset.lang === lang);
+        });
+        document.querySelectorAll('[data-i18n-es]').forEach(el => {
+          el.innerHTML = lang === 'en'
+            ? (el.dataset.i18nEn || el.innerHTML)
+            : (el.dataset.i18nEs || el.innerHTML);
+        });
+      }
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', () => applyLang(btn.dataset.lang, true));
+      });
+      const saved = localStorage.getItem(LANG_KEY) || 'es';
+      applyLang(saved, false);
+    })();
+  </script>
+</body>
+</html>

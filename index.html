@@ -30,7 +30,7 @@
       --border: rgba(0,0,0,0.08);
       --border-hi: rgba(0,0,0,0.2);
       --ink: #111010;
-      --muted: #888;
+      --muted: #707070;
       --rosa: #C38F8F;
       --rosa-border: rgba(195,143,143,0.3);
       --lime: #7DB800;
@@ -53,6 +53,7 @@
       align-items: center;
       justify-content: center;
       gap: 18px;
+      clip-path: inset(0 0 0 0);
     }
     .loader-name {
       display: flex;
@@ -63,20 +64,21 @@
     .loader-name .lc {
       display: inline-block;
       font-family: var(--serif);
-      font-size: clamp(28px, 5vw, 54px);
+      font-size: clamp(32px, 5.5vw, 64px);
       font-weight: 700;
       letter-spacing: -0.02em;
       line-height: 1;
+      color: var(--ink);
     }
     .loader-name .lc-first { font-style: italic; color: var(--rosa); }
-    .loader-name .lc-space { width: 0.3em; display: inline-block; }
+    .loader-name .lc-space { width: 0.28em; display: inline-block; }
     .loader-line {
-      width: clamp(160px, 22vw, 260px);
+      width: clamp(160px, 22vw, 280px);
       height: 0.8px;
-      background: var(--rosa);
+      background: rgba(240,237,232,0.25);
       transform-origin: left;
       transform: scaleX(0);
-      margin-top: 10px ;
+      margin-top: 8px;
     }
 
     /* ─── TRANSITION OVERLAY ─── */
@@ -121,12 +123,12 @@
 
     /* ─── MAIN WRAPPER ─── */
     .pr { min-height: 100vh; }
-    .wrap { max-width: 920px; margin: 0 auto; padding: 0 40px 30px; }
+    .wrap { width: 100%; max-width: 920px; margin: 0 auto; padding: 0 40px 30px; }
 
     /* ─── NAV ─── */
     nav { display:flex; justify-content:space-between; align-items:center; padding:28px 0 14px 0; border-bottom:0.5px solid var(--border); }
     .nav-logo { font-family:var(--serif); font-size:22px; font-weight:700; font-style:italic; color:var(--rosa); letter-spacing:-0.02em; text-decoration:none; cursor:default; }
-    .nav-logo img { height:42px; width:auto; display:block; }
+    .nav-logo img { height:42px; width:auto; display:block; margin-right: 30px;}
     .nav-right { display:flex; align-items:center; gap:32px; }
     .nav-avail { display:flex; align-items:center; gap:6px; font-family:var(--mono); font-size:10px; color:var(--lime); letter-spacing:0.06em; }
     .nav-dot { width:5px; height:5px; border-radius:50%; background:var(--lime); animation:pulse 2.4s ease-in-out infinite; }
@@ -148,18 +150,88 @@
     .nav-links a:hover { color:var(--ink); }
     .nav-links a:hover::after { transform: scaleX(1); }
 
-    /* ─── HERO ─── */
-    .hero { padding:88px 0 72px; border-bottom:0px solid var(--border); }
-    .hero-layout { display:grid; grid-template-columns:1fr 248px; gap:48px; align-items:start; }
-    @media (max-width:720px) { .hero-layout { grid-template-columns:1fr; } .hero-card { display:none; } }
+    /* ─── HERO AREA (dark, full-screen) ─── */
+    .hero-area {
+      background: var(--bg);
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .hero-area nav {
+      border-bottom-color: rgba(240,237,232,0.1);
+      flex-shrink: 0;
+    }
+    .hero-area .nav-links a { color:var(--ink) }
+    .hero-area .nav-links a:hover { color: var(--rosa); }
+    .hero-area .nav-links a::after { background: var(--ink); }
+    .hero-area .nav-avail { color: var(--lime); }
 
-    .hero-intro { font-size:16px; font-weight:300; color:var(--muted); margin-bottom:12px; }
-    .hero-name { font-family:var(--serif); line-height:0.88; letter-spacing:-0.02em; display: grid; justify-content: left; margin-bottom: -40px;}
-    /* .hero-name .n1 { display:block; font-style:italic; font-weight:700; font-size:clamp(64px,11vw,104px); color:var(--rosa); } */
-    .hero-name .n1 {height:auto; width:300px; display:inline-block; will-change:transform; }
-    /* .hero-name .n2 { display:block; font-weight:900; font-size:clamp(64px,11vw,104px); text-transform:uppercase; color:var(--ink); } */
-    .hero-name .n2 {height:auto; width:400px; margin-top: -90px; will-change:transform; }
-    .hero-copy { font-size:14px; line-height:1.8; color:var(--muted); font-weight:300; max-width:420px; margin-top:40px; margin-bottom:16px; }
+    .hero-cinematic {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 0 64px;
+      position: relative;
+    }
+    .hc-inner { /* uses .wrap for max-width + padding */ }
+    .hc-headline {
+      font-family: var(--serif);
+      font-size: clamp(44px, 7vw, 88px);
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1.07;
+      letter-spacing: -0.025em;
+      max-width: 900px;
+      transform-origin: center center;
+      will-change: transform;
+    }
+    .hc-headline em { font-style: italic; font-weight: 800 !important; color: var(--rosa); }
+    .zapolski {  color: var(--rosa); }
+    .cursiva { font-style: italic}
+    .hc-word { display: inline-block; opacity: 0; will-change: transform, opacity;  font-weight: 600;}
+    .hc-bottom {
+      position: absolute;
+      bottom: 40px; left: 0; right: 0;
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .hc-side { flex: 1; }
+    .hc-sub {
+      font-family: var(--ink);
+      font-size: 9px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(240,237,232,0.32);
+      line-height: 1.9;
+      text-align: center;
+    }
+    .hc-avail {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--lime);
+      opacity: 0;
+    }
+    .hc-avail-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--lime);
+      animation: pulse 2.4s ease-in-out infinite;
+    }
+
+    /* ─── HERO SUB (light bg, copy + tags + button) ─── */
+    .hero-divider { height: 0.5px; background: var(--border); margin: 0; }
+    .hero-sub { padding: 40px 0 48px; }
+    .hero-copy { font-size:14px; line-height:1.8; color:var(--muted); font-weight:300; max-width:520px; margin-bottom:20px; }
     .hero-copy .hl { color:var(--rosa); font-style:italic; }
     .hero-tags { display:flex; flex-wrap:wrap; gap:5px; margin-bottom:36px; }
     .hero-tag { font-family:var(--mono); font-size:9px; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); border:0.5px solid var(--border); padding:4px 10px; }
@@ -203,67 +275,6 @@
     }
     .btn-pill-icon { animation: pill-glow 2.6s ease-in-out infinite; }
 
-    /* ─── SWIPE STACK ─── */
-    .swipe-section { padding:80px 40px 72px; max-width:920px; margin:0 auto; }
-    .swipe-layout { display:grid; grid-template-columns:1fr 280px; gap:64px; align-items:center; }
-    @media (max-width:720px) { .swipe-layout { grid-template-columns:1fr; } .swipe-arena { align-items:flex-start; } }
-
-    .swipe-eyebrow { font-family:var(--mono); font-size:9px; color:var(--muted); letter-spacing:0.18em; text-transform:uppercase; margin-bottom:14px; }
-    .swipe-title { font-family:var(--serif); font-size:clamp(28px,4vw,40px); font-weight:700; letter-spacing:-0.02em; line-height:1; margin-bottom:20px; }
-    .swipe-title em { font-style:italic; color:var(--rosa); display:block; }
-    .swipe-desc { font-size:13px; line-height:1.8; color:var(--muted); font-weight:300; max-width:340px; margin-bottom:32px; }
-
-    .swipe-arena { display:flex; flex-direction:column; align-items:center; gap:20px; }
-    .swipe-stack {
-      position:relative; width:280px; height:390px;
-      cursor:grab; user-select:none; -webkit-user-select:none;
-    }
-    .swipe-stack:active { cursor:grabbing; }
-
-    .scard {
-      position:absolute; top:0; left:0; width:280px; height:390px;
-      border:0.5px solid var(--rosa); overflow:hidden;
-      transform-origin:center bottom; will-change:transform;
-      background:var(--surface);
-    }
-    .scard-img { width:100%; height:305px; object-fit:cover; display:block; }
-    .scard-ph {
-      width:100%; height:305px; display:flex; align-items:center; justify-content:center;
-      font-family:var(--serif); font-size:13px; font-style:italic; font-weight:400;
-      color:rgba(255,255,255,0.45); letter-spacing:0.02em; flex-direction:column; gap:8px;
-    }
-    .scard-ph span { font-family:var(--mono); font-size:8px; letter-spacing:0.1em; text-transform:uppercase; opacity:0.5; }
-    .scard-ph-1 { background:linear-gradient(145deg,#C38F8F,#8B6565); }
-    .scard-ph-2 { background:linear-gradient(145deg,#7DB800,#4a6d00); }
-    .scard-ph-3 { background:linear-gradient(145deg,#111010,#2a2a2a); }
-    .scard-ph-4 { background:linear-gradient(145deg,#8F9FC3,#5a6a8b); }
-    .scard-ph-5 { background:linear-gradient(145deg,#C3A88F,#8b6845); }
-    .scard-ph-6 { background:linear-gradient(145deg,#8FC3B8,#4a8b7e); }
-
-    .scard-info { padding:14px 18px; border-top:0.5px solid var(--border); background:var(--bg); height:85px; }
-    .scard-name { font-family:var(--serif); font-size:14px; font-weight:700; letter-spacing:-0.01em; margin-bottom:3px; }
-    .scard-sub { font-family:var(--mono); font-size:8px; color:var(--muted); letter-spacing:0.12em; text-transform:uppercase; }
-
-    /* progress bar autoplay */
-    .swipe-progress { position:absolute; bottom:0; left:0; right:0; height:2px; background:rgba(0,0,0,0.07); z-index:100; pointer-events:none; overflow:hidden; }
-    .swipe-progress-bar { height:100%; width:100%; background:var(--rosa); transform:scaleX(0); transform-origin:left; }
-
-    /* drag indicators */
-    .sd { position:absolute; top:18px; font-family:var(--mono); font-size:9px; letter-spacing:0.12em; text-transform:uppercase; padding:5px 12px; border:1.5px solid; opacity:0; pointer-events:none; z-index:20; }
-    .sd-r { right:16px; color:var(--lime); border-color:var(--lime); transform:rotate(12deg); }
-    .sd-l { left:16px; color:var(--rosa); border-color:var(--rosa); transform:rotate(-12deg); }
-
-    /* nav */
-    .swipe-nav { display:flex; align-items:center; gap:16px; }
-    .swipe-btn {
-      width:42px; height:42px; border-radius:50%; border:0.5px solid var(--border-hi);
-      background:var(--bg); display:flex; align-items:center; justify-content:center;
-      cursor:pointer; transition:background 0.2s, border-color 0.2s, color 0.2s;
-      font-size:14px; color:var(--ink); flex-shrink:0;
-    }
-    .swipe-btn:hover { background:var(--ink); color:var(--bg); border-color:var(--ink); }
-    .swipe-counter { font-family:var(--mono); font-size:9px; color:var(--muted); letter-spacing:0.12em; min-width:36px; text-align:center; }
-
     /* ─── MARQUEE ─── */
     .marquee-wrap { border-top:0.5px solid var(--border); border-bottom:0.5px solid var(--border); overflow:hidden; padding:12px 0;margin-top: -10px; }
     .marquee-track { display:flex; white-space:nowrap; animation:mq 22s linear infinite; }
@@ -277,47 +288,189 @@
     /* ─── PROJECTS ─── */
     .projects-section { margin-top:72px; }
     .proj-head { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:8px; }
-    .proj-intro { font-family:var(--serif); font-size:clamp(17px,2.6vw,24px); font-weight:400; font-style:italic; line-height:1.3; color:var(--muted); max-width:560px; margin-bottom:36px; }
+    .proj-intro { font-family:var(--serif); font-size:clamp(17px,2.6vw,24px); font-weight:400; font-style:italic; line-height:1.3; color:var(--muted); max-width:560px; margin-bottom:32px; }
     .proj-intro strong { font-style:normal; font-weight:700; color:var(--ink); }
 
-    .proj-list { display:flex; flex-direction:column; }
-    .proj-row { border-bottom:0.5px solid var(--border); cursor:pointer; transition:background 0.2s; padding: 20px;}
-    .proj-row:first-child { border-top:0.5px solid var(--border); }
-    .proj-row:hover { background:rgba(0,0,0,0.02); }
-    .proj-row.open { background:var(--surface); }
-    .proj-top { display:grid; grid-template-columns:40px 1fr auto 20px; align-items:center; gap:20px; padding:22px 0; }
-    .pnum { font-family:var(--mono); font-size:9px; color:var(--muted); letter-spacing:0.1em; transition: transform 0.2s; }
-    .proj-row:hover .pnum { transform: translateY(-3px); }
-    .pname { font-family:var(--serif); font-size:18px; font-weight:700; letter-spacing:-0.01em; }
-    .ptags { display:flex; gap:4px; }
-    .ptag { font-family:var(--mono); font-size:8px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); border:0.5px solid var(--border); padding:3px 7px; }
-    .parrow { font-size:14px; color:var(--muted); transition:transform 0.25s, color 0.2s; text-align:right; }
-    .proj-row.open .parrow { transform:rotate(45deg); color:var(--rosa); }
-    .proj-expand { display:none; padding:0 0 28px; }
-    .proj-row.open .proj-expand { display:block; }
-    .xgrid { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border); margin-bottom:20px; }
-    .xblock { background:var(--bg); padding:20px; }
-    .proj-row.open .xblock { background:var(--surface); }
-    .xlabel { font-family:var(--mono); font-size:8px; color:var(--rosa); letter-spacing:0.16em; text-transform:uppercase; margin-bottom:10px; }
-    .xtext { font-size:11px; line-height:1.7; color:var(--muted); font-weight:300; }
-    .xcta {
-      display:inline-flex; align-items:center; gap:6px;
-      font-family:var(--mono); font-size:9px; letter-spacing:0.1em; text-transform:uppercase;
-      color:var(--lime); background:none; border:0.5px solid rgba(125,184,0,0.3);
-      padding:8px 14px; cursor:pointer;
-      position:relative; overflow:hidden; z-index:0;
-      transition:border-color 0.3s ease, color 0.2s;
+    /* ─── PROJECT GALLERY ─── */
+    .proj-gallery {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 0 -40px;
     }
-    .xcta::before {
-      content:''; position:absolute; inset:0; z-index:-1;
-      background:rgba(125,184,0,0.11);
-      transform:scaleX(0); transform-origin:left;
-      transition:transform 0.38s cubic-bezier(0.4,0,0.2,1);
+    .pgcard {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      background: var(--surface);
+      aspect-ratio: 4/3;
+      display: block;
+      transition: transform 0.55s cubic-bezier(0.25,0.46,0.45,0.94),
+                  box-shadow 0.55s cubic-bezier(0.25,0.46,0.45,0.94);
+      z-index: 1;
     }
-    .xcta:hover::before { transform:scaleX(1); }
-    .xcta:hover { border-color:rgba(125,184,0,0.75); }
-    .xcta .arr { display:inline-block; transition:transform 0.38s cubic-bezier(0.34,1.56,0.64,1); }
-    .xcta:hover .arr { transform:translate(4px,-4px); }
+    .pgcard:hover {
+      transform: translateY(-7px) scale(1.012);
+      box-shadow: 0 32px 64px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.18);
+      z-index: 3;
+    }
+
+    /* accent sweep line across top on hover */
+    .pgcard::after {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--rosa);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94);
+      z-index: 4;
+    }
+    .pgcard:hover::after { transform: scaleX(1); }
+    .pgcard--featured {
+      grid-column: 1 / -1;
+      aspect-ratio: 16/7;
+    }
+    .pgcard--footer {
+      grid-column: 1 / -1;
+      aspect-ratio: 21/5;
+      min-height: 160px;
+    }
+    .pgcard--dark { background: var(--ink); }
+    .pgcard--nami { background: #1B1A51; }
+
+    /* image layer */
+    .pgcard-bg {
+      position: absolute; inset: 0;
+    }
+    .pgcard-bg img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      transition: transform 0.85s cubic-bezier(0.25,0.46,0.45,0.94);
+      display: block;
+    }
+    .pgcard:hover .pgcard-bg img { transform: scale(1.1); }
+
+    /* gradient overlay — solo cubre el tercio inferior para texto legible */
+    .pgcard-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top,
+        rgba(17,16,16,0.94) 0%,
+        rgba(17,16,16,0.72) 22%,
+        rgba(17,16,16,0.18) 48%,
+        transparent 68%);
+      transition: opacity 0.45s;
+    }
+    .pgcard:hover .pgcard-overlay { opacity: 0.82; }
+    .pgcard--dark .pgcard-overlay {
+      background: linear-gradient(135deg, rgba(195, 143, 143, 0.041) 0%, transparent 60%);
+    }
+
+    /* info strip */
+    .pgcard-info {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 24px 28px 26px;
+      z-index: 1;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+      transition: transform 0.45s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    .pgcard:hover .pgcard-info { transform: translateY(-8px); }
+    .pgcard-left { flex: 1; min-width: 0; }
+    .pgcard-num {
+      font-family: var(--mono);
+      font-size: 8px;
+      color: rgba(247,245,242,0.45);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 7px;
+    }
+    .pgcard-name {
+      font-family: var(--serif);
+      font-size: clamp(18px, 2.2vw, 28px);
+      font-weight: 700;
+      color: #F7F5F2;
+      letter-spacing: -0.015em;
+      line-height: 1.05;
+      margin-bottom: 10px;
+      transition: letter-spacing 0.4s ease;
+    }
+    .pgcard:hover .pgcard-name { letter-spacing: -0.005em; }
+    .pgcard--featured .pgcard-name { font-size: clamp(22px, 2.8vw, 36px); }
+    .pgcard--dark .pgcard-name { color: #F7F5F2; }
+    .pgcard-tags {
+      display: flex; gap: 5px; flex-wrap: wrap;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 0.35s ease 0.08s, transform 0.35s ease 0.08s;
+    }
+    .pgcard:hover .pgcard-tags {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .pgcard-tag {
+      font-family: var(--mono); font-size: 8px;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: rgba(247,245,242,0.5);
+      border: 0.5px solid rgba(247,245,242,0.18);
+      padding: 3px 8px;
+    }
+    .pgcard--dark .pgcard-tag { color: rgba(247,245,242,0.55); border-color: rgba(247,245,242,0.2); }
+
+    /* arrow button */
+    .pgcard-arrow {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      border: 0.5px solid rgba(247,245,242,0.28);
+      background: rgba(247,245,242,0.1);
+      display: flex; align-items: center; justify-content: center;
+      color: #F7F5F2;
+      font-size: 16px;
+      flex-shrink: 0;
+      transition: background 0.28s, border-color 0.28s, transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .pgcard:hover .pgcard-arrow {
+      background: var(--rosa);
+      border-color: var(--rosa);
+      transform: rotate(45deg) scale(1.08);
+    }
+
+    /* behance / no-image card center content */
+    .pgcard-center {
+      position: absolute; inset: 0; z-index: 1;
+      display: flex; flex-direction: column;
+      align-items: flex-start; justify-content: flex-end;
+      padding: 24px 28px 26px;
+      gap: 6px;
+    }
+    .pgcard-center-label {
+      font-family: var(--mono);
+      font-size: 8px;
+      color: rgba(195,143,143,0.65);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+    .pgcard-center-title {
+      font-family: var(--serif);
+      font-size: clamp(18px, 2.2vw, 26px);
+      font-weight: 700;
+      color: rgba(247,245,242,0.88);
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+    }
+    .pgcard-center-sub {
+      font-size: 11px;
+      color: rgba(247,245,242,0.4);
+      font-weight: 300;
+      line-height: 1.5;
+      margin-top: 8px;
+      max-width: 280px;
+    }
 
     /* ─── DIFERENCIAL ─── */
     .diff-section { margin-top:80px; }
@@ -399,6 +552,7 @@
       .diff-row { grid-template-columns:1fr 1fr; }
       .stats-bar { grid-template-columns:1fr 1fr; }
       .meta-row { grid-template-columns:1fr 1fr; }
+      .pgcard--featured { aspect-ratio: 16/9; }
     }
 
     /* ─── MOBILE (≤640px) ─── */
@@ -413,32 +567,22 @@
       .nav-right { gap:0; }
 
       /* ── Hero ── */
-      .hero { padding:40px 0 32px; }
-      .hero-name { margin-bottom:-28px; }
-      .hero-name .n1 { width: min(240px, 68vw); }
-      .hero-name .n2 { width: min(320px, 88vw); margin-top:-48px; }
-      .hero-copy { margin-top:28px; max-width:100%; font-size:13px; }
+      .hc-headline { font-size: clamp(36px, 9.5vw, 52px); }
+      .hero-cinematic { padding-bottom: 80px; }
+      .hc-bottom { padding: 0 20px; flex-direction: column; align-items: flex-start; gap: 10px; }
+      .hc-sub { text-align: left; }
+      .hero-sub { padding: 48px 0 32px; }
+      .hero-copy { font-size:13px; }
       .hero-tags { gap:4px; margin-bottom:28px; }
       .hero-tag { font-size:8px; padding:4px 8px; }
 
-      /* ── Swipe stack ── */
-      .hero-layout { gap:32px; }
-      .swipe-arena { align-items:center; }
-      .swipe-stack  { width:min(280px, calc(100vw - 56px)); height:390px; }
-      .scard        { width:min(280px, calc(100vw - 56px)); height:390px; }
-      .scard-img    { height:min(305px, calc((100vw - 56px) * 1.09)); }
-      .swipe-section { padding:40px 20px 40px; }
-      .swipe-layout  { gap:28px; }
-      .swipe-title   { font-size:26px; }
-
       /* ── Projects ── */
       .projects-section { margin-top:48px; }
-      .proj-top { grid-template-columns:28px 1fr auto; gap:12px; padding:16px 0; }
-      .pname { font-size:15px; }
-      .ptags { display:none; }
-      .xgrid { grid-template-columns:1fr; }
-      .xblock { padding:16px; }
-      .xcta { font-size:8px; padding:7px 12px; }
+      .proj-gallery { grid-template-columns: 1fr; margin: 0 -20px; }
+      .pgcard--featured { grid-column: 1; aspect-ratio: 4/3; }
+      .pgcard--footer { grid-column: 1; aspect-ratio: 3/1; min-height: 120px; }
+      .pgcard-info { padding: 18px 20px 20px; }
+      .pgcard-center { padding: 18px 20px 20px; }
 
       /* ── Diferencial ── */
       .diff-section { margin-top:48px; }
@@ -475,6 +619,24 @@
       /* ── Footer ── */
       .footer { flex-direction:column; gap:6px; padding-top:16px; margin-top:32px; }
     }
+
+    /* ─── LANGUAGE SWITCHER ─── */
+    .nav-lang {
+      display: flex; align-items: center; gap: 1px;
+      margin-left: 18px; padding-left: 18px;
+      border-left: 0.5px solid var(--border-hi);
+    }
+    .lang-btn {
+      font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em;
+      text-transform: uppercase; background: none; border: none;
+      cursor: pointer; color: var(--muted); padding: 4px 5px;
+      transition: color 0.2s; line-height: 1;
+    }
+    .lang-btn.active { color: var(--ink); font-weight: 400; }
+    .lang-btn:hover { color: var(--ink); }
+    .lang-sep { font-family: var(--mono); font-size: 9px; color: var(--border-hi); pointer-events: none; }
+    /* headline EN oculto por defecto */
+    #hl-en { display: none; }
   </style>
 </head>
 <body>
@@ -483,9 +645,7 @@
   <script>if(sessionStorage.getItem('pageTransition'))document.write('<style>#loader{display:none!important}</style>');</script>
   <div id="loader" aria-hidden="true">
     <div class="loader-name">
-      <!-- <span class="lc lc-first">j</span><span class="lc lc-first">i</span><span class="lc lc-first">m</span><span class="lc lc-first">e</span><span class="lc lc-first">n</span><span class="lc lc-first">a</span><span class="lc-space"></span><span class="lc">Z</span><span class="lc">a</span><span class="lc">p</span><span class="lc">o</span><span class="lc">l</span><span class="lc">s</span><span class="lc">k</span><span class="lc">i</span> -->
-
-     <span class="lc">Z</span><span class="lc">a</span><span class="lc">p</span><span class="lc">o</span><span class="lc">l</span><span class="lc">s</span><span class="lc">k</span><span class="lc">i</span>
+      <span class="lc lc-first">J</span><span class="lc lc-first">i</span><span class="lc lc-first">m</span><span class="lc lc-first">e</span><span class="lc lc-first">n</span><span class="lc lc-first">a</span><span class="lc-space"></span><span class="lc">Z</span><span class="lc">a</span><span class="lc">p</span><span class="lc">o</span><span class="lc">l</span><span class="lc">s</span><span class="lc">k</span><span class="lc">i</span>
     </div>
     <div class="loader-line"></div>
   </div>
@@ -499,147 +659,79 @@
   <div id="cursor" aria-hidden="true"></div>
 
   <div class="pr">
-    <div class="wrap">
 
-      <!-- NAV -->
-      <nav>
-        <div class="nav-logo">
-          <img
-            src="assets/Asset 18@72x.png"
-            alt="JZ"
-            onerror="this.outerHTML='<span style=\'font-family:var(--serif);font-size:22px;font-weight:900;font-style:italic;color:var(--rosa);letter-spacing:-0.02em\'>JZ</span>'"
-          />
-        </div>
-        <div class="nav-right">
-          <span class="nav-avail"><span class="nav-dot"></span>Disponible</span>
-          <ul class="nav-links">
-            <li><a onclick="scrollToSection('.projects-section')">Proyectos</a></li>
-            <li><a onclick="scrollToSection('.exp-section')">Experiencia</a></li>
-            <li><a onclick="scrollToSection('.contact-section')">Contacto</a></li>
-          </ul>
-        </div>
-      </nav>
-
-      <!-- HERO -->
-      <section class="hero">
-        <div class="hero-layout">
-          <!-- izquierda -->
-          <div class="hero-left">
-            <p class="hero-intro anim-ready">Hola, soy</p>
-            <h1 class="hero-name">
-              <img class="n1 anim-ready"
-                src="assets/jimena.png"
-                alt="jimena"
-                onerror="this.outerHTML='<span style=\'font-family:var(--serif);font-size:22px;font-weight:900;font-style:italic;color:var(--rosa);letter-spacing:-0.02em\'>jimena</span>'"
-              /></img>
-              <img class="n2 anim-ready"
-                src="assets/zapolski.png"
-                alt="zapolski"
-                onerror="this.outerHTML='<span style=\'font-family:var(--serif);font-size:22px;font-weight:900;font-style:italic;color:var(--ink);letter-spacing:-0.02em\'>zapolski</span>'"
-              /></img>
-            </h1>
-            <p class="hero-copy anim-ready">Transformo ideas en experiencias digitales claras, útiles y memorables. — <span class="hl">cada decisión tiene un propósito.</span></p>
-            <div class="hero-tags anim-ready">
-              <span class="hero-tag hi">Diseño UX / UI</span>
-              <span class="hero-tag hi">Producto</span>
-              <span class="hero-tag hi">AR / VR</span>
-              <span class="hero-tag hi">IA</span>
-              <span class="hero-tag hi">Diseño End-to-end</span>
-              <span class="hero-tag">Salud · Pharma</span>
-              <span class="hero-tag">Ed-Tech</span>
-              <span class="hero-tag">Logística</span>
-              <span class="hero-tag">E-commerce</span>
-            </div>
-            <button class="btn-pill anim-ready" onclick="scrollToSection('.contact-section')">
-              <span class="btn-pill-text">Conectemos</span>
-              <span class="btn-pill-icon">
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#F7F5F2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
-              </span>
-            </button>
+    <!-- ─── DARK HERO (100vh) ─── -->
+    <div class="hero-area">
+      <div class="wrap">
+        <nav>
+          <div class="nav-logo">
+            <img
+              src="assets/jz-logo.png"
+              alt="JZ"
+              onerror="this.outerHTML='<span style=\'font-family:var(--serif);font-size:22px;font-weight:700;font-style:italic;color:var(--rosa);letter-spacing:-0.02em\'>JZ</span>'"
+            />
           </div>
+          <div class="nav-right">
+            <!-- <span class="nav-avail"><span class="nav-dot"></span>Disponible</span> -->
+            <ul class="nav-links">
+              <li><a data-i18n-es="Proyectos" data-i18n-en="Projects" onclick="scrollToSection('.projects-section')">Proyectos</a></li>
+              <li><a data-i18n-es="Experiencia" data-i18n-en="Experience" onclick="goTo('experiencia.html', 'Experiencia')">Experiencia</a></li>
+              <li><a data-i18n-es="Contacto" data-i18n-en="Contact" onclick="goTo('experiencia.html', 'Experiencia')">Contacto</a></li>
+            </ul>
+            <div class="nav-lang">
+              <button class="lang-btn active" data-lang="es">ES</button>
+              <span class="lang-sep">/</span>
+              <button class="lang-btn" data-lang="en">EN</button>
+            </div>
+          </div>
+        </nav>
+      </div>
 
-          <!-- derecha — card de status
-          <div class="hero-card anim-ready">
-            <div class="hcard-top">
-              <div class="hcard-avail">
-                <span class="hcard-dot"></span>
-                <span class="hcard-avail-txt">Disponible</span>
-              </div>
-              <p class="hcard-sub">para proyectos · freelance</p>
-            </div>
-            <div class="hcard-grid">
-              <div class="hcard-cell">
-                <p class="hcard-cell-label">Ubicación</p>
-                <p class="hcard-cell-val">Buenos Aires</p>
-              </div>
-              <div class="hcard-cell">
-                <p class="hcard-cell-label">Foco</p>
-                <p class="hcard-cell-val">UX · UI</p>
-              </div>
-              <div class="hcard-cell">
-                <p class="hcard-cell-label">Experiencia</p>
-                <p class="hcard-cell-val">5+ años</p>
-              </div>
-              <div class="hcard-cell">
-                <p class="hcard-cell-label">Idiomas</p>
-                <p class="hcard-cell-val">ES · EN</p>
-              </div>
-            </div>
-            <p class="hcard-quote">«Diseño que <strong>no necesita manual</strong> — intuitivo por definición.»</p>
-          </div> -->
-          <div class="swipe-arena anim-ready">
-            <div class="swipe-stack" id="swipeStack">
-  
-              <!-- CARD 1 — cambiá src por assets/mix/01.jpg -->
-              <div class="scard">
-                <img class="scard-img" src="assets/mix/01.png" alt="Pantalla 1"
-                     onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-                <div class="scard-info"><p class="scard-name">CARTHAGE - Ecommerce</p><p class="scard-sub">UX / UI · 2025</p></div>
-              </div>
-  
-              <!-- CARD 2 -->
-              <div class="scard">
-                <div class="sd sd-r">→</div>
-                <div class="sd sd-l">←</div>
-                <img class="scard-img" src="assets/mix/02.png" alt="Pantalla 2"
-                     onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-                <div class="scard-info"><p class="scard-name">Sistema Gamificado</p><p class="scard-sub">UI · 2024</p></div>
-              </div>
-  
-              <!-- CARD 3 -->
-              <div class="scard">
-                <div class="sd sd-r"> →</div>
-                <div class="sd sd-l">← </div>
-                <img class="scard-img" src="assets/mix/03.png" alt="Pantalla 3"
-                     onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-                <div class="scard-ph scard-ph-3" style="display:none">Subí tu pantalla<span>assets/mix/03.jpg</span></div>
-                <div class="scard-info"><p class="scard-name">IA para medicos</p><p class="scard-sub"> End-to-End · 2025</p></div>
-              </div>
-  
-              <!-- CARD 4 -->
-              <div class="scard">
-                <div class="sd sd-r"> →</div>
-                <div class="sd sd-l">← </div>
-                <img class="scard-img" src="assets/mix/04.png" alt="Pantalla 4"
-                     onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-                <div class="scard-info"><p class="scard-name">Abbvie Brasil</p><p class="scard-sub">AR/VR · 2026</p></div>
-              </div>
-  
-              <!-- CARD 5 -->
-              <div class="scard">
-                <div class="sd sd-r"> →</div>
-                <div class="sd sd-l">← </div>
-                <img class="scard-img" src="assets/mix/05.png" alt="Pantalla 5"
-                     onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-                <div class="scard-info"><p class="scard-name">Laboratorios Bagó</p><p class="scard-sub"> App · 2024</p></div>
-              </div>
-  
-            
-            </div><!-- /swipeStack -->
-          </div><!-- /swipe-arena -->
+      <section class="hero-cinematic">
+        <div class="hc-inner wrap">
+          <h1 class="hc-headline" id="hl-es">
+            <span class="hc-word">Hola!</span> <span class="hc-word"> Soy</span> <em><span class="hc-word hc-name">Jimena</span></em><br>
+            <span class="hc-word hc-name zapolski">Zapolski</span> <span class="hc-word">—</span> <span class="hc-word">diseñadora</span><br>
+            <span class="hc-word">de</span> <span class="hc-word cursiva">experiencias</span> <span class="hc-word cursiva">digitales.</span>
+          </h1>
+          <h1 class="hc-headline" id="hl-en">
+            Hi! I'm <em><span class="hc-name">Jimena</span></em><br>
+            <span class="hc-name zapolski">Zapolski</span> — digital<br>
+            <span class="cursiva">experience designer.</span>
+          </h1>
         </div>
+        <!-- <div class="hc-bottom">
+          <div class="hc-side"></div>
+          <p class="hc-sub">TRANSFORMO IDEAS EN EXPERIENCIAS<br>DIGITALES CLARAS Y MEMORABLES.</p>
+          <div class="hc-side" style="display:flex;justify-content:flex-end">
+          </div>
+        </div> -->
       </section>
+    </div>
 
+    <!-- ─── LIGHT SECTION (copy + tags + button) ─── -->
+    <div class="wrap">
+      <div class="hero-divider"></div>
+      <section class="hero-sub">
+        <p class="hero-copy" data-i18n-es="Transformo ideas en experiencias digitales claras, útiles y memorables. — <span class='hl'>cada decisión tiene un propósito.</span>" data-i18n-en="I turn ideas into clear, useful and memorable digital experiences. — <span class='hl'>every decision has a purpose.</span>">Transformo ideas en experiencias digitales claras, útiles y memorables. — <span class="hl">cada decisión tiene un propósito.</span></p>
+        <div class="hero-tags">
+          <span class="hero-tag hi" data-i18n-es="Diseño UX / UI" data-i18n-en="UX / UI Design">Diseño UX / UI</span>
+          <span class="hero-tag hi" data-i18n-es="Producto" data-i18n-en="Product">Producto</span>
+          <span class="hero-tag hi">AR / VR</span>
+          <span class="hero-tag hi" data-i18n-es="IA" data-i18n-en="AI">IA</span>
+          <span class="hero-tag hi" data-i18n-es="Diseño End-to-end" data-i18n-en="End-to-end Design">Diseño End-to-end</span>
+          <span class="hero-tag" data-i18n-es="Salud · Pharma" data-i18n-en="Health · Pharma">Salud · Pharma</span>
+          <span class="hero-tag">Ed-Tech</span>
+          <span class="hero-tag" data-i18n-es="Logística" data-i18n-en="Logistics">Logística</span>
+          <span class="hero-tag">E-commerce</span>
+        </div>
+        <button class="btn-pill" onclick="goTo('experiencia.html', 'Experiencia')">
+          <span class="btn-pill-text" data-i18n-es="Conectemos" data-i18n-en="Let's talk">Conectemos</span>
+          <span class="btn-pill-icon">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#F7F5F2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+          </span>
+        </button>
+      </section>
     </div>
 
     <!-- MARQUEE -->
@@ -670,207 +762,95 @@
       </div>
     </div>
 
-    <!-- SWIPE STACK
-    <div class="swipe-section">
-      <div class="swipe-layout">
-        <div>
-          <p class="swipe-eyebrow anim-ready">Exploración visual</p>
-          <h2 class="swipe-title anim-ready">Un mix de<br><em>lo que hice</em></h2>
-          <p class="swipe-desc anim-ready">Pantallas reales de proyectos, explorations y sistemas de diseño. Deslizá para explorar.</p>
-          <div class="swipe-nav anim-ready">
-            <button class="swipe-btn" id="swipePrev" title="Anterior">←</button>
-            <span class="swipe-counter"><span class="swipe-counter-num">1 / 6</span></span>
-            <button class="swipe-btn" id="swipeNext" title="Siguiente">→</button>
-          </div>
-        </div>
-
-       stack derecha -->
-       
-      <!-- </div>
-    </div> -->
-
     <div class="wrap">
 
       <!-- PROJECTS -->
       <section class="projects-section">
         <div class="proj-head">
-          <p class="slbl">Trabajos recientes</p>
-          <span style="font-family:var(--mono);font-size:9px;color:var(--muted)">(001)</span>
+          <p class="slbl" data-i18n-es="Trabajos recientes" data-i18n-en="Recent work">Trabajos recientes</p>
         </div>
-        <p class="proj-intro anim-ready">Combinando <strong>innovación, estrategia y diseño</strong> para crear experiencias que generan resultados reales.</p>
-        <div class="proj-list">
+        <p class="proj-intro anim-ready" data-i18n-es="Combinando <strong>innovación, estrategia y diseño</strong> para crear experiencias que generan resultados reales." data-i18n-en="Combining <strong>innovation, strategy and design</strong> to create experiences that deliver real results.">Combinando <strong>innovación, estrategia y diseño</strong> para crear experiencias que generan resultados reales.</p>
+        <div class="proj-gallery">
 
-          <div class="proj-row anim-ready" onclick="toggle(this)">
-            <div class="proj-top">
-              <span class="pnum">001</span>
-              <span class="pname">Zenda — AR Education</span>
-              <div class="ptags"><span class="ptag">Ed-Tech</span><span class="ptag">AR</span><span class="ptag">Diseño UX/UI</span><span class="ptag">React Native</span><span class="ptag">Swift</span></div>
-              <span class="parrow">+</span>
+          <!-- 001 — Zenda (featured, full-width) -->
+          <div class="pgcard pgcard--featured anim-ready" onclick="goTo('zenda.html', 'Zenda — AR Education')">
+            <div class="pgcard-bg">
+              <img src="assets/zenda/zenda-portada.png" alt="Zenda — AR Education">
             </div>
-            <div class="proj-expand">
-              <div class="xgrid">
-                <div class="xblock"><p class="xlabel">Enfoque</p><p class="xtext"> Proyecto de tesis centrado en cómo transformar información compleja en experiencias comprensibles, combinando investigación con usuarios, diseño iterativo y desarrollo nativo en React Native y Swift.</p></div>
-                <div class="xblock"><p class="xlabel">Impacto en usuarios</p><p class="xtext">Una experiencia de aprendizaje en realidad aumentada que convierte la interpretación del etiquetado frontal en una interacción visual, tangible y activa.</p></div>
-                <div class="xblock"><p class="xlabel">Resultado</p><p class="xtext">Propuesta validada con potencial de implementación institucional. Tesis calificada con 9, destacada por su integración entre diseño, tecnología y educación.</p></div>
+            <div class="pgcard-overlay"></div>
+            <div class="pgcard-info">
+              <div class="pgcard-left">
+                <p class="pgcard-num">001 · Ed-Tech · AR · React Native</p>
+                <h3 class="pgcard-name">Zenda — AR Education</h3>
+                <div class="pgcard-tags">
+                  <span class="pgcard-tag" data-i18n-es="Diseño UX/UI" data-i18n-en="UX/UI Design">Diseño UX/UI</span>
+                  <span class="pgcard-tag">AR</span>
+                  <span class="pgcard-tag" data-i18n-es="Tesis · 9/10" data-i18n-en="Thesis · 9/10">Tesis · 9/10</span>
+                </div>
               </div>
-              <button class="xcta" onclick="event.stopPropagation(); goTo('zenda.html', 'Zenda — AR Education')">Ver caso completo <span class="arr">↗</span></button>
+              <div class="pgcard-arrow">↗</div>
             </div>
           </div>
 
-          <div class="proj-row anim-ready" onclick="toggle(this)">
-            <div class="proj-top">
-              <span class="pnum">002</span>
-              <span class="pname">ZonaProp — Redesign</span>
-              <div class="ptags"><span class="ptag">App</span><span class="ptag">Mobile</span><span class="ptag">Auditoría</span></div>
-              <span class="parrow">+</span>
+          <!-- 002 — ZonaProp -->
+          <div class="pgcard anim-ready" onclick="goTo('zonaprop.html', 'ZonaProp — AI Redesign')">
+            <div class="pgcard-bg">
+              <img src="assets/zonaprop/zonaprop-portada.png" alt="ZonaProp — AI Redesign">
             </div>
-            <div class="proj-expand">
-              <div class="xgrid">
-                <div class="xblock"><p class="xlabel">Enfoque</p><p class="xtext">Rediseño conceptual del flujo de búsqueda inmobiliaria, cuestionando patrones tradicionales y explorando cómo la IA puede asistir decisiones complejas.</p></div>
-                <div class="xblock"><p class="xlabel">Impacto en usuarios</p><p class="xtext"> Simplifica la toma de decisiones al transformar la búsqueda en una experiencia más guiada, clara y alineada a las necesidades reales de cada usuario.</p></div>
-                <div class="xblock"><p class="xlabel">Resultado</p><p class="xtext"> Propuesta especulativa que redefine la interacción con portales inmobiliarios, enfocada en eficiencia, personalización y una experiencia más guiada.</p></div>
+            <div class="pgcard-overlay"></div>
+            <div class="pgcard-info">
+              <div class="pgcard-left">
+                <p class="pgcard-num">002 · Mobile · IA</p>
+                <h3 class="pgcard-name">ZonaProp — AI Redesign</h3>
+                <div class="pgcard-tags">
+                  <span class="pgcard-tag" data-i18n-es="Auditoría" data-i18n-en="Audit">Auditoría</span>
+                  <span class="pgcard-tag" data-i18n-es="Rediseño" data-i18n-en="Redesign">Rediseño</span>
+                </div>
               </div>
-              <button class="xcta" onclick="event.stopPropagation(); goTo('zonaprop.html', 'ZonaProp — AI Redesign')">Ver caso completo <span class="arr">↗</span></button>
+              <div class="pgcard-arrow">↗</div>
             </div>
           </div>
 
-          <div class="proj-row anim-ready" onclick="toggle(this)">
-            <div class="proj-top">
-              <span class="pnum">003</span>
-              <span class="pname">Proyectos anteriores</span>
-              <div class="ptags"><span class="ptag"></span><span class="ptag"></span><span class="ptag"></span><span class="ptag"></span></div>
-              <span class="parrow">+</span>
+          <!-- 003 — Nami -->
+          <div class="pgcard pgcard--nami anim-ready" onclick="goTo('nami.html', 'Nami — Mental Health')">
+            <div class="pgcard-bg">
+              <img src="assets/nami/nami-portada.png" alt="Nami — Mental Health App">
             </div>
-            <div class="proj-expand">
-              <!-- <div class="xgrid">
-                <div class="xblock"><p class="xlabel">Enfoque</p><p class="xtext"></p></div>
-                <div class="xblock"><p class="xlabel">Impacto en usuarios</p><p class="xtext"></p></div>
-                <div class="xblock"><p class="xlabel">Resultados</p><p class="xtext"></p></div>
-              </div> -->
-              <button class="xcta" onclick="openLink('https://www.behance.net/jimezapolski')">proyectos en BEHANCE ↗</button>
+            <div class="pgcard-overlay"></div>
+            <div class="pgcard-info">
+              <div class="pgcard-left">
+                <p class="pgcard-num">003 · Mobile · Mental Health · IA</p>
+                <h3 class="pgcard-name">Nami — Mental Health</h3>
+                <div class="pgcard-tags">
+                  <span class="pgcard-tag" data-i18n-es="Diseño UX/UI" data-i18n-en="UX/UI Design">Diseño UX/UI</span>
+                  <span class="pgcard-tag" data-i18n-es="IA integrada" data-i18n-en="AI integration" >IA integrada</span>
+                </div>
+              </div>
+              <div class="pgcard-arrow">↗</div>
+            </div>
+          </div>
+
+          <!-- 004 — Proyectos anteriores (Behance, full-width footer) -->
+          <div class="pgcard pgcard--dark pgcard--footer anim-ready" onclick="openLink('https://www.behance.net/jimezapolski')">
+            <div class="pgcard-overlay"></div>
+            <div class="pgcard-center" style="flex-direction: row; align-items: flex-end; justify-content: space-between; padding: 28px 32px 30px;">
+              <div>
+                <p class="pgcard-center-label" data-i18n-es="004 · Archivo" data-i18n-en="004 · Archive">004 · Archivo</p>
+                <h3 class="pgcard-center-title" data-i18n-es="Proyectos anteriores" data-i18n-en="Previous projects">Proyectos anteriores</h3>
+                <p class="pgcard-center-sub" data-i18n-es="Branding, UI, web design y más — todos los trabajos en Behance." data-i18n-en="Branding, UI, web design and more — all work on Behance.">Branding, UI, web design y más — todos los trabajos en Behance.</p>
+              </div>
+              <div class="pgcard-arrow" style="flex-shrink:0">↗</div>
             </div>
           </div>
 
         </div>
       </section>
 
-      <!-- DIFERENCIAL -->
-      <section class="diff-section">
-        <p class="slbl">Por qué yo</p>
-        <h2 class="diff-heading anim-ready">Lo que me <em>diferencia</em></h2>
-        <div class="diff-row">
-          <div class="diff-stat anim-ready">
-            <p class="diff-word">Diseño</p>
-            <p class="diff-label">Estratégico · End-to-end</p>
-            <p class="diff-text">Centrado en el usuario e impacto medible. Más del 50% de reducción en tiempos de aprobación.</p>
-          </div>
-          <div class="diff-stat anim-ready">
-            <p class="diff-word italic">Código</p>
-            <p class="diff-label">React · Next.js · Native</p>
-            <p class="diff-text">Entiendo lo que diseño y sé construirlo. Sin fricción con desarrollo, mayor velocidad de entrega.</p>
-          </div>
-          <div class="diff-stat anim-ready">
-            <p class="diff-word">AR / IA</p>
-            <p class="diff-label">Experiencias inmersivas</p>
-            <p class="diff-text">Proyectos reales en salud, pharma y logística. Diseño para entornos no convencionales con viabilidad técnica.</p>
-          </div>
-          <div class="diff-stat anim-ready">
-            <p class="diff-word italic">Docencia</p>
-            <p class="diff-label">ORT · Design Thinking</p>
-            <p class="diff-text">Mentoreo equipos en Agile y UX desde 2022. Enseñar diseño lo hace más profundo y comunicable.</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- STATS
-      <div class="stats-bar">
-        <div class="stat-block anim-ready">
-          <div class="stat-val"><span class="stat-num" data-target="5" data-int="true">5</span><em>+</em></div>
-          <div class="stat-lbl">Años de experiencia</div>
-        </div>
-        <div class="stat-block anim-ready">
-          <div class="stat-val"><span class="stat-num" data-target="50" data-int="true">50</span><em>%</em></div>
-          <div class="stat-lbl">↓ tiempos de aprobación</div>
-        </div>
-        <div class="stat-block anim-ready">
-          <div class="stat-val"><span class="stat-num" data-target="8" data-int="true">8</span><em>.9</em></div>
-          <div class="stat-lbl">Promedio universitario</div>
-        </div>
-        <div class="stat-block anim-ready">
-          <div class="stat-val"><span class="stat-num" data-target="20" data-int="true">20</span><em>+</em></div>
-          <div class="stat-lbl">Clientes & proyectos</div>
-        </div>
-      </div> -->
-
-      <!-- EXPERIENCIA -->
-      <section class="exp-section">
-        <p class="slbl">Experiencia</p>
-        <h2 class="sec-title anim-ready">Empresas que <em>confiaron</em> en mí</h2>
-        <div class="exp-list">
-          <div class="exp-row anim-ready">
-            <div>
-              <p class="exp-role">UX/UI Designer</p>
-              <p class="exp-company">3Destiny — AR, VR & IA</p>
-              <div class="exp-bullets">
-                <p class="exp-bullet">Lideré el diseño <strong>end-to-end</strong> para industrias complejas: Laboratorios Bagó, AbbVie, Panalab, Danone, APM Terminals, Novo Nordisk.</p>
-                <p class="exp-bullet">Reduje en más de un <strong>50% los tiempos de aprobación</strong> optimizando presentación de propuestas y handoff técnico.</p>
-                <p class="exp-bullet">Articulé estrategias de UX para <strong>proyectos de realidad aumentada</strong> en colaboración con desarrolladores y diseñadores 3D.</p>
-              </div>
-            </div>
-            <div class="exp-period">Mar 2025 — Hoy</div>
-          </div>
-          <div class="exp-row anim-ready">
-            <div>
-              <p class="exp-role">Freelance UX/UI Designer</p>
-              <p class="exp-company">Carthage Beauty · DigPar · Losa0 · Kakawa · Azikna</p>
-              <div class="exp-bullets">
-                <p class="exp-bullet">Lideré el diseño integral de <strong>Calidad de Vida Bagó</strong> — app mobile que traduce requerimientos médicos complejos en arquitectura de información clara.</p>
-                <p class="exp-bullet">Diseñé experiencias inmersivas para <strong>Ushuaia XR</strong>, adaptando narrativa y usabilidad para pantallas y espacios físicos.</p>
-                <p class="exp-bullet">Sitios web y landing pages con <strong>WCAG compliance</strong> e investigación de comportamiento de usuarios.</p>
-              </div>
-            </div>
-            <div class="exp-period">Ago 2023 — Hoy</div>
-          </div>
-          <div class="exp-row anim-ready">
-            <div>
-              <p class="exp-role">Docente de Diseño Digital</p>
-              <p class="exp-company">Escuela Técnica ORT</p>
-              <div class="exp-bullets">
-                <p class="exp-bullet">Mentoreo en <strong>ciclo completo de diseño digital</strong> y metodologías ágiles — Scrum, Design Thinking.</p>
-                <p class="exp-bullet">Prototipado con <strong>Figma, Illustrator y Photoshop</strong> en proyectos de resolución de problemas reales.</p>
-              </div>
-            </div>
-            <div class="exp-period">Mar 2022 — Hoy</div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ABOUT -->
-      <section class="about-section">
-        <div>
-          <p class="slbl" style="margin-bottom:14px">Sobre mí</p>
-          <h2 class="about-head anim-ready"><em>Diseño</em> con criterio.</h2>
-          <p class="about-body anim-ready">UX/UI Designer con formación en Tecnología Multimedial (UMaimonides). Trabajo en la intersección entre diseño estratégico, usabilidad e impacto de negocio — integrando IA, AR/VR y código cuando el proyecto lo necesita.</p>
-          <p class="about-body anim-ready">Docente en la Escuela Técnica ORT desde 2022. Creo que enseñar diseño te hace mejor diseñador/a — y que el mejor diseño es el que no se nota.</p>
-          <div class="edu-block anim-ready">
-            <p class="edu-title">Lic. en Tecnología Multimedial</p>
-            <p class="edu-sub">Universidad Maimonides · 2020–2024</p>
-            <p class="edu-note">Promedio <strong>8,9/10</strong> · Tesis: Zenda, app educativa con AR en React Native y Swift — ciclo completo de producto.</p>
-          </div>
-        </div>
-        <div class="skills-col">
-          <div class="anim-ready"><p class="sklbl">Diseño & Prototipado</p><div class="skpills"><span class="skp">Figma</span><span class="skp">Framer</span><span class="skp">Webflow</span><span class="skp">Adobe XD</span><span class="skp">Illustrator</span><span class="skp">InDesign</span></div></div>
-          <div class="anim-ready"><p class="sklbl">Desarrollo</p><div class="skpills"><span class="skp">HTML/CSS</span><span class="skp">JavaScript</span><span class="skp">React</span><span class="skp">React Native</span><span class="skp">Next.js</span><span class="skp">TypeScript</span></div></div>
-          <div class="anim-ready"><p class="sklbl">IA Aplicada</p><div class="skpills"><span class="skp">Figma Make</span><span class="skp">V0</span><span class="skp">Lovable</span><span class="skp">Stitch</span><span class="skp">Claude</span><span class="skp">ChatGPT</span></div></div>
-          <div class="anim-ready"><p class="sklbl">Metodologías</p><div class="skpills"><span class="skp">Design Thinking</span><span class="skp">Agile</span><span class="skp">Scrum</span><span class="skp">Kanban</span></div></div>
-        </div>
-      </section>
-
-      <!-- CONTACT -->
+      <!-- CONTACTO -->
       <section class="contact-section">
         <h2 class="contact-big">
-          <span class="anim-ready" style="display:block">¿Trabajamos</span>
-          <em class="anim-ready">juntos?</em>
+          <span class="anim-ready" style="display:block" data-i18n-es="¿Trabajamos" data-i18n-en="Work">¿Trabajamos</span>
+          <em class="anim-ready" data-i18n-es="juntos?" data-i18n-en="together?">juntos?</em>
         </h2>
         <div class="crow anim-ready">
           <p class="cmail">jimenazapolski@gmail.com</p>
@@ -936,13 +916,14 @@
       clearTimeout(window._loaderFallback);
       const tl = gsap.timeline({ onComplete: () => {
         gsap.to(loader, {
-          opacity: 0, duration: 0.4, delay: 0.25,
+          clipPath: 'inset(0 0 100% 0)',
+          duration: 0.75, ease: 'power3.inOut', delay: 0.2,
           onComplete: () => { loader.style.display = 'none'; revealPage(); }
         });
       }});
-      tl.set(chars, { y: 60, opacity: 0 })
-        .to(chars, { y: 0, opacity: 1, stagger: 0.035, ease: 'expo.out', duration: 0.9 })
-        .to(line, { scaleX: 1, duration: 0.55, ease: 'power3.inOut' }, '-=0.35');
+      tl.set(chars, { y: 50, opacity: 0 })
+        .to(chars, { y: 0, opacity: 1, stagger: 0.04, ease: 'expo.out', duration: 0.95 })
+        .to(line, { scaleX: 1, duration: 0.5, ease: 'power3.inOut' }, '-=0.4');
     }
 
     function revealPage() {
@@ -978,28 +959,8 @@
         .to(titleEl, { opacity: 1, scale: 1, duration: 0.25, ease: 'power2.out' }, '-=0.15');
     }
 
-    /* ─── HERO ANIMATIONS (run immediately after loader) ─── */
-    function animateHero() {
-      if (prefersReducedMotion) {
-        document.querySelectorAll('.hero .anim-ready').forEach(el => el.style.opacity = 1);
-        return;
-      }
-      const tl = gsap.timeline({ delay: 0 });
-      tl.to('.hero-intro', { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' })
-        .to('.hero-name .n1', { opacity: 1, x: 0, duration: 0.7, ease: 'expo.out' }, '-=0.3')
-        .to('.hero-name .n2', { opacity: 1, x: 0, duration: 0.7, ease: 'expo.out' }, '-=0.5')
-        .to('.hero-copy', { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, '-=0.3')
-        .to('.hero-tags', { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' }, '-=0.3')
-        .to('.btn-pill', { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(1.5)' }, '-=0.2')
-        .to('.hero-card', { opacity: 1, x: 0, duration: 0.7, ease: 'expo.out' }, '-=0.55');
-      gsap.set('.hero-intro', { y: 20, opacity: 0 });
-      gsap.set('.hero-name .n1', { x: -80, opacity: 0 });
-      gsap.set('.hero-name .n2', { x: 80, opacity: 0 });
-      gsap.set('.hero-copy', { y: 20, opacity: 0 });
-      gsap.set('.hero-tags', { y: 16, opacity: 0 });
-      gsap.set('.btn-pill', { scale: 0.9, opacity: 0 });
-      gsap.set('.hero-card', { x: 40, opacity: 0 });
-    }
+    /* ─── HERO ANIMATIONS ─── (lógica centralizada en initScrollAnimations) */
+    function animateHero() { /* no-op — handled by initScrollAnimations */ }
 
     /* ─── SCROLL ANIMATIONS ─── */
     function initScrollAnimations() {
@@ -1008,22 +969,40 @@
         return;
       }
 
-      // Set initial states
-      gsap.set('.hero-intro', { y: 20, opacity: 0 });
-      gsap.set('.hero-name .n1', { x: -80, opacity: 0 });
-      gsap.set('.hero-name .n2', { x: 80, opacity: 0 });
+      // ─── HERO CINEMATIC ANIMATION ───────────────────────────────────────
+      // El headline arranca CENTRADO en la pantalla al mismo tamaño visual que el loader
+      // "Jimena" y "Zapolski" aparecen primero (continuando del loader)
+      // luego se llenan el resto de las palabras → toda la frase se EXPANDE al hero
+      const headlineEl = document.querySelector('.hc-headline');
+      const headlineRect = headlineEl.getBoundingClientRect();
+      // Offset para centrar verticalmente el headline en el viewport (donde estaba el loader)
+      const yToCenter = window.innerHeight / 2 - (headlineRect.top + headlineRect.height / 2);
+
+      gsap.set('.hc-headline', { scale: 0.42, y: yToCenter, transformOrigin: 'center center', opacity: 1 });
+      // Jimena + Zapolski visibles de entrada (vienen del loader)
+      gsap.set('.hc-word', { opacity: 0 });
+      gsap.set('.hc-word.hc-name', { opacity: 1 });
+      gsap.set('.hc-sub', { opacity: 0 });
+      gsap.set('.hc-avail', { opacity: 0 });
       gsap.set('.hero-copy', { y: 20, opacity: 0 });
       gsap.set('.hero-tags', { y: 16, opacity: 0 });
       gsap.set('.btn-pill', { scale: 0.9, opacity: 0 });
 
-      // Hero — immediate after loader
-      gsap.timeline({ delay: 0.1 })
-        .to('.hero-intro', { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' })
-        .to('.hero-name .n1', { opacity: 1, x: 0, duration: 0.8, ease: 'expo.out' }, '-=0.3')
-        .to('.hero-name .n2', { opacity: 1, x: 0, duration: 0.8, ease: 'expo.out' }, '-=0.55')
-        .to('.hero-copy', { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, '-=0.3')
-        .to('.hero-tags', { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' }, '-=0.3')
-        .to('.btn-pill', { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(1.5)' }, '-=0.2');
+      // FASE 1: el resto de palabras se llenan (con Jimena/Zapolski ya visibles al centro)
+      // FASE 2: toda la frase se expande al tamaño hero y baja a su posición final
+      gsap.timeline({ delay: 0.08 })
+        .to('.hc-word:not(.hc-name)', { opacity: 1, stagger: 0.07, duration: 0.38, ease: 'power2.out' })
+        .to('.hc-headline', { scale: 1, y: 0, duration: 1.45, ease: 'expo.inOut' }, '-=0.05')
+        .to('.hc-sub',   { opacity: 1, duration: 0.65, ease: 'power3.out' }, '-=0.55')
+        .to('.hc-avail', { opacity: 1, duration: 0.45 }, '-=0.4');
+
+      // Hero sub — scroll into view
+      gsap.to('.hero-copy', { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out',
+        scrollTrigger: { trigger: '.hero-sub', start: 'top 85%' } });
+      gsap.to('.hero-tags', { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out', delay: 0.12,
+        scrollTrigger: { trigger: '.hero-sub', start: 'top 85%' } });
+      gsap.to('.btn-pill', { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(1.5)', delay: 0.25,
+        scrollTrigger: { trigger: '.hero-sub', start: 'top 85%' } });
 
       // Projects intro
       gsap.fromTo('.proj-intro', { y: 20, opacity: 0 }, {
@@ -1031,12 +1010,12 @@
         scrollTrigger: { trigger: '.proj-intro', start: 'top 88%' }
       });
 
-      // Project rows — stagger
-      gsap.utils.toArray('.proj-row').forEach((row, i) => {
-        gsap.fromTo(row, { y: 30, opacity: 0 }, {
-          y: 0, opacity: 1, duration: 0.65, ease: 'power3.out',
-          delay: i * 0.08,
-          scrollTrigger: { trigger: row, start: 'top 88%' }
+      // Project gallery cards — stagger
+      gsap.utils.toArray('.pgcard').forEach((card, i) => {
+        gsap.fromTo(card, { y: 40, opacity: 0 }, {
+          y: 0, opacity: 1, duration: 0.75, ease: 'power3.out',
+          delay: i * 0.1,
+          scrollTrigger: { trigger: '.proj-gallery', start: 'top 85%' }
         });
       });
 
@@ -1158,206 +1137,23 @@
       });
     }
 
-    /* ─── NAME PARALLAX ─── */
+    /* ─── HEADLINE PARALLAX (sutil mouse parallax en el cinematic hero) ─── */
     function initNameParallax() {
-      if (prefersReducedMotion) return;
-      const hero = document.querySelector('.hero');
-      const n1   = document.querySelector('.n1');
-      const n2   = document.querySelector('.n2');
-      const card = document.querySelector('.hero-card');
-      if (!n1 || !n2 || !hero) return;
-
-      // n1 (jimena) — primer plano
-      const n1x = gsap.quickTo(n1, 'x', { duration: 0.7, ease: 'power3.out' });
-      const n1y = gsap.quickTo(n1, 'y', { duration: 0.7, ease: 'power3.out' });
-      // n2 (zapolski) — fondo, sentido contrario
-      const n2x = gsap.quickTo(n2, 'x', { duration: 1.1, ease: 'power3.out' });
-      const n2y = gsap.quickTo(n2, 'y', { duration: 1.1, ease: 'power3.out' });
-      // card — capa media, movimiento sutil vertical
-      const cardY = card ? gsap.quickTo(card, 'y', { duration: 1.3, ease: 'power3.out' }) : null;
-
+      if (isMobile || prefersReducedMotion) return;
+      const hero = document.querySelector('.hero-cinematic');
+      const headline = document.querySelector('.hc-headline');
+      if (!hero || !headline) return;
+      const hx = gsap.quickTo(headline, 'x', { duration: 1.2, ease: 'power3.out' });
+      const hy = gsap.quickTo(headline, 'y', { duration: 1.4, ease: 'power3.out' });
       hero.addEventListener('mousemove', e => {
         const r  = hero.getBoundingClientRect();
-        const cx = (e.clientX - r.left  - r.width  / 2) / r.width;
-        const cy = (e.clientY - r.top   - r.height / 2) / r.height;
-
-        n1x( cx * 30);
-        n1y( cy * 18);
-        n2x(-cx * 18);
-        n2y(-cy * 11);
-        if (cardY) cardY(cy * 10);   // la card flota suavemente en Y
+        const cx = (e.clientX - r.left - r.width  / 2) / r.width;
+        const cy = (e.clientY - r.top  - r.height / 2) / r.height;
+        hx(cx * 12);
+        hy(cy * 8);
       });
-
       hero.addEventListener('mouseleave', () => {
-        gsap.to(n1,   { x: 0, y: 0, duration: 1.2, ease: 'elastic.out(1, 0.4)' });
-        gsap.to(n2,   { x: 0, y: 0, duration: 1.4, ease: 'elastic.out(1, 0.35)' });
-        if (card) gsap.to(card, { y: 0, duration: 1.3, ease: 'elastic.out(1, 0.35)' });
-      });
-    }
-
-    /* ─── SWIPE STACK ─── */
-    function initSwipeStack() {
-      const stack = document.getElementById('swipeStack');
-      if (!stack) return;
-      const cards = [...stack.querySelectorAll('.scard')];
-      const N = cards.length;
-      if (!N) return;
-
-      // Config por posición en el stack (0 = encima)
-      const CFG = [
-        { y:0,  rot:0,    scale:1,    opacity:1   },
-        { y:7,  rot:2.8,  scale:0.97, opacity:1   },
-        { y:13, rot:-1.8, scale:0.94, opacity:1   },
-        { y:17, rot:1.4,  scale:0.91, opacity:0.8 },
-        { y:20, rot:-1.2, scale:0.88, opacity:0.5 },
-      ];
-
-      let order = [...Array(N).keys()]; // order[0] = índice de la card encima
-      let cyclePos = 0;
-
-      function placeCard(card, pos, animate) {
-        const c = CFG[Math.min(pos, CFG.length - 1)];
-        const p = { x:0, y:c.y, rotation:c.rot, scale:c.scale, zIndex:N - pos, opacity: pos < CFG.length ? c.opacity : 0 };
-        animate ? gsap.to(card, { ...p, duration:0.4, ease:'power3.out' })
-                : gsap.set(card, p);
-      }
-
-      // Layout inicial
-      order.forEach((ci, si) => placeCard(cards[ci], si, false));
-
-      // Counter
-      const cntEl = document.querySelector('.swipe-counter-num');
-      function updateCounter() {
-        if (!cntEl) return;
-        cntEl.textContent = (cyclePos % N + 1) + ' / ' + N;
-        gsap.fromTo(cntEl, { y:-6, opacity:0 }, { y:0, opacity:1, duration:0.25, ease:'power2.out' });
-      }
-
-      // Drag
-      let dragging = false, sx = 0, sy = 0;
-      const top  = () => cards[order[0]];
-      const next = () => cards[order[1]];
-
-      function startDrag(cx, cy) { dragging = true; sx = cx; sy = cy; }
-      function moveDrag(cx, cy) {
-        if (!dragging) return;
-        const dx = cx - sx, dy = cy - sy;
-        gsap.set(top(), { x:dx, y:dy * 0.18, rotation:dx / 15 });
-        // indicadores de dirección
-        const t = Math.min(Math.abs(dx) / 75, 1);
-        const tR = top().querySelector('.sd-r');
-        const tL = top().querySelector('.sd-l');
-        if (tR) gsap.set(tR, { opacity: dx > 18 ? t : 0 });
-        if (tL) gsap.set(tL, { opacity: dx < -18 ? t : 0 });
-        // la siguiente card sube
-        const nc = next();
-        if (nc) {
-          const p = Math.min(Math.abs(dx) / 110, 1);
-          gsap.set(nc, { scale: CFG[1].scale + p * (1 - CFG[1].scale), y: CFG[1].y * (1 - p) });
-        }
-      }
-      function endDrag(cx) {
-        if (!dragging) return;
-        dragging = false;
-        const dx = cx - sx;
-        top().querySelectorAll('.sd').forEach(t => gsap.set(t, { opacity:0 }));
-        if (Math.abs(dx) > 88) {
-          dismiss(dx > 0 ? 1 : -1);
-        } else {
-          gsap.to(top(), { x:0, y:0, rotation:0, duration:0.65, ease:'elastic.out(1, 0.42)' });
-          if (next()) gsap.to(next(), { scale:CFG[1].scale, y:CFG[1].y, duration:0.3 });
-        }
-      }
-
-      stack.addEventListener('mousedown',  e => { if (!e.target.closest('.swipe-btn')) startDrag(e.clientX, e.clientY); });
-      stack.addEventListener('touchstart', e => startDrag(e.touches[0].clientX, e.touches[0].clientY), { passive:true });
-      window.addEventListener('mousemove',  e => moveDrag(e.clientX, e.clientY));
-      window.addEventListener('touchmove',  e => moveDrag(e.touches[0].clientX, e.touches[0].clientY), { passive:true });
-      window.addEventListener('mouseup',   e => endDrag(e.clientX));
-      window.addEventListener('touchend',  e => endDrag(e.changedTouches[0].clientX));
-
-      function dismiss(dir) {
-        const card = top();
-        cyclePos++;
-        updateCounter();
-
-        // Las cartas de atrás empiezan a avanzar inmediatamente
-        order.slice(1).forEach((ci, si) => placeCard(cards[ci], si, true));
-
-        gsap.to(card, {
-          x: dir * 420, y:30, rotation: dir * 22, opacity:0,
-          duration:0.38, ease:'power2.in',
-          onComplete: () => {
-            order.push(order.shift());           // la carta va al fondo
-            const backPos = Math.min(N-1, CFG.length-1);
-            const bc = CFG[backPos];
-            gsap.set(card, { x:0, y:bc.y, rotation:bc.rot, scale:bc.scale, zIndex:1, opacity:0 });
-            setTimeout(() => gsap.to(card, { opacity:bc.opacity, duration:0.4 }), 260);
-          }
-        });
-      }
-
-      // ── AUTOPLAY CON BARRA DE PROGRESO ──────────────────────
-      const AUTO_MS = 3200;
-      // Inyectar barra de progreso en el DOM
-      const progressWrap = document.createElement('div');
-      progressWrap.className = 'swipe-progress';
-      const progressBar  = document.createElement('div');
-      progressBar.className = 'swipe-progress-bar';
-      progressWrap.appendChild(progressBar);
-      stack.appendChild(progressWrap);
-
-      let autoTween = null;
-      let hovered   = false;
-
-      function startProgress() {
-        if (autoTween) autoTween.kill();
-        gsap.set(progressBar, { scaleX: 0 });
-        if (hovered || dragging || prefersReducedMotion) return;
-        autoTween = gsap.to(progressBar, {
-          scaleX: 1,
-          duration: AUTO_MS / 1000,
-          ease: 'none',
-          onComplete: () => { dismiss(1); }
-        });
-      }
-
-      function pauseProgress() {
-        if (autoTween) autoTween.pause();
-      }
-      function resumeProgress() {
-        if (autoTween) autoTween.resume();
-      }
-
-      // Pausa al hover, retoma al salir
-      stack.addEventListener('mouseenter', () => { hovered = true;  pauseProgress(); });
-      stack.addEventListener('mouseleave', () => {
-        hovered = false;
-        setTimeout(() => { if (!dragging) resumeProgress(); }, 600);
-      });
-
-      // Pausa al arrastrar, retoma al soltar
-      const _startDrag = startDrag;
-      startDrag = (cx, cy) => { _startDrag(cx, cy); pauseProgress(); };
-
-      const _endDrag = endDrag;
-      endDrag = (cx) => {
-        _endDrag(cx);
-        setTimeout(() => { if (!hovered) resumeProgress(); }, 800);
-      };
-
-      // Reinicia la barra en cada dismiss (manual o auto)
-      const _dismiss = dismiss;
-      dismiss = (dir) => { _dismiss(dir); startProgress(); };
-
-      startProgress(); // arrancar
-
-      // ── BOTONES Y TECLADO ───────────────────────────────────
-      document.getElementById('swipePrev')?.addEventListener('click', () => dismiss(-1));
-      document.getElementById('swipeNext')?.addEventListener('click', () => dismiss(1));
-      window.addEventListener('keydown', e => {
-        if (e.key === 'ArrowLeft')  dismiss(-1);
-        if (e.key === 'ArrowRight') dismiss(1);
+        gsap.to(headline, { x: 0, y: 0, duration: 1.4, ease: 'elastic.out(1, 0.4)' });
       });
     }
 
@@ -1404,8 +1200,44 @@
     initCursor();
     initNameParallax();
     initButtonAnimations();
-    initSwipeStack();
     initLoader();
+
+    /* ─── LANGUAGE SWITCHER ─── */
+    (function() {
+      const LANG_KEY = 'jz-lang';
+
+      function applyLang(lang, save) {
+        if (save) localStorage.setItem(LANG_KEY, lang);
+
+        // Botones activos
+        document.querySelectorAll('.lang-btn').forEach(b => {
+          b.classList.toggle('active', b.dataset.lang === lang);
+        });
+
+        // Todos los elementos con data-i18n
+        document.querySelectorAll('[data-i18n-es]').forEach(el => {
+          el.innerHTML = lang === 'en'
+            ? (el.dataset.i18nEn || el.innerHTML)
+            : (el.dataset.i18nEs || el.innerHTML);
+        });
+
+        // Titulares del hero
+        const hlEs = document.getElementById('hl-es');
+        const hlEn = document.getElementById('hl-en');
+        if (hlEs && hlEn) {
+          hlEs.style.display = lang === 'en' ? 'none' : 'block';
+          hlEn.style.display = lang === 'en' ? 'block' : 'none';
+        }
+      }
+
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', () => applyLang(btn.dataset.lang, true));
+      });
+
+      // Aplicar preferencia guardada al cargar
+      const saved = localStorage.getItem(LANG_KEY) || 'es';
+      applyLang(saved, false);
+    })();
   </script>
 </body>
 </html>

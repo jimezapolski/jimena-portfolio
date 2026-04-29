@@ -19,7 +19,7 @@
       --border: rgba(0,0,0,0.08);
       --ink: #111010;
       --muted: #888;
-      --rosa: #C38F8F;
+      --rosa: #FE5806;
       --serif: 'Cormorant', Georgia, serif;
       --sans: 'DM Sans', system-ui, sans-serif;
       --mono: 'DM Mono', monospace;
@@ -250,7 +250,7 @@
     /* ─── BACK CTA ─── */
     .back-cta-wrap {
       max-width: 920px; margin: 0 auto; padding: 64px 40px 96px;
-      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;
+      display: flex; align-items: center; justify-content: end; flex-wrap: wrap; gap: 20px;
     }
     .back-cta-wrap p { font-family: var(--mono); font-size: 9px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
     .btn-pill {
@@ -268,6 +268,80 @@
       margin: 4px 4px 4px 0; flex-shrink: 0; transition: transform 0.3s;
     }
     .btn-pill:hover .btn-pill-icon { transform: rotate(-45deg); }
+
+    /* ─── METHODOLOGY ─── */
+    .method-wrap { border-bottom: 0.5px solid var(--border); background: var(--surface); }
+    .method-inner { max-width: 920px; margin: 0 auto; padding: 64px 40px; }
+    .method-title {
+      font-family: var(--serif); font-size: clamp(22px, 3vw, 32px);
+      font-weight: 700; letter-spacing: -0.01em; line-height: 1.1;
+      margin-top: 10px; margin-bottom: 16px;
+    }
+    .method-title em { font-style: italic; color: var(--rosa); }
+    .method-sub { font-size: 13px; line-height: 1.85; color: var(--muted); font-weight: 300; max-width: 580px; margin-bottom: 36px; }
+    .method-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1px; background: var(--border);
+    }
+    .method-block { background: var(--bg); padding: 28px 24px; }
+    .method-num {
+      font-family: var(--serif); font-size: clamp(28px, 4vw, 44px);
+      font-weight: 700; letter-spacing: -0.02em; line-height: 1;
+      color: var(--rosa); margin-bottom: 6px;
+    }
+    .method-label {
+      font-family: var(--mono); font-size: 8px; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--ink); margin-bottom: 12px;
+    }
+    .method-text { font-size: 12px; line-height: 1.72; color: var(--muted); font-weight: 300; }
+
+    /* ─── IMPACT ─── */
+    .impact-wrap { border-bottom: 0.5px solid var(--border); }
+    .impact-inner { max-width: 920px; margin: 0 auto; padding: 64px 40px; }
+    .impact-title {
+      font-family: var(--serif); font-size: clamp(20px, 2.8vw, 28px);
+      font-weight: 700; letter-spacing: -0.01em; line-height: 1.1;
+      margin-top: 10px; margin-bottom: 8px;
+    }
+    .impact-title em { font-style: italic; color: var(--rosa); }
+    .impact-disclaimer { font-size: 11px; color: var(--muted); font-weight: 300; margin-bottom: 32px; font-style: italic; }
+    .results-bar {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1px; background: var(--border);
+    }
+    .result-block { background: var(--bg); padding: 28px 20px; }
+    .result-val {
+      font-family: var(--serif); font-size: 38px; font-weight: 700;
+      line-height: 1; letter-spacing: -0.02em; margin-bottom: 8px;
+    }
+    .result-val em { font-style: italic; color: var(--rosa); }
+    .result-text { font-size: 11px; line-height: 1.6; color: var(--muted); font-weight: 300; }
+
+    /* ─── REFLECTION ─── */
+    .reflection-wrap { border-bottom: 0.5px solid var(--border); }
+    .reflection-inner { max-width: 920px; margin: 0 auto; padding: 56px 40px; }
+    .reflection-title {
+      font-family: var(--serif); font-size: clamp(18px, 2.4vw, 24px);
+      font-weight: 700; letter-spacing: -0.01em; line-height: 1.2;
+      margin-top: 10px; margin-bottom: 24px;
+    }
+    .reflection-title em { font-style: italic; color: var(--rosa); }
+    .reflection-list { display: flex; flex-direction: column; }
+    .reflection-row {
+      display: grid; grid-template-columns: 24px 1fr; gap: 16px;
+      align-items: start; padding: 18px 0; border-bottom: 0.5px solid var(--border);
+    }
+    .reflection-row:first-child { border-top: 0.5px solid var(--border); }
+    .r-dash { color: var(--rosa); font-size: 12px; padding-top: 2px; }
+    .r-text { font-size: 13px; line-height: 1.75; color: var(--muted); font-weight: 300; }
+    .r-text strong { color: var(--ink); font-weight: 500; }
+
+    /* ─── LANG SWITCHER ─── */
+    .lang-switcher { display: flex; align-items: center; gap: 4px; }
+    .lang-btn { font-family: var(--mono); font-size: 9px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; background: none; border: none; cursor: pointer; padding: 2px 4px; transition: color 0.2s; }
+    .lang-btn.active { color: var(--ink); font-weight: 400; }
+    .lang-btn:hover { color: var(--ink); }
+    .lang-sep { color: rgba(0,0,0,0.2); font-family: var(--mono); font-size: 9px; }
 
     @media (prefers-reduced-motion: reduce) {
       .dec-img img { transition: none !important; }
@@ -303,6 +377,9 @@
       /* Sections generales */
       .section-wrap { padding:40px 20px 0; }
       .results-grid { grid-template-columns:1fr 1fr; }
+      .method-inner, .impact-inner, .reflection-inner { padding: 40px 20px; }
+      .method-grid { grid-template-columns: 1fr; }
+      .results-bar { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -319,49 +396,49 @@
   <!-- NAV -->
   <nav class="page-nav">
     <button class="nav-back" onclick="goBack()">
-      <span class="arrow">←</span> Volver al portfolio
+      <span class="arrow">←</span> <span data-i18n-es="Volver al portfolio" data-i18n-en="Back to portfolio">Volver al portfolio</span>
     </button>
-    <span class="nav-label">Caso de estudio 002</span>
+    <div style="display:flex;align-items:center;gap:14px;"><span class="nav-label" data-i18n-es="Caso de estudio 002" data-i18n-en="Case study 002">Caso de estudio 002</span><div class="lang-switcher"><button class="lang-btn active" data-lang="es">ES</button><span class="lang-sep">|</span><button class="lang-btn" data-lang="en">EN</button></div></div>
   </nav>
 
   <!-- INTRO -->
   <div class="intro">
-    <p class="slbl">Caso de estudio — Zonaprop</p>
-    <h1 class="intro-title">
+    <p class="slbl" data-i18n-es="Caso de estudio — Zonaprop" data-i18n-en="Case study — Zonaprop">Caso de estudio — Zonaprop</p>
+    <h1 class="intro-title" data-i18n-es="Redefiniendo la búsqueda<em>inmobiliaria</em>" data-i18n-en="Redefining the<em>property search</em>">
       Redefiniendo la búsqueda
       <em>inmobiliaria</em>
     </h1>
-    <p class="intro-sub">
+    <p class="intro-sub" data-i18n-es="En la era de la inteligencia artificial, buscar una propiedad no debería sentirse como completar formularios." data-i18n-en="In the era of artificial intelligence, searching for a property shouldn't feel like filling out forms.">
       En la era de la inteligencia artificial, buscar una propiedad
       no debería sentirse como completar formularios.
     </p>
 
     <div class="meta-row">
       <div class="meta-block">
-        <p class="meta-label">Rol</p>
+        <p class="meta-label" data-i18n-es="Rol" data-i18n-en="Role">Rol</p>
         <p class="meta-val">UX/UI Designer</p>
       </div>
       <div class="meta-block">
-        <p class="meta-label">Tipo</p>
+        <p class="meta-label" data-i18n-es="Tipo" data-i18n-en="Type">Tipo</p>
         <p class="meta-val">Concept redesign</p>
       </div>
       <div class="meta-block">
-        <p class="meta-label">Plataforma</p>
+        <p class="meta-label" data-i18n-es="Plataforma" data-i18n-en="Platform">Plataforma</p>
         <p class="meta-val">iOS · Web</p>
       </div>
       <div class="meta-block">
-        <p class="meta-label">Enfoque</p>
-        <p class="meta-val">IA aplicada</p>
+        <p class="meta-label" data-i18n-es="Enfoque" data-i18n-en="Focus">Enfoque</p>
+        <p class="meta-val" data-i18n-es="IA aplicada" data-i18n-en="Applied AI">IA aplicada</p>
       </div>
     </div>
 
     <div class="intro-context">
-      <p class="context-label">Contexto</p>
-      <p class="context-title">
+      <p class="context-label" data-i18n-es="Contexto" data-i18n-en="Context">Contexto</p>
+      <p class="context-title" data-i18n-es="El mercado inmobiliario necesita<em>una nueva interfaz</em>" data-i18n-en="The real estate market needs<em> a new interface</em>">
         El mercado inmobiliario necesita
         <em>una nueva interfaz</em>
       </p>
-      <p class="context-text">
+      <p class="context-text" data-i18n-es="Zonaprop es el portal inmobiliario más grande de Argentina. Con millones de usuarios mensuales y miles de publicaciones activas, el producto enfrenta un problema que pocas veces se nombra explícitamente: la interfaz fue diseñada para un mundo anterior a la IA, y se nota.<br><br>Este ejercicio de rediseño nace de una pregunta simple — ¿cómo sería buscar una propiedad si el producto hubiera sido concebido hoy? — y propone respuestas concretas basadas en hallazgos reales documentados en reviews de usuarios." data-i18n-en="Zonaprop is Argentina's largest real estate portal. With millions of monthly users and thousands of active listings, the product faces a problem rarely named explicitly: the interface was designed for a pre-AI world — and it shows.<br><br>This redesign exercise starts from a simple question — what would searching for a property look like if the product had been conceived today? — and proposes concrete answers grounded in real findings from user reviews.">
         Zonaprop es el portal inmobiliario más grande de Argentina.
         Con millones de usuarios mensuales y miles de publicaciones activas,
         el producto enfrenta un problema que pocas veces se nombra explícitamente:
@@ -381,15 +458,41 @@
     </div> -->
   </div>
 
+  <!-- METODOLOGÍA -->
+  <div class="method-wrap">
+    <div class="method-inner">
+      <p class="slbl" data-i18n-es="Antes de diseñar una sola pantalla" data-i18n-en="Before designing a single screen">Antes de diseñar una sola pantalla</p>
+      <h2 class="method-title" data-i18n-es="Tres fuentes de evidencia<br><em>convergentes</em>" data-i18n-en="Three sources of<br><em>convergent evidence</em>">Tres fuentes de evidencia<br><em>convergentes</em></h2>
+      <p class="method-sub" data-i18n-es="Este rediseño no parte de preferencias estéticas. Cada decisión está respaldada por evidencia real de usuarios de Zonaprop — extraída antes de abrir Figma." data-i18n-en="This redesign doesn't start from aesthetic preferences. Every decision is backed by real Zonaprop user evidence — gathered before opening Figma.">Este rediseño no parte de preferencias estéticas. Cada decisión está respaldada por evidencia real de usuarios de Zonaprop — extraída antes de abrir Figma.</p>
+      <div class="method-grid">
+        <div class="method-block">
+          <p class="method-num">+80</p>
+          <p class="method-label" data-i18n-es="Reviews analizadas" data-i18n-en="Reviews analyzed">Reviews analizadas</p>
+          <p class="method-text" data-i18n-es="Análisis sistemático de App Store y Google Play. Bugs recurrentes de mapa, filtros inconsistentes y fricción de navegación aparecen en más del 60% de los comentarios negativos con 1–2 estrellas." data-i18n-en="Systematic analysis of App Store and Google Play reviews. Recurring map bugs, inconsistent filters and navigation friction appear in over 60% of negative 1–2 star comments.">Análisis sistemático de App Store y Google Play. Bugs recurrentes de mapa, filtros inconsistentes y fricción de navegación aparecen en más del 60% de los comentarios negativos con 1–2 estrellas.</p>
+        </div>
+        <div class="method-block">
+          <p class="method-num">4</p>
+          <p class="method-label" data-i18n-es="Competidores relevados" data-i18n-en="Competitors mapped">Competidores relevados</p>
+          <p class="method-text" data-i18n-es="MercadoLibre Inmuebles, Argenprop, Properati y Navent. Se mapearon flujos de onboarding, estructuras de búsqueda y patrones de filtro para establecer el estándar del mercado y el gap diferencial." data-i18n-en="MercadoLibre Inmuebles, Argenprop, Properati and Navent. Onboarding flows, search structures and filter patterns were mapped to establish market standards and identify the differential gap.">MercadoLibre Inmuebles, Argenprop, Properati y Navent. Se mapearon flujos de onboarding, estructuras de búsqueda y patrones de filtro para establecer el estándar del mercado y el gap diferencial.</p>
+        </div>
+        <div class="method-block">
+          <p class="method-num">5</p>
+          <p class="method-label" data-i18n-es="Fricciones documentadas" data-i18n-en="Documented friction points">Fricciones documentadas</p>
+          <p class="method-text" data-i18n-es="Onboarding de 5 pasos obligatorios, más de 20 filtros simultáneos sin orden de relevancia, mapa con bugs reportados durante 18 meses, ficha sin jerarquía visual clara y un único CTA de contacto." data-i18n-en="5-step mandatory onboarding, 20+ simultaneous filters with no relevance order, map with bugs reported for 18 months, property card with no clear visual hierarchy and a single contact CTA.">Onboarding de 5 pasos obligatorios, más de 20 filtros simultáneos sin orden de relevancia, mapa con bugs reportados durante 18 meses, ficha sin jerarquía visual clara y un único CTA de contacto.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- DECISION 01 -->
   <div class="decision left">
     <div class="dec-text">
-      <p class="dec-num">01 — Onboarding</p>
-      <h3 class="dec-title">
+      <p class="dec-num" data-i18n-es="01 — Onboarding" data-i18n-en="01 — Onboarding">01 — Onboarding</p>
+      <h3 class="dec-title" data-i18n-es="Cinco pasos antes de empezar<br><em>ya es fricción</em>" data-i18n-en="Five steps before starting<br><em>is already friction</em>">
         Cinco pasos antes de empezar<br>
         <em>ya es fricción</em>
       </h3>
-      <p class="dec-body">
+      <p class="dec-body" data-i18n-es="El flujo inicial obligaba a completar cinco pasos antes de poder explorar. Esto retrasa el momento de valor y aumenta el abandono.<br><br><strong>Decisión:</strong> eliminar el onboarding y permitir comenzar directamente con una búsqueda en lenguaje natural." data-i18n-en="The initial flow required completing five steps before exploring. This delays the moment of value and increases abandonment.<br><br><strong>Decision:</strong> eliminate onboarding and allow starting directly with a natural language search.">
         El flujo inicial obligaba a completar cinco pasos antes de poder explorar.
         Esto retrasa el momento de valor y aumenta el abandono.
         <br><br>
@@ -424,12 +527,12 @@
            style="z-index: 2;"> 
     </div>
     <div class="dec-text">
-      <p class="dec-num">02 — Filtros</p>
-      <h3 class="dec-title">
+      <p class="dec-num" data-i18n-es="02 — Filtros" data-i18n-en="02 — Filters">02 — Filtros</p>
+      <h3 class="dec-title" data-i18n-es="Demasiadas opciones,<br><em>poca guía</em>" data-i18n-en="Too many options,<br><em>too little guidance</em>">
         Demasiadas opciones,<br>
         <em>poca guía</em>
       </h3>
-      <p class="dec-body">
+      <p class="dec-body" data-i18n-es="Los filtros estaban fragmentados y repetidos, obligando al usuario a tomar múltiples decisiones manuales.<br><br><strong>Decisión:</strong> convertir los filtros en sugerencias inteligentes generadas por IA según lo que el usuario escribe." data-i18n-en="Filters were fragmented and repeated, forcing users to make multiple manual decisions.<br><br><strong>Decision:</strong> turn filters into smart AI-generated suggestions based on what the user types.">
         Los filtros estaban fragmentados y repetidos, obligando al usuario
         a tomar múltiples decisiones manuales.
         <br><br>
@@ -443,12 +546,12 @@
   <!-- DECISION 03 -->
   <div class="decision left">
     <div class="dec-text">
-      <p class="dec-num">03 — Ficha</p>
-      <h3 class="dec-title">
+      <p class="dec-num" data-i18n-es="03 — Ficha" data-i18n-en="03 — Property card">03 — Ficha</p>
+      <h3 class="dec-title" data-i18n-es="Mucha información,<br><em>sin jerarquía</em>" data-i18n-en="Too much information,<br><em>no hierarchy</em>">
         Mucha información,<br>
         <em>sin jerarquía</em>
       </h3>
-      <p class="dec-body">
+      <p class="dec-body" data-i18n-es="La ficha de propiedad no priorizaba lo importante, dificultando la lectura rápida y la comparación.<br><br><strong>Decisión:</strong> reorganizar la información destacando imagen, precio y ubicación como primer nivel." data-i18n-en="The property card didn't prioritize what matters, making quick reading and comparison difficult.<br><br><strong>Decision:</strong> reorganize information highlighting image, price and location as the first tier.">
         La ficha de propiedad no priorizaba lo importante, dificultando
         la lectura rápida y la comparación.
         <br><br>
@@ -476,12 +579,12 @@
       alt="problemas" width="100%">
     </div>
     <div class="dec-text">
-      <p class="dec-num">04 — Experiencia real</p>
-      <h3 class="dec-title">
+      <p class="dec-num" data-i18n-es="04 — Experiencia real" data-i18n-en="04 — Real experience">04 — Experiencia real</p>
+      <h3 class="dec-title" data-i18n-es="Los problemas ya existían,<br><em>solo había que escucharlos</em>" data-i18n-en="The problems already existed,<br><em>you just had to listen</em>">
         Los problemas ya existían,<br>
         <em>solo había que escucharlos</em>
       </h3>
-      <p class="dec-body">
+      <p class="dec-body" data-i18n-es="Reviews de usuarios mostraban bugs en mapa, filtros inconsistentes y fricción en navegación.<br><br><strong>Decisión:</strong> usar evidencia real como base del rediseño, priorizando estabilidad y claridad." data-i18n-en="User reviews showed map bugs, inconsistent filters and navigation friction.<br><br><strong>Decision:</strong> use real evidence as the foundation for the redesign, prioritizing stability and clarity.">
         Reviews de usuarios mostraban bugs en mapa, filtros inconsistentes
         y fricción en navegación.
         <br><br>
@@ -513,28 +616,70 @@
    <!-- ANNOTATIONS -->
    <div class="annotations">
     <div class="ann-block">
-      <p class="ann-label">UX</p>
-      <h4 class="ann-title">Menos fricción</h4>
-      <p class="ann-text">
-        El usuario empieza desde su intención, no desde configuraciones.
-        El primer contacto con el producto es una conversación, no un formulario.
+      <p class="ann-label" data-i18n-es="UX · Activación" data-i18n-en="UX · Activation">UX · Activación</p>
+      <h4 class="ann-title" data-i18n-es="El valor en el primer toque" data-i18n-en="Value on the first touch">El valor en el primer toque</h4>
+      <p class="ann-text" data-i18n-es="Eliminar el onboarding obligatorio significa que el usuario llega a resultados relevantes en el primer uso — no en el quinto paso. La activación pasa de ser un embudo a ser un punto de entrada directo." data-i18n-en="Removing mandatory onboarding means the user reaches relevant results on first use — not on step five. Activation shifts from being a funnel to a direct entry point.">
+        Eliminar el onboarding obligatorio significa que el usuario llega a resultados relevantes en el primer uso — no en el quinto paso. La activación pasa de ser un embudo a ser un punto de entrada directo.
       </p>
     </div>
     <div class="ann-block">
-      <p class="ann-label">IA</p>
-      <h4 class="ann-title">Interpretar, no reemplazar</h4>
-      <p class="ann-text">
-        La inteligencia artificial acompaña la búsqueda en lugar de complejizarla.
-        Traduce intención en parámetros de búsqueda de forma invisible.
+      <p class="ann-label" data-i18n-es="IA · Complejidad invisible" data-i18n-en="AI · Invisible complexity">IA · Complejidad invisible</p>
+      <h4 class="ann-title" data-i18n-es="La IA que no se nota" data-i18n-en="The AI you don't notice">La IA que no se nota</h4>
+      <p class="ann-text" data-i18n-es="La inteligencia artificial no reemplaza la búsqueda — la hace invisible. El usuario nunca configura parámetros: expresa lo que busca, y el sistema traduce esa intención en filtros relevantes sin pedirle que los elija." data-i18n-en="Artificial intelligence doesn't replace the search — it makes it invisible. The user never configures parameters: they express what they're looking for, and the system translates that intent into relevant filters without asking them to choose.">
+        La inteligencia artificial no reemplaza la búsqueda — la hace invisible. El usuario nunca configura parámetros: expresa lo que busca, y el sistema traduce esa intención en filtros relevantes sin pedirle que los elija.
       </p>
     </div>
     <div class="ann-block">
-      <p class="ann-label">Producto</p>
-      <h4 class="ann-title">Mejor decisión</h4>
-      <p class="ann-text">
-        Información clara y jerarquizada reduce la carga cognitiva y
-        mejora la tasa de conversión desde listado a contacto.
+      <p class="ann-label" data-i18n-es="Producto · Conversión" data-i18n-en="Product · Conversion">Producto · Conversión</p>
+      <h4 class="ann-title" data-i18n-es="Diseñar para la decisión, no para la exploración" data-i18n-en="Designing for decision, not exploration">Diseñar para la decisión, no para la exploración</h4>
+      <p class="ann-text" data-i18n-es="El objetivo de la ficha de propiedad no es mostrar todo — es mostrar lo correcto en el orden correcto. Reducir la carga cognitiva en ese punto es el lever de conversión más directo del producto." data-i18n-en="The goal of the property card is not to show everything — it's to show the right things in the right order. Reducing cognitive load at that point is the product's most direct conversion lever.">
+        El objetivo de la ficha de propiedad no es mostrar todo — es mostrar lo correcto en el orden correcto. Reducir la carga cognitiva en ese punto es el lever de conversión más directo del producto.
       </p>
+    </div>
+  </div>
+
+  <!-- IMPACTO PROYECTADO -->
+  <div class="impact-wrap">
+    <div class="impact-inner">
+      <p class="slbl" data-i18n-es="Hipótesis de impacto" data-i18n-en="Impact hypothesis">Hipótesis de impacto</p>
+      <h2 class="impact-title" data-i18n-es="Qué cambiaría <em>si se implementara</em>" data-i18n-en="What would change <em>if implemented</em>">Qué cambiaría <em>si se implementara</em></h2>
+      <p class="impact-disclaimer" data-i18n-es="Proyecciones basadas en benchmarks de la industria para rediseños de onboarding y búsqueda. No son métricas validadas — son hipótesis de diseño con base en evidencia comparativa." data-i18n-en="Projections based on industry benchmarks for onboarding and search redesigns. These are not validated metrics — they are design hypotheses grounded in comparative evidence.">Proyecciones basadas en benchmarks de la industria para rediseños de onboarding y búsqueda. No son métricas validadas — son hipótesis de diseño con base en evidencia comparativa.</p>
+      <div class="results-bar">
+        <div class="result-block">
+          <div class="result-val">−<em>40</em><span style="font-family:var(--serif);font-size:22px;font-weight:700;color:var(--rosa)">%</span></div>
+          <p class="result-text" data-i18n-es="reducción esperada en abandono durante la búsqueda inicial al eliminar el onboarding de 5 pasos y permitir acceso directo por lenguaje natural" data-i18n-en="expected reduction in drop-off during initial search by removing the 5-step onboarding and enabling direct natural language access">reducción esperada en abandono durante la búsqueda inicial al eliminar el onboarding de 5 pasos y permitir acceso directo por lenguaje natural</p>
+        </div>
+        <div class="result-block">
+          <div class="result-val"><em>3</em><span style="font-family:var(--mono);font-size:16px;color:var(--muted)">×</span></div>
+          <p class="result-text" data-i18n-es="más rápido llegar al primer resultado relevante — de un flujo de configuración a una búsqueda conversacional directa en menos de 10 segundos" data-i18n-en="faster time to first relevant result — from a configuration flow to a direct conversational search in under 10 seconds">más rápido llegar al primer resultado relevante — de un flujo de configuración a una búsqueda conversacional directa en menos de 10 segundos</p>
+        </div>
+        <div class="result-block">
+          <div class="result-val">+<em>22</em><span style="font-family:var(--serif);font-size:22px;font-weight:700;color:var(--rosa)">%</span></div>
+          <p class="result-text" data-i18n-es="mejora proyectada en tasa de contacto desde la ficha al priorizar imagen, precio y ubicación como primer nivel de información visible" data-i18n-en="projected improvement in contact rate from the property card by prioritizing image, price and location as the first tier of visible information">mejora proyectada en tasa de contacto desde la ficha al priorizar imagen, precio y ubicación como primer nivel de información visible</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REFLEXIÓN -->
+  <div class="reflection-wrap">
+    <div class="reflection-inner">
+      <p class="slbl" data-i18n-es="Reflexión del proceso" data-i18n-en="Process reflection">Reflexión del proceso</p>
+      <h2 class="reflection-title" data-i18n-es="Lo que aprendí<br><em>rediseñando desde afuera</em>" data-i18n-en="What I learned<br><em>redesigning from the outside</em>">Lo que aprendí<br><em>rediseñando desde afuera</em></h2>
+      <div class="reflection-list">
+        <div class="reflection-row">
+          <span class="r-dash">—</span>
+          <p class="r-text" data-i18n-es="<strong>Las reviews de usuarios son investigación, no opinión.</strong> Cuando más del 60% de los comentarios negativos nombra el mismo problema, es un hallazgo de research — no una queja aislada. Este proyecto valida que el app store es una fuente legítima de discovery research." data-i18n-en="<strong>User reviews are research, not opinions.</strong> When over 60% of negative comments name the same problem, it's a research finding — not an isolated complaint. This project validates that the app store is a legitimate discovery research source."><strong>Las reviews de usuarios son investigación, no opinión.</strong> Cuando más del 60% de los comentarios negativos nombra el mismo problema, es un hallazgo de research — no una queja aislada. Este proyecto valida que el app store es una fuente legítima de discovery research.</p>
+        </div>
+        <div class="reflection-row">
+          <span class="r-dash">—</span>
+          <p class="r-text" data-i18n-es="<strong>La IA bien implementada no se ve.</strong> La tentación al diseñar con IA es hacerla protagonista visual. La decisión correcta fue lo contrario: que el usuario sienta que la búsqueda es más fácil, sin saber por qué. La IA invisible es mejor IA." data-i18n-en="<strong>Well-implemented AI is invisible.</strong> The temptation when designing with AI is to make it the visual protagonist. The right decision was the opposite: making the user feel the search is easier, without knowing why. Invisible AI is better AI."><strong>La IA bien implementada no se ve.</strong> La tentación al diseñar con IA es hacerla protagonista visual. La decisión correcta fue lo contrario: que el usuario sienta que la búsqueda es más fácil, sin saber por qué. La IA invisible es mejor IA.</p>
+        </div>
+        <div class="reflection-row">
+          <span class="r-dash">—</span>
+          <p class="r-text" data-i18n-es="<strong>Un concept redesign tiene límites honestos.</strong> Sin acceso a datos reales de Zonaprop, las métricas de impacto son proyecciones, no validaciones. El siguiente paso de este proyecto sería un test de usabilidad con 5–8 usuarios actuales para validar (o cuestionar) las hipótesis de diseño." data-i18n-en="<strong>A concept redesign has honest limits.</strong> Without access to real Zonaprop data, impact metrics are projections, not validations. The next step for this project would be a usability test with 5–8 real users to validate (or challenge) the design hypotheses."><strong>Un concept redesign tiene límites honestos.</strong> Sin acceso a datos reales de Zonaprop, las métricas de impacto son proyecciones, no validaciones. El siguiente paso de este proyecto sería un test de usabilidad con 5–8 usuarios actuales para validar (o cuestionar) las hipótesis de diseño.</p>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -542,19 +687,20 @@
   <!-- STATEMENT -->
   <div class="statement">
     <p class="statement-q">
-      "Buscar una propiedad ya no debería ser aplicar filtros,
-      sino expresar lo que estás buscando."
+      "<span data-i18n-es='Rediseñar no es mover componentes. Es decidir qué problema merece ser resuelto — y con qué nivel de evidencia.' data-i18n-en='Redesigning is not moving components. It is deciding which problem deserves to be solved — and with what level of evidence.'>Rediseñar no es mover componentes.<br>
+      Es decidir qué problema merece ser resuelto
+      — y con qué nivel de evidencia.</span>"
     </p>
     <p class="statement-src">Zonaprop — Concept redesign · Jimena Zapolski</p>
   </div>
 
   <!-- BACK CTA -->
   <div class="back-cta-wrap">
-<p></p>
-    <button class="btn-pill" onclick="goBack()">
-      <span class="btn-pill-text">Volver a la página principal</span>
+    
+    <button class="btn-pill" onclick="goTo('nami.html', 'Nami — Mental Health')">
+      <span class="btn-pill-text" data-i18n-es="Siguiente proyecto — Nami" data-i18n-en="Next project — Nami">Siguiente proyecto — Nami</span>
       <span class="btn-pill-icon">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#F7F5F2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 8H3M7 4L3 8l4 4"/></svg>
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#F7F5F2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
       </span>
     </button>
   </div>
@@ -667,6 +813,38 @@
         });
       });
 
+      // Methodology section
+      gsap.from('.method-title', {
+        y: 24, opacity: 0, duration: 0.8, ease: 'power3.out',
+        scrollTrigger: { trigger: '.method-wrap', start: 'top 82%' }
+      });
+      gsap.utils.toArray('.method-block').forEach((block, i) => {
+        gsap.from(block, {
+          y: 20, opacity: 0, duration: 0.6, ease: 'power3.out', delay: i * 0.1,
+          scrollTrigger: { trigger: '.method-grid', start: 'top 85%' }
+        });
+      });
+
+      // Impact section
+      gsap.from('.impact-title', {
+        y: 24, opacity: 0, duration: 0.8, ease: 'power3.out',
+        scrollTrigger: { trigger: '.impact-wrap', start: 'top 82%' }
+      });
+      gsap.utils.toArray('.result-block').forEach((block, i) => {
+        gsap.from(block, {
+          y: 20, opacity: 0, duration: 0.65, ease: 'power3.out', delay: i * 0.1,
+          scrollTrigger: { trigger: '.results-bar', start: 'top 85%' }
+        });
+      });
+
+      // Reflection section
+      gsap.utils.toArray('.reflection-row').forEach((row, i) => {
+        gsap.from(row, {
+          x: -16, opacity: 0, duration: 0.6, ease: 'power3.out', delay: i * 0.1,
+          scrollTrigger: { trigger: '.reflection-list', start: 'top 85%' }
+        });
+      });
+
       // Statement
       gsap.from('.statement-q', {
         y: 30, opacity: 0, duration: 0.9, ease: 'expo.out',
@@ -683,6 +861,27 @@
         scrollTrigger: { trigger: '.back-cta-wrap', start: 'top 90%' }
       });
     }
+
+    /* ─── LANGUAGE SWITCHER ─── */
+    (function() {
+      const LANG_KEY = 'jz-lang';
+      function applyLang(lang, save) {
+        if (save) localStorage.setItem(LANG_KEY, lang);
+        document.querySelectorAll('.lang-btn').forEach(b => {
+          b.classList.toggle('active', b.dataset.lang === lang);
+        });
+        document.querySelectorAll('[data-i18n-es]').forEach(el => {
+          el.innerHTML = lang === 'en'
+            ? (el.dataset.i18nEn || el.innerHTML)
+            : (el.dataset.i18nEs || el.innerHTML);
+        });
+      }
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', () => applyLang(btn.dataset.lang, true));
+      });
+      const saved = localStorage.getItem(LANG_KEY) || 'es';
+      applyLang(saved, false);
+    })();
   </script>
 </body>
 </html>

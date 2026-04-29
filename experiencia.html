@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Experiencia — Jimena Zapolski</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,600;0,700;1,400;1,600;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    :root {
+      --bg: #F7F5F2;
+      --surface: #EFEDE9;
+      --border: rgba(0,0,0,0.08);
+      --border-hi: rgba(0,0,0,0.2);
+      --ink: #111010;
+      --muted: #707070;
+      --rosa: #C38F8F;
+      --rosa-border: rgba(195,143,143,0.3);
+      --lime: #7DB800;
+      --serif: 'Cormorant', Georgia, serif;
+      --sans: 'DM Sans', system-ui, sans-serif;
+      --mono: 'DM Mono', monospace;
+    }
+
+    html { scroll-behavior: auto; }
+    body { background:var(--bg); color:var(--ink); font-family:var(--sans); font-weight:300; overflow-x:hidden; }
+
+    /* ─── TRANSITION OVERLAY ─── */
+    #transition-overlay {
+      position: fixed; inset: 0;
+      background: var(--ink);
+      z-index: 2000;
+      transform: scaleY(0);
+      transform-origin: bottom;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+    #transition-title {
+      font-family: var(--serif);
+      font-size: clamp(22px, 4vw, 48px);
+      font-style: italic;
+      font-weight: 700;
+      color: var(--bg);
+      opacity: 0;
+      transform: scale(0.95);
+      letter-spacing: -0.02em;
+      text-align: center;
+      padding: 0 40px;
+    }
+
+    /* ─── CUSTOM CURSOR ─── */
+    #cursor {
+      position: fixed;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--rosa);
+      pointer-events: none;
+      z-index: 9999;
+      top: 0; left: 0;
+      transform: translate(-50%, -50%) scale(1);
+      will-change: transform;
+      transition: background 0.2s;
+    }
+    @media (max-width: 640px) { #cursor { display: none; } }
+
+    /* ─── WRAPPER ─── */
+    .pr { min-height: 100vh; }
+    .wrap { width: 100%; max-width: 920px; margin: 0 auto; padding: 0 40px 30px; }
+
+    /* ─── NAV ─── */
+    nav { display:flex; justify-content:space-between; align-items:center; padding:28px 0 14px 0; border-bottom:0.5px solid var(--border); }
+    .nav-logo { font-family:var(--serif); font-size:22px; font-weight:700; font-style:italic; color:var(--rosa); letter-spacing:-0.02em; text-decoration:none; cursor:pointer; }
+    .nav-logo img { height:42px; width:auto; display:block; margin-right: 30px; }
+    .nav-right { display:flex; align-items:center; gap:32px; }
+    .nav-links { display:flex; gap:28px; list-style:none; }
+    .nav-links a {
+      font-size:12px; color:var(--muted); text-decoration:none; cursor:pointer;
+      transition:color 0.2s;
+      position: relative; padding-bottom: 2px;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute; bottom: -1px; left: 0;
+      width: 100%; height: 0.5px;
+      background: var(--ink);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+    .nav-links a:hover { color:var(--ink); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+    .nav-links a.active { color:var(--ink); }
+    .nav-links a.active::after { transform: scaleX(1); }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    /* ─── PAGE HEADER ─── */
+    .page-header {
+      padding: 72px 0 64px;
+      border-bottom: 0.5px solid var(--border);
+      margin-bottom: 0;
+    }
+    .page-header .slbl { margin-bottom: 14px; }
+    .page-heading {
+      font-family: var(--serif);
+      font-size: clamp(42px, 6.5vw, 76px);
+      font-weight: 700;
+      line-height: 0.95;
+      letter-spacing: -0.025em;
+    }
+    .page-heading em { font-style: italic; color: var(--rosa); }
+
+    /* ─── SHARED ─── */
+    .slbl { font-family:var(--mono); font-size:9px; color:var(--muted); letter-spacing:0.18em; text-transform:uppercase; }
+
+    /* ─── DIFERENCIAL ─── */
+    .diff-section { margin-top:72px; }
+    .diff-heading { font-family:var(--serif); font-size:28px; font-weight:700; letter-spacing:-0.01em; margin-top:6px; margin-bottom:36px; }
+    .diff-heading em { font-style:italic; color:var(--rosa); }
+    .diff-row { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border); }
+    .diff-stat {
+      background:var(--bg); padding:32px 24px 28px;
+      border-bottom:2px solid transparent;
+      transition:border-color 0.25s, transform 0.25s;
+      cursor: default;
+    }
+    .diff-stat:hover { border-bottom-color:var(--rosa); transform: scale(1.01); }
+    .diff-word { font-family:var(--serif); font-size:32px; font-weight:700; line-height:1; letter-spacing:-0.02em; margin-bottom:14px; color:var(--ink); }
+    .diff-word.italic { font-style:italic; }
+    .diff-label { font-family:var(--mono); font-size:9px; color:var(--muted); letter-spacing:0.12em; text-transform:uppercase; margin-bottom:8px; }
+    .diff-text { font-size:11px; line-height:1.7; color:var(--muted); font-weight:300; }
+
+    /* ─── EXPERIENCIA ─── */
+    .exp-section { margin-top:80px; }
+    .sec-title { font-family:var(--serif); font-size:28px; font-weight:700; letter-spacing:-0.01em; margin-top:6px; }
+    .sec-title em { font-style:italic; color:var(--rosa); }
+    .exp-list { margin-top:28px; display:flex; flex-direction:column; }
+    .exp-row { border-bottom:0.5px solid var(--border); padding:28px 0; display:grid; grid-template-columns:1fr auto; gap:24px; align-items:start; }
+    .exp-row:first-child { border-top:0.5px solid var(--border); }
+    .exp-role { font-family:var(--serif); font-size:17px; font-weight:700; margin-bottom:4px; letter-spacing:-0.01em; }
+    .exp-company { font-family:var(--mono); font-size:10px; color:var(--rosa); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:14px; }
+    .exp-bullets { display:flex; flex-direction:column; gap:6px; }
+    .exp-bullet { font-size:12px; line-height:1.65; color:var(--muted); font-weight:300; padding-left:14px; position:relative; }
+    .exp-bullet::before { content:'—'; position:absolute; left:0; color:var(--rosa); font-size:10px; }
+    .exp-bullet strong { color:var(--ink); font-weight:500; }
+    .exp-period { font-family:var(--mono); font-size:9px; color:var(--muted); letter-spacing:0.06em; white-space:nowrap; margin-top:4px; }
+
+    /* ─── ABOUT ─── */
+    .about-section { margin-top:80px; padding-top:64px; border-top:0.5px solid var(--border); display:grid; grid-template-columns:1fr 1fr; gap:72px; align-items:start; }
+    .about-head { font-family:var(--serif); font-size:clamp(30px,4.5vw,46px); font-weight:700; line-height:0.95; letter-spacing:-0.02em; margin-bottom:20px; }
+    .about-head em { font-style:italic; color:var(--rosa); display:block; }
+    .about-body { font-size:13px; line-height:1.9; color:var(--muted); font-weight:300; margin-bottom:16px; }
+    .edu-block { margin-top:20px; padding-top:20px; border-top:0.5px solid var(--border); }
+    .edu-title { font-family:var(--serif); font-size:13px; font-weight:700; margin-bottom:3px; }
+    .edu-sub { font-family:var(--mono); font-size:9px; color:var(--muted); letter-spacing:0.06em; margin-bottom:6px; }
+    .edu-note { font-size:11px; color:var(--muted); line-height:1.6; }
+    .edu-note strong { color:var(--rosa); font-weight:500; }
+    .skills-col { display:flex; flex-direction:column; gap:22px; }
+    .sklbl { font-family:var(--mono); font-size:8px; color:var(--lime); letter-spacing:0.16em; text-transform:uppercase; margin-bottom:8px; }
+    .skpills { display:flex; flex-wrap:wrap; gap:3px; }
+    .skp { font-family:var(--mono); font-size:10px; color:var(--muted); border:0.5px solid var(--border); padding:4px 10px; }
+
+    /* ─── CONTACT ─── */
+    .contact-section { margin-top:80px; padding-top:64px; border-top:0.5px solid var(--border); }
+    .contact-big { font-family:var(--serif); font-size:clamp(38px,6.5vw,68px); font-weight:700; line-height:0.9; letter-spacing:-0.02em; margin-bottom:48px; }
+    .contact-big em { font-style:italic; color:var(--rosa); display:block; }
+    .crow { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:20px; }
+    .cmail { font-family:var(--mono); font-size:11px; color:var(--muted); }
+    .clinks { display:flex; gap:8px; }
+    .clnk {
+      font-family:var(--mono); font-size:9px; letter-spacing:0.1em; text-transform:uppercase;
+      color:var(--muted); background:none; border:0.5px solid var(--border);
+      padding:9px 14px; cursor:pointer; transition:color 0.2s, border-color 0.2s;
+    }
+    .clnk:hover { color:var(--ink); border-color:var(--border-hi); }
+    .footer { margin-top:48px; padding-top:20px; border-top:0.5px solid var(--border); display:flex; justify-content:space-between; font-family:var(--mono); font-size:9px; color:var(--muted); letter-spacing:0.06em; }
+
+    /* ─── REDUCED MOTION ─── */
+    @media (prefers-reduced-motion: reduce) {
+      .anim-ready { opacity: 1 !important; transform: none !important; }
+    }
+
+    /* ─── TABLET (≤768px) ─── */
+    @media (max-width:768px) {
+      .diff-row { grid-template-columns:1fr 1fr; }
+    }
+
+    /* ─── MOBILE (≤640px) ─── */
+    @media (max-width:640px) {
+      .wrap { padding:0 20px 64px; }
+      nav { padding:18px 0 12px; }
+      .nav-links { display:none; }
+      .nav-right { gap:0; }
+
+      .page-header { padding: 48px 0 48px; }
+      .page-heading { font-size: clamp(36px, 10vw, 52px); }
+
+      .diff-section { margin-top:48px; }
+      .diff-row { grid-template-columns:1fr 1fr; }
+      .diff-stat { padding:22px 14px 18px; }
+      .diff-word { font-size:22px; }
+      .diff-text { font-size:10px; }
+
+      .exp-section { margin-top:48px; }
+      .exp-row { grid-template-columns:1fr; gap:2px; padding:22px 0; }
+      .exp-period { margin-top:6px; }
+      .exp-role { font-size:15px; }
+      .exp-bullet { font-size:11px; }
+
+      .about-section { margin-top:48px; grid-template-columns:1fr; gap:32px; padding-top:40px; }
+      .about-head { font-size:clamp(28px,8vw,38px); }
+      .skpills { gap:4px; }
+      .skp { font-size:9px; padding:3px 8px; }
+
+      .contact-section { margin-top:48px; padding-top:48px; }
+      .contact-big { font-size:clamp(34px,10vw,48px); margin-bottom:32px; line-height:0.92; }
+      .crow { flex-direction:column; align-items:flex-start; gap:14px; }
+      .clinks { flex-wrap:wrap; gap:6px; }
+      .clnk { font-size:8px; padding:8px 12px; }
+
+      .footer { flex-direction:column; gap:6px; padding-top:16px; margin-top:32px; }
+    }
+
+    /* ─── LANGUAGE SWITCHER ─── */
+    .nav-lang {
+      display: flex; align-items: center; gap: 1px;
+      margin-left: 18px; padding-left: 18px;
+      border-left: 0.5px solid rgba(0,0,0,0.15);
+    }
+    .lang-btn {
+      font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em;
+      text-transform: uppercase; background: none; border: none;
+      cursor: pointer; color: var(--muted); padding: 4px 5px;
+      transition: color 0.2s; line-height: 1;
+    }
+    .lang-btn.active { color: var(--ink); }
+    .lang-btn:hover { color: var(--ink); }
+    .lang-sep { font-family: var(--mono); font-size: 9px; color: rgba(0,0,0,0.2); pointer-events: none; }
+  </style>
+</head>
+<body>
+
+  <!-- TRANSITION OVERLAY -->
+  <div id="transition-overlay" aria-hidden="true">
+    <span id="transition-title"></span>
+  </div>
+
+  <!-- CUSTOM CURSOR -->
+  <div id="cursor" aria-hidden="true"></div>
+
+  <div class="pr">
+
+    <div class="wrap">
+      <nav>
+        <div class="nav-logo" onclick="goTo('index.html', '')">
+          <img
+            src="assets/jz-logo.png"
+            alt="JZ"
+            onerror="this.outerHTML='<span style=\'font-family:var(--serif);font-size:22px;font-weight:700;font-style:italic;color:var(--rosa);letter-spacing:-0.02em\'>JZ</span>'"
+          />
+        </div>
+        <div class="nav-right">
+          <ul class="nav-links">
+            <li><a data-i18n-es="Proyectos" data-i18n-en="Projects" onclick="goTo('index.html', '')">Proyectos</a></li>
+            <li><a class="active" data-i18n-es="Experiencia" data-i18n-en="Experience">Experiencia</a></li>
+            <li><a data-i18n-es="Contacto" data-i18n-en="Contact" onclick="scrollToSection('.contact-section')">Contacto</a></li>
+          </ul>
+          <div class="nav-lang">
+            <button class="lang-btn active" data-lang="es">ES</button>
+            <span class="lang-sep">/</span>
+            <button class="lang-btn" data-lang="en">EN</button>
+          </div>
+        </div>
+      </nav>
+
+      <!-- PAGE HEADER -->
+      <div class="page-header">
+        <p class="slbl" data-i18n-es="Perfil profesional" data-i18n-en="Professional profile">Perfil profesional</p>
+        <h1 class="page-heading" data-i18n-es="Experiencia &amp; <em> sobre mí </em>" data-i18n-en="Experience &amp; <em>about me</em>">Experiencia &amp; <em> sobre mí </em></h1>
+      </div>
+
+      <!-- POR QUÉ YO -->
+      <section class="diff-section">
+        <p class="slbl" data-i18n-es="Por qué yo" data-i18n-en="Why me">Por qué yo</p>
+        <h2 class="diff-heading anim-ready" data-i18n-es="Lo que me <em>diferencia</em>" data-i18n-en="What sets me <em>apart</em>">Lo que me <em>diferencia</em></h2>
+        <div class="diff-row">
+          <div class="diff-stat anim-ready">
+            <p class="diff-word" data-i18n-es="Diseño" data-i18n-en="Design">Diseño</p>
+            <p class="diff-label" data-i18n-es="Estratégico · End-to-end" data-i18n-en="Strategic · End-to-end">Estratégico · End-to-end</p>
+            <p class="diff-text" data-i18n-es="Centrado en el usuario e impacto medible. Más del 50% de reducción en tiempos de aprobación." data-i18n-en="User-centered with measurable impact. Over 50% reduction in approval turnaround time.">Centrado en el usuario e impacto medible. Más del 50% de reducción en tiempos de aprobación.</p>
+          </div>
+          <div class="diff-stat anim-ready">
+            <p class="diff-word italic" data-i18n-es="Código" data-i18n-en="Code">Código</p>
+            <p class="diff-label">React · Next.js · Native</p>
+            <p class="diff-text" data-i18n-es="Entiendo lo que diseño y sé construirlo. Sin fricción con desarrollo, mayor velocidad de entrega." data-i18n-en="I understand what I design and I know how to build it. Zero friction with dev, faster delivery.">Entiendo lo que diseño y sé construirlo. Sin fricción con desarrollo, mayor velocidad de entrega.</p>
+          </div>
+          <div class="diff-stat anim-ready">
+            <p class="diff-word">AR / AI</p>
+            <p class="diff-label" data-i18n-es="Experiencias inmersivas" data-i18n-en="Immersive experiences">Experiencias inmersivas</p>
+            <p class="diff-text" data-i18n-es="Proyectos reales en salud, pharma y logística. Diseño para entornos no convencionales con viabilidad técnica." data-i18n-en="Real projects in healthcare, pharma and logistics. Designing for non-conventional environments with technical feasibility.">Proyectos reales en salud, pharma y logística. Diseño para entornos no convencionales con viabilidad técnica.</p>
+          </div>
+          <div class="diff-stat anim-ready">
+            <p class="diff-word italic" data-i18n-es="Docencia" data-i18n-en="Teaching">Docencia</p>
+            <p class="diff-label">ORT · Design Thinking</p>
+            <p class="diff-text" data-i18n-es="Mentoreo equipos en Agile y UX desde 2022. Enseñar diseño lo hace más profundo y comunicable." data-i18n-en="Mentoring teams in Agile and UX since 2022. Teaching design makes it deeper and more communicable.">Mentoreo equipos en Agile y UX desde 2022. Enseñar diseño lo hace más profundo y comunicable.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- EXPERIENCIA -->
+      <section class="exp-section">
+        <p class="slbl" data-i18n-es="Experiencia" data-i18n-en="Experience">Experiencia</p>
+        <h2 class="sec-title anim-ready" data-i18n-es="Empresas que <em>confiaron</em> en mí" data-i18n-en="Companies that <em>trusted</em> me">Empresas que <em>confiaron</em> en mí</h2>
+        <div class="exp-list">
+          <div class="exp-row anim-ready">
+            <div>
+              <p class="exp-role">UX/UI Designer</p>
+              <p class="exp-company">3Destiny — AR, VR & AI</p>
+              <div class="exp-bullets">
+                <p class="exp-bullet" data-i18n-es="Lideré el diseño <strong>end-to-end</strong> para industrias complejas: Laboratorios Bagó, AbbVie, Panalab, Danone, APM Terminals, Novo Nordisk." data-i18n-en="Led <strong>end-to-end</strong> design for complex industries: Laboratorios Bagó, AbbVie, Panalab, Danone, APM Terminals, Novo Nordisk.">Lideré el diseño <strong>end-to-end</strong> para industrias complejas: Laboratorios Bagó, AbbVie, Panalab, Danone, APM Terminals, Novo Nordisk.</p>
+                <p class="exp-bullet" data-i18n-es="Reduje en más de un <strong>50% los tiempos de aprobación</strong> optimizando presentación de propuestas y handoff técnico." data-i18n-en="Reduced <strong>approval turnaround by 50%+</strong> by optimizing proposal presentation and technical handoff.">Reduje en más de un <strong>50% los tiempos de aprobación</strong> optimizando presentación de propuestas y handoff técnico.</p>
+                <p class="exp-bullet" data-i18n-es="Articulé estrategias de UX para <strong>proyectos de realidad aumentada</strong> en colaboración con desarrolladores y diseñadores 3D." data-i18n-en="Articulated UX strategies for <strong>augmented reality projects</strong> in collaboration with developers and 3D designers.">Articulé estrategias de UX para <strong>proyectos de realidad aumentada</strong> en colaboración con desarrolladores y diseñadores 3D.</p>
+              </div>
+            </div>
+            <div class="exp-period" data-i18n-es="Mar 2025 — Hoy" data-i18n-en="Mar 2025 — Present">Mar 2025 — Hoy</div>
+          </div>
+          <div class="exp-row anim-ready">
+            <div>
+              <p class="exp-role">Freelance UX/UI Designer</p>
+              <p class="exp-company">Carthage Beauty · DigPar · Losa0 · Kakawa · Azikna</p>
+              <div class="exp-bullets">
+                <p class="exp-bullet" data-i18n-es="Lideré el diseño integral de <strong>Calidad de Vida Bagó</strong> — app mobile que traduce requerimientos médicos complejos en arquitectura de información clara." data-i18n-en="Led the full design of <strong>Calidad de Vida Bagó</strong> — a mobile app that translates complex medical requirements into clear information architecture.">Lideré el diseño integral de <strong>Calidad de Vida Bagó</strong> — app mobile que traduce requerimientos médicos complejos en arquitectura de información clara.</p>
+                <p class="exp-bullet" data-i18n-es="Diseñé experiencias inmersivas para <strong>Ushuaia XR</strong>, adaptando narrativa y usabilidad para pantallas y espacios físicos." data-i18n-en="Designed immersive experiences for <strong>Ushuaia XR</strong>, adapting narrative and usability for screens and physical spaces.">Diseñé experiencias inmersivas para <strong>Ushuaia XR</strong>, adaptando narrativa y usabilidad para pantallas y espacios físicos.</p>
+                <p class="exp-bullet" data-i18n-es="Sitios web y landing pages con <strong>WCAG compliance</strong> e investigación de comportamiento de usuarios." data-i18n-en="Websites and landing pages with <strong>WCAG compliance</strong> and user behavior research.">Sitios web y landing pages con <strong>WCAG compliance</strong> e investigación de comportamiento de usuarios.</p>
+              </div>
+            </div>
+            <div class="exp-period" data-i18n-es="Ago 2023 — Hoy" data-i18n-en="Aug 2023 — Present">Ago 2023 — Hoy</div>
+          </div>
+          <div class="exp-row anim-ready">
+            <div>
+              <p class="exp-role" data-i18n-es="Docente de Diseño Digital" data-i18n-en="Digital Design Instructor">Docente de Diseño Digital</p>
+              <p class="exp-company">Escuela Técnica ORT</p>
+              <div class="exp-bullets">
+                <p class="exp-bullet" data-i18n-es="Mentoreo en <strong>ciclo completo de diseño digital</strong> y metodologías ágiles — Scrum, Design Thinking." data-i18n-en="Mentoring in the <strong>full digital design cycle</strong> and agile methodologies — Scrum, Design Thinking.">Mentoreo en <strong>ciclo completo de diseño digital</strong> y metodologías ágiles — Scrum, Design Thinking.</p>
+                <p class="exp-bullet" data-i18n-es="Prototipado con <strong>Figma, Illustrator y Photoshop</strong> en proyectos de resolución de problemas reales." data-i18n-en="Prototyping with <strong>Figma, Illustrator and Photoshop</strong> in real problem-solving projects.">Prototipado con <strong>Figma, Illustrator y Photoshop</strong> en proyectos de resolución de problemas reales.</p>
+              </div>
+            </div>
+            <div class="exp-period" data-i18n-es="Mar 2022 — Hoy" data-i18n-en="Mar 2022 — Present">Mar 2022 — Hoy</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SOBRE MÍ -->
+      <section class="about-section">
+        <div>
+          <p class="slbl" style="margin-bottom:14px" data-i18n-es="Sobre mí" data-i18n-en="About me">Sobre mí</p>
+          <h2 class="about-head anim-ready" data-i18n-es="<em>Diseño</em> con criterio." data-i18n-en="<em>Design</em> with purpose."><em>Diseño</em> con criterio.</h2>
+          <p class="about-body anim-ready" data-i18n-es="UX/UI Designer con formación en Tecnología Multimedial (UMaimonides). Trabajo en la intersección entre diseño estratégico, usabilidad e impacto de negocio — integrando IA, AR/VR y código cuando el proyecto lo necesita." data-i18n-en="UX/UI Designer with a background in Multimedia Technology (UMaimonides). I work at the intersection of strategic design, usability, and business impact — integrating AI, AR/VR, and code when the project calls for it.">UX/UI Designer con formación en Tecnología Multimedial (UMaimonides). Trabajo en la intersección entre diseño estratégico, usabilidad e impacto de negocio — integrando IA, AR/VR y código cuando el proyecto lo necesita.</p>
+          <p class="about-body anim-ready" data-i18n-es="Docente en la Escuela Técnica ORT desde 2022. Creo que enseñar diseño te hace mejor diseñador/a — y que el mejor diseño es el que no se nota." data-i18n-en="Instructor at Escuela Técnica ORT since 2022. I believe teaching design makes you a better designer — and that the best design is the one you don't notice.">Docente en la Escuela Técnica ORT desde 2022. Creo que enseñar diseño te hace mejor diseñador/a — y que el mejor diseño es el que no se nota.</p>
+          <div class="edu-block anim-ready">
+            <p class="edu-title" data-i18n-es="Lic. en Tecnología Multimedial" data-i18n-en="B.S. in Multimedia Technology">Lic. en Tecnología Multimedial</p>
+            <p class="edu-sub">Universidad Maimonides · 2020–2024</p>
+            <p class="edu-note" data-i18n-es="Promedio <strong>8,9/10</strong> · Tesis: Zenda, app educativa con AR en React Native y Swift — ciclo completo de producto." data-i18n-en="GPA <strong>8.9/10</strong> · Thesis: Zenda, an educational AR app in React Native and Swift — full product cycle.">Promedio <strong>8,9/10</strong> · Tesis: Zenda, app educativa con AR en React Native y Swift — ciclo completo de producto.</p>
+          </div>
+        </div>
+        <div class="skills-col">
+          <div class="anim-ready"><p class="sklbl" data-i18n-es="Diseño &amp; Prototipado" data-i18n-en="Design &amp; Prototyping">Diseño & Prototipado</p><div class="skpills"><span class="skp">Figma</span><span class="skp">Framer</span><span class="skp">Webflow</span><span class="skp">Adobe XD</span><span class="skp">Illustrator</span><span class="skp">InDesign</span></div></div>
+          <div class="anim-ready"><p class="sklbl" data-i18n-es="Desarrollo" data-i18n-en="Development">Desarrollo</p><div class="skpills"><span class="skp">HTML/CSS</span><span class="skp">JavaScript</span><span class="skp">React</span><span class="skp">React Native</span><span class="skp">Next.js</span><span class="skp">TypeScript</span></div></div>
+          <div class="anim-ready"><p class="sklbl" data-i18n-es="IA Aplicada" data-i18n-en="Applied AI">IA Aplicada</p><div class="skpills"><span class="skp">Figma Make</span><span class="skp">V0</span><span class="skp">Lovable</span><span class="skp">Stitch</span><span class="skp">Claude</span><span class="skp">ChatGPT</span></div></div>
+          <div class="anim-ready"><p class="sklbl" data-i18n-es="Metodologías" data-i18n-en="Methodologies">Metodologías</p><div class="skpills"><span class="skp">Design Thinking</span><span class="skp">Agile</span><span class="skp">Scrum</span><span class="skp">Kanban</span></div></div>
+        </div>
+      </section>
+
+      <!-- CONTACTO -->
+      <section class="contact-section">
+        <h2 class="contact-big">
+          <span class="anim-ready" style="display:block" data-i18n-es="¿Trabajamos" data-i18n-en="Work">¿Trabajamos</span>
+          <em class="anim-ready" data-i18n-es="juntos?" data-i18n-en="together?">juntos?</em>
+        </h2>
+        <div class="crow anim-ready">
+          <p class="cmail">jimenazapolski@gmail.com</p>
+          <div class="clinks">
+            <button class="clnk" onclick="openLink('mailto:jimenazapolski@gmail.com')">Email</button>
+            <button class="clnk" onclick="openLink('https://www.linkedin.com/in/jimena-zapolski')">LinkedIn</button>
+            <button class="clnk" onclick="openLink('https://www.behance.net/jimezapolski')">Behance</button>
+          </div>
+        </div>
+        <div class="footer">
+          <span>Jimena Zapolski · UX/UI Designer · Product Designer · Buenos Aires</span>
+          <span>2026</span>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isMobile = window.innerWidth < 640;
+
+    /* ─── LENIS ─── */
+    function initLenis() {
+      const lenis = new Lenis({ lerp: 0.1, smoothWheel: true });
+      lenis.on('scroll', ScrollTrigger.update);
+      gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+      gsap.ticker.lagSmoothing(0);
+    }
+
+    /* ─── CURSOR ─── */
+    function initCursor() {
+      if (isMobile || prefersReducedMotion) return;
+      const cursor = document.getElementById('cursor');
+      const xTo = gsap.quickTo(cursor, 'x', { duration: 0.35, ease: 'power3' });
+      const yTo = gsap.quickTo(cursor, 'y', { duration: 0.35, ease: 'power3' });
+      window.addEventListener('mousemove', e => { xTo(e.clientX); yTo(e.clientY); });
+      document.querySelectorAll('a, button, .clnk, .diff-stat').forEach(el => {
+        el.addEventListener('mouseenter', () => gsap.to(cursor, { scale: 1.75, duration: 0.25, ease: 'power2.out' }));
+        el.addEventListener('mouseleave', () => gsap.to(cursor, { scale: 1, duration: 0.25, ease: 'power2.out' }));
+      });
+    }
+
+    /* ─── TRANSITION IN ─── */
+    function initTransitionIn() {
+      const overlay = document.getElementById('transition-overlay');
+      if (sessionStorage.getItem('pageTransition')) {
+        sessionStorage.removeItem('pageTransition');
+        gsap.set(overlay, { scaleY: 1, transformOrigin: 'top', pointerEvents: 'none' });
+        gsap.to(overlay, { scaleY: 0, duration: 0.65, ease: 'power3.inOut', delay: 0.05 });
+      }
+    }
+
+    /* ─── TRANSITION OUT ─── */
+    function goTo(href, title) {
+      const overlay = document.getElementById('transition-overlay');
+      const titleEl = document.getElementById('transition-title');
+      overlay.style.pointerEvents = 'all';
+      if (title) titleEl.textContent = title;
+      const tl = gsap.timeline({
+        onComplete: () => {
+          sessionStorage.setItem('pageTransition', '1');
+          window.location.href = href;
+        }
+      });
+      tl.set(overlay, { scaleY: 0, transformOrigin: 'bottom' })
+        .to(overlay, { scaleY: 1, duration: 0.5, ease: 'power3.inOut' })
+        .to(titleEl, { opacity: 1, scale: 1, duration: 0.25, ease: 'power2.out' }, '-=0.15');
+    }
+
+    /* ─── SCROLL ANIMATIONS ─── */
+    function initScrollAnimations() {
+      if (prefersReducedMotion) {
+        document.querySelectorAll('.anim-ready').forEach(el => el.style.opacity = 1);
+        return;
+      }
+
+      // Page header
+      gsap.fromTo('.page-heading', { y: 30, opacity: 0 }, {
+        y: 0, opacity: 1, duration: 0.9, ease: 'power3.out', delay: 0.1
+      });
+
+      // Diferencial heading
+      gsap.fromTo('.diff-heading', { y: 20, opacity: 0 }, {
+        y: 0, opacity: 1, duration: 0.6, ease: 'power3.out',
+        scrollTrigger: { trigger: '.diff-heading', start: 'top 88%' }
+      });
+
+      // Diferencial stats — stagger
+      gsap.utils.toArray('.diff-stat').forEach((el, i) => {
+        gsap.fromTo(el, { x: 24, opacity: 0 }, {
+          x: 0, opacity: 1, duration: 0.6, ease: 'power3.out',
+          delay: i * 0.1,
+          scrollTrigger: { trigger: '.diff-row', start: 'top 85%' }
+        });
+      });
+
+      // Experience section title
+      gsap.utils.toArray('.sec-title').forEach(el => {
+        gsap.fromTo(el, { y: 20, opacity: 0 }, {
+          y: 0, opacity: 1, duration: 0.6, ease: 'power3.out',
+          scrollTrigger: { trigger: el, start: 'top 88%' }
+        });
+      });
+
+      // Experience rows
+      gsap.utils.toArray('.exp-row').forEach((row, i) => {
+        gsap.fromTo(row, { x: -20, opacity: 0 }, {
+          x: 0, opacity: 1, duration: 0.65, ease: 'power3.out',
+          delay: i * 0.08,
+          scrollTrigger: { trigger: row, start: 'top 88%' }
+        });
+      });
+
+      // About
+      gsap.fromTo('.about-head', { y: 30, opacity: 0 }, {
+        y: 0, opacity: 1, duration: 0.8, ease: 'power3.out',
+        scrollTrigger: { trigger: '.about-section', start: 'top 85%' }
+      });
+      gsap.utils.toArray('.about-body, .edu-block').forEach((el, i) => {
+        gsap.fromTo(el, { y: 20, opacity: 0 }, {
+          y: 0, opacity: 1, duration: 0.6, ease: 'power3.out',
+          delay: i * 0.1,
+          scrollTrigger: { trigger: el, start: 'top 90%' }
+        });
+      });
+      gsap.utils.toArray('.skills-col > div').forEach((el, i) => {
+        gsap.fromTo(el, { y: 16, opacity: 0 }, {
+          y: 0, opacity: 1, duration: 0.5, ease: 'power3.out',
+          delay: i * 0.1,
+          scrollTrigger: { trigger: el, start: 'top 90%' }
+        });
+      });
+
+      // Contact
+      gsap.utils.toArray('.contact-big span, .contact-big em').forEach((el, i) => {
+        gsap.fromTo(el, { y: 40, opacity: 0 }, {
+          y: 0, opacity: 1, duration: 0.7, ease: 'expo.out',
+          delay: i * 0.12,
+          scrollTrigger: { trigger: '.contact-section', start: 'top 85%' }
+        });
+      });
+      gsap.fromTo('.crow', { y: 20, opacity: 0 }, {
+        y: 0, opacity: 1, duration: 0.6, ease: 'power3.out',
+        scrollTrigger: { trigger: '.crow', start: 'top 90%' }
+      });
+    }
+
+    /* ─── MAGNETIC ─── */
+    function initMagnetic() {
+      if (isMobile || prefersReducedMotion) return;
+      document.querySelectorAll('.clnk').forEach(el => {
+        el.addEventListener('mousemove', e => {
+          const r = el.getBoundingClientRect();
+          const x = (e.clientX - r.left - r.width / 2) * 0.25;
+          const y = (e.clientY - r.top - r.height / 2) * 0.25;
+          gsap.to(el, { x, y, duration: 0.3, ease: 'power2.out' });
+        });
+        el.addEventListener('mouseleave', () => {
+          gsap.to(el, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.5)' });
+        });
+      });
+    }
+
+    /* ─── HELPERS ─── */
+    function openLink(url) {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+
+    function scrollToSection(selector) {
+      const el = document.querySelector(selector);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    /* ─── INIT ─── */
+    initLenis();
+    initCursor();
+    initTransitionIn();
+    initScrollAnimations();
+    initMagnetic();
+
+    /* ─── LANGUAGE SWITCHER ─── */
+    (function() {
+      const LANG_KEY = 'jz-lang';
+
+      function applyLang(lang, save) {
+        if (save) localStorage.setItem(LANG_KEY, lang);
+        document.querySelectorAll('.lang-btn').forEach(b => {
+          b.classList.toggle('active', b.dataset.lang === lang);
+        });
+        document.querySelectorAll('[data-i18n-es]').forEach(el => {
+          el.innerHTML = lang === 'en'
+            ? (el.dataset.i18nEn || el.innerHTML)
+            : (el.dataset.i18nEs || el.innerHTML);
+        });
+      }
+
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', () => applyLang(btn.dataset.lang, true));
+      });
+
+      const saved = localStorage.getItem(LANG_KEY) || 'es';
+      applyLang(saved, false);
+    })();
+  </script>
+</body>
+</html>
