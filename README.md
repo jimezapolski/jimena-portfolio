@@ -1,7 +1,5 @@
 # Jimena Zapolski — Portfolio UX/UI
 
-Portfolio personal de Jimena Zapolski, UX/UI Designer & Product Designer radicada en Buenos Aires.
-
 ## 🔗 [jimezapolski.github.io/jimena-portfolio](https://jimezapolski.github.io/jimena-portfolio)
 
 ---
