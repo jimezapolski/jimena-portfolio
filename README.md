@@ -1,6 +1,6 @@
 # Jimena Zapolski — Portfolio UX/UI
 
-## 🔗 [jimezapolski.github.io/jimena-portfolio](https://jimezapolski.github.io/jimena-portfolio)
+## 🔗 [Link a vercel](https://jimena-zapolski.vercel.app/experiencia.html)
 
 ---
 
